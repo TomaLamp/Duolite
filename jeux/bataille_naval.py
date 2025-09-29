@@ -1,9 +1,13 @@
 from pygame import *
 import pygame
+from module.pygameCore import *
+
 
 
 def bataille_naval():
     from dis import dis
+
+    # %% initialisation
 
     A1=["A2","B1"]
     A2=["A1","A3","B2"]
@@ -107,6 +111,8 @@ def bataille_naval():
     J10=["J9","I10"]
     total=[A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,D1,D2,D3,D4,D5,D6,D7,D8,D9,D10,E1,E2,E3,E4,E5,E6,E7,E8,E9,E10,F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,G1,G2,G3,G4,G5,G6,G7,G8,G9,G10,H1,H2,H3,H4,H5,H6,H7,H8,H9,H10,I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,J1,J2,J3,J4,J5,J6,J7,J8,J9,J10] 
 
+    # %% fonctions
+
     def get_case(kijou):
         end=0
         while end==0:
@@ -206,27 +212,13 @@ def bataille_naval():
         if kijou == 2:
             x = x + 500
         
-        pygame.init()
-        bille = pygame.image.load(image).convert_alpha()
-        bille = pygame.transform.scale(bille, (40, 40))
-        position_bille = [x, y]
-        fenetre.blit(bille, position_bille)
+        printImage(image, (40, 40), (x, y), fenetre)
         pygame.display.flip()
 
 
     def printt(textes, fenetre, color):
-        bille = pygame.image.load("./image/bataille_naval/fond texte.JPG").convert_alpha()
-        bille = pygame.transform.scale(bille, (1005, 100))
-        position_bille = [0, 0] 
-        fenetre.blit(bille, position_bille)
-        rectImage = bille.get_rect()
-        pygame.display.flip()
-
-        police = pygame.font.Font("./police/Modusa.ttf", 64)
-        texte = police.render(textes,True,pygame.Color(color))
-        rectTexte = texte.get_rect()
-        rectTexte.center = rectImage.center
-        fenetre.blit(texte, rectTexte)
+        printImage("./image/bataille_naval/fond texte.JPG", (1005, 100), (0,0), fenetre)
+        printText(textes, 64, color, (502, 20), fenetre, Alignement="Center", police="./police/Modusa.ttf", underline=False)
         pygame.display.flip()
 
     def place_ship(kijou, bateau, fenetre):
@@ -298,24 +290,13 @@ def bataille_naval():
             x = x + 500
 
         if len(bateau) == 1:
-            bille = pygame.image.load(image).convert_alpha()
-            bille = pygame.transform.scale(bille, (40, 40))
-            position_bille = [x, y]
-            fenetre.blit(bille, position_bille)
-            pygame.display.flip()
+            printImage(image, (40, 40), (x, y), fenetre)
         elif bateau[0][0] == bateau[1][0]:
-            bille = pygame.image.load(image).convert_alpha()
-            bille = pygame.transform.scale(bille, (40*len(bateau), 40))
-            position_bille = [x, y]
-            fenetre.blit(bille, position_bille)
-            pygame.display.flip()
+            printImage(image, (40*len(bateau), 40), (x, y), fenetre)
         else:
-            bille = pygame.image.load(image).convert_alpha()
-            bille = pygame.transform.scale(bille, (40*len(bateau), 40))
-            bille = pygame.transform.rotate(bille, 90)
-            position_bille = [x, y]
-            fenetre.blit(bille, position_bille)
-            pygame.display.flip()
+            printImage(image, (40*len(bateau), 40), (x, y), fenetre, 90)
+        
+        pygame.display.flip()
 
     def place_Rship(kijou, bateau, fenetre):
         image = "./image/bataille_naval/bateau" + str(len(bateau)) + "R.png"
@@ -386,24 +367,13 @@ def bataille_naval():
             x = x + 500
 
         if len(bateau) == 1:
-            bille = pygame.image.load(image).convert_alpha()
-            bille = pygame.transform.scale(bille, (40, 40))
-            position_bille = [x, y]
-            fenetre.blit(bille, position_bille)
-            pygame.display.flip()
+            printImage(image, (40, 40), (x, y), fenetre)
         elif bateau[0][0] == bateau[1][0]:
-            bille = pygame.image.load(image).convert_alpha()
-            bille = pygame.transform.scale(bille, (40*len(bateau), 40))
-            position_bille = [x, y]
-            fenetre.blit(bille, position_bille)
-            pygame.display.flip()
+            printImage(image, (40*len(bateau), 40), (x, y), fenetre)
         else:
-            bille = pygame.image.load(image).convert_alpha()
-            bille = pygame.transform.scale(bille, (40*len(bateau), 40))
-            bille = pygame.transform.rotate(bille, 90)
-            position_bille = [x, y]
-            fenetre.blit(bille, position_bille)
-            pygame.display.flip()
+            printImage(image, (40*len(bateau), 40), (x, y), fenetre, 90)
+        
+        pygame.display.flip()
 
     def place_line(kijou, bateau, fenetre):
         image = "./image/bataille_naval/red line.png"
@@ -474,24 +444,13 @@ def bataille_naval():
             x = x + 500
 
         if len(bateau) == 1:
-            bille = pygame.image.load(image).convert_alpha()
-            bille = pygame.transform.scale(bille, (40-2, 40))
-            position_bille = [x+2, y]
-            fenetre.blit(bille, position_bille)
-            pygame.display.flip()
+            printImage(image, (40-2, 40), (x+2, y), fenetre)
         elif bateau[0][0] == bateau[1][0]:
-            bille = pygame.image.load(image).convert_alpha()
-            bille = pygame.transform.scale(bille, (40*len(bateau)-10, 40))
-            position_bille = [x+2, y]
-            fenetre.blit(bille, position_bille)
-            pygame.display.flip()
+            printImage(image, (40*len(bateau)-10, 40), (x+2, y), fenetre)
         else:
-            bille = pygame.image.load(image).convert_alpha()
-            bille = pygame.transform.scale(bille, (40*len(bateau)-2, 40))
-            bille = pygame.transform.rotate(bille, 90)
-            position_bille = [x, y]
-            fenetre.blit(bille, position_bille)
-            pygame.display.flip()
+            printImage(image, (40*len(bateau)-2, 40), (x, y), fenetre, 90)
+        
+        pygame.display.flip()
 
     def copie_bateau(bateau):
         copie = []
@@ -872,6 +831,7 @@ def bataille_naval():
                 return True
 
         
+    # %% main
 
     pygame.init()
     pygame.font.init()
@@ -883,9 +843,7 @@ def bataille_naval():
     pygame_icon = pygame.image.load("./image/bataille_naval/bateau1.png")
     pygame.display.set_icon(pygame_icon)
 
-    bille = pygame.image.load("./image/bataille_naval/play.png").convert_alpha()
-    bille = pygame.transform.scale(bille, (700, 420))
-    fenetre.blit(bille, (160,66))
+    printImage("./image/bataille_naval/play.png", (700, 420), (160,66), fenetre)
     pygame.display.flip()
     
 
@@ -932,17 +890,8 @@ def bataille_naval():
 
         
 
-
-        bille = pygame.image.load("./image/bataille_naval/grille4.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (1000, 600))
-        position_bille = [0, 0] 
-        fenetre.blit(bille, position_bille)
-        pygame.display.flip()
-
-        police = pygame.font.Font(None, 44)
-        texte = police.render("Joueur 1 ",True,pygame.Color("yellow"))
-        rectTexte = texte.get_rect()
-        fenetre.blit(texte, (10, 100))
+        printImage("./image/bataille_naval/grille4.png", (1000, 600), (0,0), fenetre)
+        printText("Joueur 1 ", 44, "yellow", (10, 100), fenetre)
         pygame.display.flip()
 
         printt("BATEAU DE 1", fenetre, "black")
@@ -1366,21 +1315,11 @@ def bataille_naval():
         place_line(1, bateauc5, fenetre)
 
 
-        bille = pygame.image.load("./image/bataille_naval/grille4.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (1000, 600))
-        position_bille = [0, 0] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/bataille_naval/grille4.png", (1000, 600), (0,0), fenetre)
+        printText("Jooeur 2", 44, "orange", (870, 100), fenetre)
         pygame.display.flip()
-
-        police = pygame.font.Font(None, 44)
-        texte = police.render("Joueur 2",True,pygame.Color("orange"))
-        rectTexte = texte.get_rect()
-        fenetre.blit(texte, (870, 100))
-        pygame.display.flip()
-
 
         printt("joueur 2", fenetre, "orange")
-
 
         printt("BATEAU DE 1", fenetre, "black")
         cc1=get_case(2)
@@ -1803,22 +1742,10 @@ def bataille_naval():
         place_line(2, b2teauc5, fenetre)
 
 
-        bille = pygame.image.load("./image/bataille_naval/grille4.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (1000, 600))
-        position_bille = [0, 0] 
-        fenetre.blit(bille, position_bille)
-        pygame.display.flip()
+        printImage("./image/bataille_naval/grille4.png", (1000, 600), (0,0), fenetre)
+        printText("Joueur 1", 44, "yellow", (10, 100), fenetre)
+        printText("Joueur 2", 44, "orange", (870, 100), fenetre)
 
-        police = pygame.font.Font(None, 44)
-        texte = police.render("Joueur 1",True,pygame.Color("yellow"))
-        rectTexte = texte.get_rect()
-        fenetre.blit(texte, (10, 100))
-        pygame.display.flip()
-
-        police = pygame.font.Font(None, 44)
-        texte = police.render("Joueur 2",True,pygame.Color("orange"))
-        rectTexte = texte.get_rect()
-        fenetre.blit(texte, (870, 100))
         pygame.display.flip()
 
 
@@ -1990,10 +1917,8 @@ def bataille_naval():
                             place_Rship(1, bateauc4, fenetre)
                         if len(bateau5) !=0:
                             place_Rship(1, bateauc5, fenetre)
-                        bille = pygame.image.load("./image/bataille_naval/rejouer.png").convert_alpha()
-                        bille = pygame.transform.scale(bille, (40, 40))
-                        position_bille = [10,10] 
-                        fenetre.blit(bille, position_bille)
+                        
+                        printImage("./image/bataille_naval/rejouer.png", (40, 40), (10,10), fenetre)
                         pygame.display.flip()
                             
                             
@@ -2004,7 +1929,6 @@ def bataille_naval():
 
         end = 0
         while end==0:
-            pygame.init()
             for event in pygame.event.get():
                 if(event.type == QUIT): 
                         return 0
@@ -2014,6 +1938,9 @@ def bataille_naval():
                     if y > 10 and y < 50 and x > 10 and x < 50:
                         end = 1
 
+
+if __name__ == "__main__":
+    bataille_naval()
 
 
 

@@ -1,5 +1,6 @@
 from pygame import *
 import pygame
+from module.pygameCore import *
 
 
 def main():
@@ -17,28 +18,13 @@ def main():
     from jeux.yams import yams
     from jeux.boogle import boogle
     
-    
-
 
     def restart(page, jeux):
-        pygame.init()
-        pygame.font.init()
-        fenetre = pygame.display.set_mode((1000,600))
-        fenetre.fill("#001E6D")
-        pygame.display.set_caption("Main")
-        pygame_icon = pygame.image.load('./image/icon main.jpg')
-        pygame.display.set_icon(pygame_icon)
+        fenetre = initScreen((1000,600), "Main", "#001E6D", './image/icon main.jpg')
 
-        police = pygame.font.Font(None, 62)
-        police.underline = True
-        texte = police.render("Choisissez un jeu",True,"black")
-        rectTexte = texte.get_rect()
-        fenetre.blit(texte, (320, 10))
+        printText("Choisissez un jeu", 62, "black", (320,10), fenetre, underline=True)
+        printText('"Duolité, le n°1 des jeux seul ou a deux"', 28, "black", (318, 75), fenetre)
 
-        police = pygame.font.Font(None, 28)
-        texte = police.render('"Duolité, le n°1 des jeux seul ou a deux"',True,"black")
-        rectTexte = texte.get_rect()
-        fenetre.blit(texte, (318, 75))
 
         police = pygame.font.Font(None, 14)
         texte = police.render("LAMPURE Thomas",True,"black")
@@ -50,105 +36,38 @@ def main():
         rectTexte = texte.get_rect()
         fenetre.blit(texte, (900, 30))
 
-        bille = pygame.image.load("./image/logo.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (172, 48))
-        position_bille = [10,10] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/logo.png", (172, 48), (10,10), fenetre)
 
         if page==1:
 
-            bille = pygame.image.load("./image/bataille_naval.jpg").convert_alpha()
-            bille = pygame.transform.scale(bille, (200, 114))
-            position_bille = [100,150] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/puissance4.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (200, 114))
-            position_bille = [100,400] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/pendu.jpg").convert_alpha()
-            bille = pygame.transform.scale(bille, (200, 114))
-            position_bille = [400,150] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/chifoumi.jpg").convert_alpha()
-            bille = pygame.transform.scale(bille, (200, 114))
-            position_bille = [700,150] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/juste prix.jpg").convert_alpha()
-            bille = pygame.transform.scale(bille, (200, 114))
-            position_bille = [400,400] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/morpion.jpg").convert_alpha()
-            bille = pygame.transform.scale(bille, (200, 114))
-            position_bille = [700,400] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/fleche.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (50, 50))
-            position_bille = [940,300] 
-            fenetre.blit(bille, position_bille)
-
+            printImage("./image/bataille_naval.jpg", (200, 114), (100,150), fenetre)
+            printImage("./image/puissance4.png", (200, 114), (100,400), fenetre)
+            printImage("./image/juste prix.jpg", (200, 114), (400,400), fenetre)
+            printImage("./image/pendu.jpg", (200, 114), (400,150), fenetre)
+            printImage("./image/chifoumi.jpg", (200, 114), (700,150), fenetre)
+            printImage("./image/juste prix.jpg", (200, 114), (400,400), fenetre)
+            printImage("./image/morpion.jpg", (200, 114), (700,400), fenetre)
+            printImage("./image/fleche.png", (50, 50), (940,300), fenetre)
             pygame.display.flip()
 
         else:
 
-            bille = pygame.image.load("./image/4_21.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (200, 114))
-            position_bille = [100,150] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/mastermind.jpg").convert_alpha()
-            bille = pygame.transform.scale(bille, (200, 114))
-            position_bille = [100,400] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/motus.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (200, 114))
-            position_bille = [400,150] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/memory.jpg").convert_alpha()
-            bille = pygame.transform.scale(bille, (200, 114))
-            position_bille = [700,150] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/yams.jpg").convert_alpha()
-            bille = pygame.transform.scale(bille, (200, 114))
-            position_bille = [400,400] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/boogle.jpg").convert_alpha()
-            bille = pygame.transform.scale(bille, (200, 114))
-            position_bille = [700,400] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/fleche.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (50, 50))
-            bille = pygame.transform.rotate(bille, 180)
-            position_bille = [10,300] 
-            fenetre.blit(bille, position_bille)
-            
-
+            printImage("./image/4_21.png", (200, 114), (100,150), fenetre)
+            printImage("./image/mastermind.jpg", (200, 114), (100,400), fenetre)
+            printImage("./image/motus.png", (200, 114), (400,150), fenetre)
+            printImage("./image/memory.jpg", (200, 114), (700,150), fenetre)
+            printImage("./image/yams.jpg", (200, 114), (400,400), fenetre)
+            printImage("./image/boogle.jpg", (200, 114), (700,400), fenetre)
+            printImage("./image/fleche.png", (50, 50), (10,300), fenetre, 180)
             pygame.display.flip()
         
 
         c = 0
         for i in range(2):
             for j in range(3):
-                bille = pygame.image.load("./image/fond.jpg").convert_alpha()
-                bille = pygame.transform.scale(bille, (200, 30))
-                position_bille = [100+300*j,264+250*i] 
-                rectWidth = bille.get_rect().width 
-                fenetre.blit(bille, position_bille)
 
-                police = pygame.font.Font(None, 33)
-                texte = police.render(jeux[c],True, "white")
-                rectTexte = texte.get_rect().width
-                fenetre.blit(texte, (100+300*j + rectWidth/2 - rectTexte/2, 269+250*i))
+                rectWidth = printImage("./image/fond.jpg", (200, 30), (100+300*j,264+250*i), fenetre).width
+                printText(jeux[c], 33, "white", (100+300*j + rectWidth/2, 269+250*i), fenetre, Alignement="Center")
 
                 c += 1
 

@@ -1,17 +1,30 @@
 from pygame import *
 import pygame
+from module.pygameCore import *
 
 
 def pendu():
     from random import choice
 
+    # --- Nouvelle taille ---
+    NEW_WIDTH = 1000
+    NEW_HEIGHT = 600
+
+
+    # --- Ancienne taille (base du jeu) ---
+    BASE_WIDTH = 780
+    BASE_HEIGHT = 400
+
+
+    # Facteurs d'échelle
+    scale_x = NEW_WIDTH / BASE_WIDTH
+    scale_y = NEW_HEIGHT / BASE_HEIGHT
+
 
     def place_image(nb_echecs):
         nomFichier = "./image/pendu/pendu_"+str(nb_echecs)+".png"
-        bille = pygame.image.load(nomFichier).convert_alpha()
-        bille = pygame.transform.scale(bille, (300, 239.682))
-        position_bille = [240, 150] 
-        fenetre.blit(bille, position_bille)
+        printImage(nomFichier, (300*scale_x, 239.682*scale_y), (240*scale_x, 150*scale_y), fenetre)
+        
         pygame.display.flip()
 
     def printt(mot):
@@ -22,21 +35,13 @@ def pendu():
             i+=1
         mot = mot_large
 
-        bille = pygame.image.load("./image/pendu/bande.jpg").convert_alpha()
-        position_bille = [0, 70] 
-        fenetre.blit(bille, position_bille)
-        rectImage = bille.get_rect().width 
-        pygame.display.flip()
-
-        police = pygame.font.Font(None, 64)
-        texte = police.render(mot ,True,pygame.Color("black"))
-        rectTexte = texte.get_rect().width
-        fenetre.blit(texte, (rectImage/2-rectTexte/2, 70))
+        printImage("./image/pendu/bande.jpg", (1000, 60), (0*scale_x, 70*scale_y), fenetre)
+        printText(mot, int(64*scale_y), "black", (500, 70*scale_y), fenetre, Alignement="Center")
+        
         pygame.display.flip()
 
 
     def get_lettre():
-        pygame.init()
         lettre = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
         end = 0
         while end==0:
@@ -44,31 +49,18 @@ def pendu():
                 if (event.type == MOUSEBUTTONUP):
                     x = event.pos[0]
                     y = event.pos[1]
-                    if y<30:
-                        bille = pygame.image.load("./image/pendu/dejavue.png").convert_alpha()
-                        bille = pygame.transform.scale(bille, (30, 30))
-                        position_bille = [(lettre.index(lettre[x//30]))*30, 0] 
-                        fenetre.blit(bille, position_bille)
+                    if y < 30*scale_y:
+                        index = int(x // (30*scale_x))
+                        printImage("./image/pendu/dejavue.png", (30*scale_x, 30*scale_y), ((lettre.index(lettre[index]))*30*scale_x, 0), fenetre)
+                        printText(lettre[index], int(20*scale_y), "black", ((lettre.index(lettre[index]))*30*scale_x+10*scale_x, 10*scale_y), fenetre)
                         pygame.display.flip()
 
-                        police = pygame.font.Font(None, 20)
-                        texte = police.render(lettre[x//30],True,pygame.Color("black"))
-                        fenetre.blit(texte, ((lettre.index(lettre[x//30]))*30+10, 10))
-                        pygame.display.flip()
-
-                        return lettre[x//30]
+                        return lettre[index]
 
                 if event.type == KEYDOWN:
                     if event.key<=122 and event.key>=97:
-                        bille = pygame.image.load("./image/pendu/dejavue.png").convert_alpha()
-                        bille = pygame.transform.scale(bille, (30, 30))
-                        position_bille = [(lettre.index(chr(event.key).upper()))*30, 0] 
-                        fenetre.blit(bille, position_bille)
-                        pygame.display.flip()
-
-                        police = pygame.font.Font(None, 20)
-                        texte = police.render(chr(event.key).upper(),True,pygame.Color("black"))
-                        fenetre.blit(texte, ((lettre.index(chr(event.key).upper()))*30+10, 10))
+                        printImage("./image/pendu/dejavue.png", (30*scale_x, 30*scale_y), ((lettre.index(chr(event.key).upper()))*30*scale_x, 0), fenetre)
+                        printText(chr(event.key).upper(), int(20*scale_y), "black", ((lettre.index(chr(event.key).upper()))*30*scale_x+10*scale_x, 10*scale_y), fenetre)
                         pygame.display.flip()
 
                         return chr(event.key).upper()
@@ -80,34 +72,22 @@ def pendu():
     liste_mots = fichier.readlines()   
     fichier.close()
 
-    pygame.init()
-    pygame.font.init()
-    fenetre = pygame.display.set_mode((780,400))
-    fenetre.fill('red')
-    pygame.display.set_caption("Pendu")
-    pygame_icon = pygame.image.load('./image/pendu/icon.jpg')
-    pygame.display.set_icon(pygame_icon)
-    pygame.display.flip()
+    fenetre = initScreen((NEW_WIDTH,NEW_HEIGHT), "Pendu", 'red', './image/pendu/icon.jpg')
 
     end = 0
     while end==0:
-        bille = pygame.image.load("./image/pendu/play-chifoumi.png")
-        bille = pygame.transform.scale(bille, (500, 337.5))
-        position_bille = [150, 30] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/pendu/play-chifoumi.png", (500*scale_x, 337.5*scale_y), (150*scale_x, 30*scale_y), fenetre)
         pygame.display.flip()
 
         for event in pygame.event.get():
-
             if (event.type == MOUSEBUTTONUP):
-                    x = event.pos[0]
-                    y = event.pos[1]
-                    if x>150 and x<649 and y>212 and y<366:
-                        end=1
-
+                x = event.pos[0]
+                y = event.pos[1]
+                if x>150*scale_x and x<649*scale_x and y>212*scale_y and y<366*scale_y:
+                    end=1
 
             if (event.type == QUIT): 
-                return 0
+                    return 0
 
 
 
@@ -116,16 +96,8 @@ def pendu():
         fenetre.fill('red')
         end = 0
         while end==0:
-            bille = pygame.image.load("./image/pendu/joueur.png")
-            bille = pygame.transform.scale(bille, (500, 123.8))
-            position_bille = [150, 30] 
-            fenetre.blit(bille, position_bille)
-            pygame.display.flip()
-
-            bille = pygame.image.load("./image/pendu/joueur2.png")
-            bille = pygame.transform.scale(bille, (500, 123.8))
-            position_bille = [150, 250] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/pendu/joueur.png", (500*scale_x, 123.8*scale_y), (150*scale_x, 30*scale_y), fenetre)
+            printImage("./image/pendu/joueur2.png", (500*scale_x, 123.8*scale_y), (150*scale_x, 250*scale_y), fenetre)
             pygame.display.flip()
 
             for event in pygame.event.get():
@@ -133,10 +105,10 @@ def pendu():
                 if (event.type == MOUSEBUTTONUP):
                         x = event.pos[0]
                         y = event.pos[1]
-                        if x>150 and x<649 and y>30 and y<147:
+                        if x>150*scale_x and x<649*scale_x and y>30*scale_y and y<147*scale_y:
                             end=1
                             nb_joueur = 1
-                        elif x>150 and x<649 and y>249 and y<367:
+                        elif x>150*scale_x and x<649*scale_x and y>249*scale_y and y<367*scale_y:
                             end=1
                             nb_joueur = 2
 
@@ -166,15 +138,11 @@ def pendu():
                         joueur = "2"
                         j2 = "1"
                     fenetre.fill('red')
-                    police = pygame.font.Font(None, 42)
-                    texte = police.render("Joueur "+ joueur +" ne regardez pas",True,pygame.Color("black"))
-                    fenetre.blit(texte, (200, 200))
-                    police = pygame.font.Font(None, 42)
-                    texte = police.render("Joueur "+ j2 +" vous allez choisir un mot pour l'adversaire",True,pygame.Color("black"))
-                    fenetre.blit(texte, (30, 150))
-                    bille = pygame.image.load("./image/pendu/suivant.png").convert_alpha()
-                    bille = pygame.transform.scale(bille, (200, 47.68))
-                    fenetre.blit(bille, (280, 250))
+
+                    printText("Joueur "+ joueur +" ne regardez pas", int(42*scale_y), "black", (500, 70*scale_y), fenetre, Alignement="Center")
+                    printText("Joueur "+ j2 +" vous allez choisir un mot pour l'adversaire", int(55), "black", (500, 150*scale_y), fenetre, Alignement="Center")
+                    
+                    printImage("./image/pendu/suivant.png", (200*scale_x, 47.68*scale_y), (280*scale_x, 250*scale_y), fenetre)
                     pygame.display.flip()
 
                     for event in pygame.event.get():
@@ -182,9 +150,12 @@ def pendu():
                         if (event.type == MOUSEBUTTONUP):
                                 x = event.pos[0]
                                 y = event.pos[1]
-                                if x>280 and x<476 and y>250 and y<296:
-                                    end=1
+                                if x>280*scale_x and x<476*scale_x and y>250*scale_y and y<296*scale_y:
+                                    end = 1
 
+                        if (event.type == KEYDOWN):
+                            if event.key==K_RETURN:
+                                end = 1
 
                         if (event.type == QUIT): 
                             return 0
@@ -199,30 +170,16 @@ def pendu():
                     else:
                         liste_mots.remove(mot)
                 
-
-                police = pygame.font.Font(None, 42)
-                police.underline = True
-                texte = police.render("Choisissez un mot pour l'adversaire",True,pygame.Color("black"))
-                fenetre.blit(texte, (150, 10))
-                pygame.display.flip()
+                printText("Choisissez un mot pour l'adversaire", int(42*scale_y), "black", (500, 10*scale_y), fenetre, Alignement="Center")
 
                 c = 0
                 for i in range(3):
                     for j in range(3):
-                        bille = pygame.image.load("./image/pendu/mots.png").convert_alpha()
-                        bille = pygame.transform.scale(bille, (180, 42.85))
-                        rectImage = bille.get_rect().width 
-                        position_bille = [i*180 + 60*(i+1), j*100 + 105] 
-                        fenetre.blit(bille, position_bille)
-                        pygame.display.flip()
-
-                        police = pygame.font.Font(None, 32)
-                        texte = police.render(choix_mot[c],True,pygame.Color("black"))
-                        rectText = texte.get_rect().width 
-                        fenetre.blit(texte, ((i*180 + 60*(i+1))+rectImage/2 - rectText/2, (j*100 + 105)+10))
-                        pygame.display.flip()
+                        rectImage = printImage("./image/pendu/mots.png", (180*scale_x, 42.85*scale_y), ((i*180 + 60*(i+1))*scale_x, (j*100 + 105)*scale_y), fenetre).width
+                        printText(choix_mot[c], int(32*scale_y), "black", ((i*180 + 60*(i+1))*scale_x + rectImage/2, ((j*100 + 105)+10)*scale_y), fenetre, Alignement="Center")
                         c += 1
-                
+                pygame.display.flip()
+
                 end=0
                 while end==0:
                     for event in pygame.event.get():
@@ -230,31 +187,31 @@ def pendu():
                         if (event.type == MOUSEBUTTONUP):
                             x = event.pos[0]
                             y = event.pos[1]
-                            if x>63 and x<236 and y>105 and y<144:
+                            if x>63*scale_x and x<236*scale_x and y>105*scale_y and y<144*scale_y:
                                 end=1
                                 mot_choisi = choix_mot[0]
-                            elif x>303 and x<477 and y>105 and y<144:
+                            elif x>303*scale_x and x<477*scale_x and y>105*scale_y and y<144*scale_y:
                                 end=1
                                 mot_choisi = choix_mot[3]
-                            elif x>543 and x<717 and y>105 and y<144:
+                            elif x>543*scale_x and x<717*scale_x and y>105*scale_y and y<144*scale_y:
                                 end=1
                                 mot_choisi = choix_mot[6]
-                            elif x>63 and x<236 and y>204 and y<242:
+                            elif x>63*scale_x and x<236*scale_x and y>204*scale_y and y<242*scale_y:
                                 end=1
                                 mot_choisi = choix_mot[1]
-                            elif x>303 and x<477 and y>204 and y<242:
+                            elif x>303*scale_x and x<477*scale_x and y>204*scale_y and y<242*scale_y:
                                 end=1
                                 mot_choisi = choix_mot[4]
-                            elif x>543 and x<717 and y>204 and y<242:
+                            elif x>543*scale_x and x<717*scale_x and y>204*scale_y and y<242*scale_y:
                                 end=1
                                 mot_choisi = choix_mot[7]
-                            elif x>63 and x<236 and y>304 and y<341:
+                            elif x>63*scale_x and x<236*scale_x and y>304*scale_y and y<341*scale_y:
                                 end=1
                                 mot_choisi = choix_mot[2]
-                            elif x>303 and x<477 and y>304 and y<341:
+                            elif x>303*scale_x and x<477*scale_x and y>304*scale_y and y<341*scale_y:
                                 end=1
                                 mot_choisi = choix_mot[5]
-                            elif x>543 and x<717 and y>304 and y<341:
+                            elif x>543*scale_x and x<717*scale_x and y>304*scale_y and y<341*scale_y:
                                 end=1
                                 mot_choisi = choix_mot[8]
                             
@@ -264,46 +221,25 @@ def pendu():
 
             fenetre.fill('red')            
             for i in range(26):
-                bille = pygame.image.load("./image/pendu/carres.jpg").convert_alpha()
-                bille = pygame.transform.scale(bille, (30, 30))
-                position_bille = [i*30, 0] 
-                fenetre.blit(bille, position_bille)
-                pygame.display.flip()
-
-                police = pygame.font.Font(None, 20)
-                texte = police.render(lettre[i],True,pygame.Color("black"))
-                fenetre.blit(texte, (i*30+10, 10))
-                pygame.display.flip()
-
-            police = pygame.font.Font(None, 32)
-            police.underline = True
-            texte = police.render("Lettres fausses :",True,pygame.Color("black"))
-            fenetre.blit(texte, (10, 150))
+                printImage("./image/pendu/carres.jpg", (30*scale_x, 30*scale_y), (i*30*scale_x, 0), fenetre)
+                printText(lettre[i], int(20*scale_y), "black", (i*30*scale_x+10*scale_x, 10*scale_y), fenetre)
+            
             pygame.display.flip()
 
-            police = pygame.font.Font(None, 32)
-            police.underline = True
-            texte = police.render("Lettres bonnes :",True,pygame.Color("black"))
-            fenetre.blit(texte, (605, 150))
+            printText("Lettres fausses :", int(32*scale_y), "black", (10*scale_x, 150*scale_y), fenetre, underline=True)
+            printText("Lettres bonnes :", int(32*scale_y), "black", (770*scale_x, 150*scale_y), fenetre, underline=True, Alignement="Right")
+            
             pygame.display.flip()
 
 
             if nb_joueur == 2:
-                police = pygame.font.Font(None, 28)
-                texte = police.render("Joueur 2 : " + str(pointj2),True,pygame.Color("black"))
-                fenetre.blit(texte, (625, 375))
-                pygame.display.flip()
-                txt_point = "Joueur 1 : "
+                printText("Joueur 2 :  " + str(pointj2), int(28*scale_y), "black", (760*scale_x, 375*scale_y), fenetre, Alignement="Right")
+                txt_point = "Joueur 1 :  "
             else:
-                police = pygame.font.Font(None, 28)
-                texte = police.render("Partie jouée : " + str(partie),True,pygame.Color("black"))
-                fenetre.blit(texte, (625, 375))
-                pygame.display.flip()
-                txt_point = "Mes points : "
+                printText("Partie jouée :  " + str(partie), int(28*scale_y), "black", (760*scale_x, 375*scale_y), fenetre, Alignement="Right")
+                txt_point = "Mes points :  "
 
-            police = pygame.font.Font(None, 28)
-            texte = police.render(txt_point + str(point),True,pygame.Color("black"))
-            fenetre.blit(texte, (625, 350))
+            printText(txt_point + str(point), int(28*scale_y), "black", (760*scale_x, 350*scale_y), fenetre, Alignement="Right")
             pygame.display.flip()
             
             nb_echecs = 0
@@ -347,10 +283,8 @@ def pendu():
                     else:
                         y = 0
                         x = 0
-                    police = pygame.font.Font(None, 32)
-                    texte = police.render(lettre_fausse[i],True,pygame.Color("black"))
-                    fenetre.blit(texte, ((i*35+10)-x, 180+y))
-                    pygame.display.flip()
+
+                    printText(lettre_fausse[i], int(32*scale_y), "black", (((i*35+10)-x)*scale_x, (180+y)*scale_y), fenetre)
 
                 for i in range(len(lettre_bonne)):
                     if i>4:
@@ -359,10 +293,12 @@ def pendu():
                     else:
                         y = 0
                         x = 0
-                    police = pygame.font.Font(None, 32)
+                    printText(lettre_bonne[i], int(32*scale_y), "black", (((i*35+605)-x)*scale_x, (180+y)*scale_y), fenetre)
+                    police = pygame.font.Font(None, int(32*scale_y))
                     texte = police.render(lettre_bonne[i],True,pygame.Color("black"))
-                    fenetre.blit(texte, ((i*35+605)-x, 180+y))
-                    pygame.display.flip()
+                    fenetre.blit(texte, (((i*35+605)-x)*scale_x, (180+y)*scale_y))
+                
+                pygame.display.flip()
 
                 if mot_partiel == mot_choisi:
                     break
@@ -372,10 +308,7 @@ def pendu():
                 printt(mot_choisi)
                 place_image(nb_echecs)
             else:
-                bille = pygame.image.load("./image/pendu/bravo.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (300, 239.682))
-                position_bille = [240, 150] 
-                fenetre.blit(bille, position_bille)
+                printImage("./image/pendu/bravo.png", (300*scale_x, 239.682*scale_y), (240*scale_x, 150*scale_y), fenetre)
                 pygame.display.flip()
 
             if len(lettre_fausse) != 10:
@@ -393,28 +326,20 @@ def pendu():
 
 
             if nb_joueur == 1:
-                x = 740
+                x = 753.5*scale_x
             else:
-                x = 720
-                
+                x = 733.5*scale_x
+            
             if kijou%2 == 1:
-                y = 350
+                y = 350*scale_y
                 pt = point
             else:
-                y=375
+                y=375*scale_y
                 pt = pointj2
 
             
-            bille = pygame.image.load("./image/pendu/cache.jpg").convert_alpha()
-            bille = pygame.transform.scale(bille, (30, 20))
-            position_bille = [x, y] 
-            fenetre.blit(bille, position_bille)
-            pygame.display.flip() 
-
-            police = pygame.font.Font(None, 28)
-            texte = police.render(str(pt),True,pygame.Color("black"))
-            fenetre.blit(texte, (x+5, y))
-            pygame.display.flip()
+            printImage("./image/pendu/cache.jpg", (30*scale_x, 20*scale_y), (x, y), fenetre) 
+            printText(str(pt), int(28*scale_y), "black", (x+5*scale_x, y), fenetre)
 
             if nb_joueur == 2: 
                 kijou += 1
@@ -422,18 +347,10 @@ def pendu():
             else:
                 partie += 1
 
-            bille = pygame.image.load("./image/pendu/rejouer.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (200, 46.58))
-            position_bille = [10, 350] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/pendu/rejouer.png", (200*scale_x, 46.58*scale_y), (10*scale_x, 350*scale_y), fenetre)
+            printImage("./image/pendu/fleche.png", (50*scale_x,34.35*scale_y), (5*scale_x, 40*scale_y), fenetre)
             pygame.display.flip() 
 
-            bille = pygame.image.load("./image/pendu/fleche.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (50,34.35))
-            bille = pygame.transform.rotate(bille, 180)
-            position_bille = [5, 40] 
-            fenetre.blit(bille, position_bille)
-            pygame.display.flip() 
             end = 0
             while end==0:
                 if nb_joueur == 2:
@@ -443,25 +360,15 @@ def pendu():
                         end=0
                         while end==0:
                             if point>pointj2:
-                                police = pygame.font.Font(None, 42)
-                                texte = police.render("Victoire du joueur 1",True,"green")
-                                fenetre.blit(texte, (240, 200))
+                                printText("Victoire du joueur 1", int(42*scale_y), "green", (500, 200*scale_y), fenetre, Alignement="Center")
                             elif point<pointj2:
-                                police = pygame.font.Font(None, 42)
-                                texte = police.render("Victoire du joueur 2",True,"green")
-                                fenetre.blit(texte, (240, 200)) 
+                                printText("Victoire du joueur 2", int(42*scale_y), "green", (500, 200*scale_y), fenetre, Alignement="Center")
                             else:
-                                police = pygame.font.Font(None, 62)
-                                texte = police.render("Egalité",True,"#9C0000")
-                                fenetre.blit(texte, (310, 195))
+                                printText("Egalité", int(62*scale_y), "#9C0000", (500, 195*scale_y), fenetre, Alignement="Center")
                                 
                             
-                            police = pygame.font.Font(None, 42)
-                            texte = police.render("Joueur 1 : " +str(point)+" points / Joueur 2 : "+str(pointj2)+ " points",True,pygame.Color("black"))
-                            fenetre.blit(texte, (100, 150))
-                            bille = pygame.image.load("./image/pendu/suivant.png").convert_alpha()
-                            bille = pygame.transform.scale(bille, (200, 47.68))
-                            fenetre.blit(bille, (280, 250))
+                            printText("joueur 1 : " +str(point)+" points / Joueur 2 : "+str(pointj2)+ " points", int(42*scale_y), "black", (500, 150*scale_y), fenetre, Alignement="Center")
+                            printImage("./image/pendu/suivant.png", (200*scale_x, 47.68*scale_y), (500, 250*scale_y), fenetre, Alignement="Center")
                             pygame.display.flip()
 
                             for event in pygame.event.get():
@@ -469,24 +376,31 @@ def pendu():
                                 if (event.type == MOUSEBUTTONUP):
                                         x = event.pos[0]
                                         y = event.pos[1]
-                                        if x>280 and x<476 and y>250 and y<296:
+                                        if x>280*scale_x and x<476*scale_x and y>250*scale_y and y<296*scale_y:
                                             end=1
 
+                                if (event.type == KEYDOWN):
+                                    if event.key==K_RETURN:
+                                        end = 1
 
                                 if (event.type == QUIT): 
                                     return 0
                         restart=0
+
                 for event in pygame.event.get():
 
                     if (event.type == MOUSEBUTTONUP):
                             x = event.pos[0]
                             y = event.pos[1]
-                            if x>10 and x<206 and y>350 and y<393:
+                            if x>10*scale_x and x<206*scale_x and y>350*scale_y and y<393*scale_y:
                                 end=1
-                            if(x>21 and x<51 and y>50 and y<61) or (x>5 and x<20 and y>41 and y<71):
+                            if(x>21*scale_x and x<51*scale_x and y>50*scale_y and y<61*scale_y) or (x>5*scale_x and x<20*scale_x and y>41*scale_y and y<71*scale_y):
                                 end=1
                                 restart=0
-                            
+
+                    if (event.type == KEYDOWN):
+                            if event.key==K_RETURN:
+                                end = 1      
 
                     if (event.type == QUIT): 
                         return 0 
@@ -500,3 +414,6 @@ def pendu():
         for event in pygame.event.get():
             if (event.type == QUIT): 
                 return 0
+
+if __name__ == "__main__":
+    pendu()
