@@ -1,6 +1,7 @@
 from pygame import *
 import pygame
 from random import choice
+from module.pygameCore import *
 
 
 def motus():
@@ -28,18 +29,11 @@ def motus():
                     return 0
 
 
-    pygame.init()
-    pygame.font.init()
-    fenetre = pygame.display.set_mode((1000,600))
-    fenetre.fill("#4682B4")
-    pygame.display.set_caption("motus")
-    pygame_icon = pygame.image.load('./image/motus/icon.png')
-    pygame.display.set_icon(pygame_icon)
-    pygame.display.flip()
+    # %% main
 
-    bille = pygame.image.load("./image/motus/play.png").convert_alpha()
-    bille = pygame.transform.scale(bille, (700, 350.315))
-    fenetre.blit(bille, (150,110))
+    fenetre = initScreen((1000,600), "motus", "#4682B4", "./image/motus/icon.png")
+
+    printImage("./image/motus/play.png", (700, 350.315), [150,110], fenetre)
     pygame.display.flip()
             
 
@@ -70,16 +64,10 @@ def motus():
         fenetre.fill("#4682B4")
         end = 0
         while end==0:
-            bille = pygame.image.load("./image/motus/1joueur.png")
-            bille = pygame.transform.scale(bille, (750, 185.7))
-            position_bille = [150, 65] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/motus/1joueur.png", (750, 185.7), [150, 65], fenetre)
             pygame.display.flip()
 
-            bille = pygame.image.load("./image/motus/2joueur.png")
-            bille = pygame.transform.scale(bille, (750, 185.7))
-            position_bille = [150, 350] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/motus/2joueur.png", (750, 185.7), [150, 350], fenetre)
             pygame.display.flip()
 
             for event in pygame.event.get():
@@ -99,10 +87,7 @@ def motus():
                     return 0
 
 
-        bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (1000, 600))
-        position_bille = [0, 0]
-        fenetre.blit(bille, position_bille)
+        printImage("./image/motus/bleu.png", (1000, 600), [0, 0], fenetre)
         pygame.display.flip()
 
 
@@ -113,23 +98,14 @@ def motus():
             lettre = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "<", ">"]
             fond = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]
 
-            police = pygame.font.Font(None, 32)
-            police.underline = True
-            texte = police.render("mes points :",True,pygame.Color("black"))
-            fenetre.blit(texte, (10, 200))
+            printText("mes points :", 32, "black", (10, 200), fenetre, underline=True)
 
-            police = pygame.font.Font(None, 32)
-            police.underline = True
-            texte = police.render("parties jouée :",True,pygame.Color("black"))
-            fenetre.blit(texte, (835, 200))
+            printText("parties jouée :", 32, "black", (835, 200), fenetre, underline=True)
 
 
             end=0
             while end==0:
-                bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (60, 60))
-                position_bille = [0,40] 
-                fenetre.blit(bille, position_bille)
+                printImage("./image/motus/bleu.png", (60, 60), [0,40], fenetre)
 
                 mot_choisi = choice(liste_mots).rstrip().upper()
                 while len(mot_choisi)!=4 and len(mot_choisi)!=5 and len(mot_choisi)!=6 and len(mot_choisi)!=7:
@@ -140,51 +116,27 @@ def motus():
                 for i in range(1, len(mot_choisi)):
                     mot_partiel.append(".")
 
-                bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (650, 520))
-                position_bille = [170, 70]
-                fenetre.blit(bille, position_bille)
+                printImage("./image/motus/bleu.png", (650, 520), [170, 70], fenetre)
 
-                bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (180, 150))
-                position_bille = [10, 500] 
-                fenetre.blit(bille, position_bille)
+                printImage("./image/motus/bleu.png", (180, 150), [10, 500], fenetre)
 
-                bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (200, 100))
-                position_bille = [825, 500] 
-                fenetre.blit(bille, position_bille)
+                printImage("./image/motus/bleu.png", (200, 100), [825, 500], fenetre)
 
                 
                 taille = [0, 0, 0, 0, 320, 290, 250, 210]
                 for i in range(len(mot_choisi)):
-                    bille = pygame.image.load("./image/motus/grille.png").convert_alpha()
-                    bille = pygame.transform.scale(bille, (82, 505))
-                    position_bille = [i*84+taille[len(mot_choisi)], 70] 
-                    fenetre.blit(bille, position_bille)
+                    printImage("./image/motus/grille.png", (82, 505), [i*84+taille[len(mot_choisi)], 70], fenetre)
 
-                    police = pygame.font.Font(None, 40)
-                    texte = police.render(mot_partiel[i],True,pygame.Color("black"))
-                    fenetre.blit(texte, (i*84+taille[len(mot_choisi)]+30+2*i, 100))
+                    printText(mot_partiel[i], 40, "black", (i*84+taille[len(mot_choisi)]+30+2*i, 100), fenetre)
                     pygame.display.flip()
 
-                bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (30, 30))
-                position_bille = [15, 245] 
-                fenetre.blit(bille, position_bille)
+                printImage("./image/motus/bleu.png", (30, 30), [15, 245], fenetre)
 
-                bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (30, 30))
-                position_bille = [960, 245] 
-                fenetre.blit(bille, position_bille)
+                printImage("./image/motus/bleu.png", (30, 30), [960, 245], fenetre)
 
-                police = pygame.font.Font(None, 32)
-                texte = police.render(str(points),True,pygame.Color("black"))
-                fenetre.blit(texte, (20, 250))
+                printText(str(points), 32, "black", (20, 250), fenetre)
 
-                police = pygame.font.Font(None, 32)
-                texte = police.render(str(partie),True,pygame.Color("black"))
-                fenetre.blit(texte, (965, 250))
+                printText(str(partie), 32, "black", (965, 250), fenetre)
                 pygame.display.flip()
 
 
@@ -199,30 +151,16 @@ def motus():
                     
                     for i in range(28):
                         if fond[i] == 0:
-                            bille = pygame.image.load("./image/motus/carresB.jpg").convert_alpha()
-                            bille = pygame.transform.scale(bille, (35.71, 35.71))
-                            position_bille = [i*35.71, 0] 
-                            fenetre.blit(bille, position_bille)
+                            printImage("./image/motus/carresB.jpg", (35.71, 35.71), [i*35.71, 0], fenetre)
                         elif fond[i] == 1 :
-                            bille = pygame.image.load("./image/motus/carresR.jpg").convert_alpha()
-                            bille = pygame.transform.scale(bille, (35.71, 35.71))
-                            position_bille = [i*35.71, 0] 
-                            fenetre.blit(bille, position_bille)
+                            printImage("./image/motus/carresR.jpg", (35.71, 35.71), [i*35.71, 0], fenetre)
                         elif fond[i] == 2:
-                            bille = pygame.image.load("./image/motus/carresJ.png").convert_alpha()
-                            bille = pygame.transform.scale(bille, (35.71, 35.71))
-                            position_bille = [i*35.71, 0] 
-                            fenetre.blit(bille, position_bille)
+                            printImage("./image/motus/carresJ.png", (35.71, 35.71), [i*35.71, 0], fenetre)
                         else:
-                            bille = pygame.image.load("./image/motus/carresP.jpg").convert_alpha()
-                            bille = pygame.transform.scale(bille, (35.71, 35.71))
-                            position_bille = [i*35.71, 0] 
-                            fenetre.blit(bille, position_bille)
+                            printImage("./image/motus/carresP.jpg", (35.71, 35.71), [i*35.71, 0], fenetre)
                     
 
-                        police = pygame.font.Font(None, 25)
-                        texte = police.render(lettre[i],True,pygame.Color("black"))
-                        fenetre.blit(texte, (i*35.8+10, 10))
+                        printText(lettre[i], 25, "black", (i*35.8+10, 10), fenetre)
                         pygame.display.flip()
 
                     mot_point = list(mot_partiel)
@@ -238,9 +176,7 @@ def motus():
                     taille = [0, 0, 0, 0, 320, 290, 250, 210]
                     for i in range(len(mot_choisi)):
 
-                        police = pygame.font.Font(None, 40)
-                        texte = police.render(mot_partiel[i],True,pygame.Color("black"))
-                        fenetre.blit(texte, (i*84+taille[len(mot_choisi)]+30+2*i, 100+tour*85))
+                        printText(mot_partiel[i], 40, "black", (i*84+taille[len(mot_choisi)]+30+2*i, 100+tour*85), fenetre)
                         pygame.display.flip()
 
                     while fin==0:
@@ -255,14 +191,9 @@ def motus():
                                 mot_test = mot_partiel[0:nbr_lettre] 
 
                             for i in range(len(mot_choisi)):
-                                bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-                                bille = pygame.transform.scale(bille, (60, 60))
-                                position_bille = [i*84+taille[len(mot_choisi)]+12, 80+tour*85] 
-                                fenetre.blit(bille, position_bille)
+                                printImage("./image/motus/bleu.png", (60, 60), [i*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
 
-                                police = pygame.font.Font(None, 40)
-                                texte = police.render(mot_partiel[i],True,pygame.Color("black"))
-                                fenetre.blit(texte, (i*84+taille[len(mot_choisi)]+30+1.5*i, 100+tour*85))
+                                printText(mot_partiel[i], 40, "black", (i*84+taille[len(mot_choisi)]+30+1.5*i, 100+tour*85), fenetre)
                                 pygame.display.flip()
                         
                         
@@ -307,25 +238,15 @@ def motus():
 
                                 for i in range(len(verif)):
                                     if verif[i]==2:
-                                        bille = pygame.image.load("./image/motus/rouge.jpg").convert_alpha()
-                                        bille = pygame.transform.scale(bille, (60, 60))
-                                        position_bille = [(i+1)*84+taille[len(mot_choisi)]+12, 80+tour*85] 
-                                        fenetre.blit(bille, position_bille)
+                                        printImage("./image/motus/rouge.jpg", (60, 60), [(i+1)*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
 
-                                        police = pygame.font.Font(None, 40)
-                                        texte = police.render(mot_test[i+1],True,pygame.Color("black"))
-                                        fenetre.blit(texte, ((i+1)*84+taille[len(mot_choisi)]+30+i, 100+tour*85))
+                                        printText(mot_test[i+1], 40, "black", ((i+1)*84+taille[len(mot_choisi)]+30+i, 100+tour*85), fenetre)
                                         pygame.display.flip()
 
                                     elif verif[i] == 1:
-                                        bille = pygame.image.load("./image/motus/cerclejaune.png").convert_alpha()
-                                        bille = pygame.transform.scale(bille, (60, 60))
-                                        position_bille = [(i+1)*84+taille[len(mot_choisi)]+12, 80+tour*85] 
-                                        fenetre.blit(bille, position_bille)
+                                        printImage("./image/motus/cerclejaune.png", (60, 60), [(i+1)*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
 
-                                        police = pygame.font.Font(None, 40)
-                                        texte = police.render(mot_test[i+1],True,pygame.Color("black"))
-                                        fenetre.blit(texte, ((i+1)*84+taille[len(mot_choisi)]+30+i, 100+tour*85))
+                                        printText(mot_test[i+1], 40, "black", ((i+1)*84+taille[len(mot_choisi)]+30+i, 100+tour*85), fenetre)
                                         pygame.display.flip()
                                 tour+=1
 
@@ -333,9 +254,7 @@ def motus():
                                     points+=7-tour
                                     tour=10
                                     
-                                    police = pygame.font.Font(None, 40)
-                                    texte = police.render('Bravo',True,pygame.Color("green"))
-                                    fenetre.blit(texte, (50,500))
+                                    printText('Bravo', 40, "green", (50,500), fenetre)
                                     pygame.display.flip()
                             
                         else:
@@ -345,14 +264,9 @@ def motus():
                                 mot_test = mot_partiel[0:nbr_lettre] 
 
                                 for i in range(len(mot_choisi)):
-                                    bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-                                    bille = pygame.transform.scale(bille, (60, 60))
-                                    position_bille = [i*84+taille[len(mot_choisi)]+12, 80+tour*85] 
-                                    fenetre.blit(bille, position_bille)
+                                    printImage("./image/motus/bleu.png", (60, 60), [i*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
 
-                                    police = pygame.font.Font(None, 40)
-                                    texte = police.render(str(mot_partiel[i]),True,pygame.Color("black"))
-                                    fenetre.blit(texte, (i*84+taille[len(mot_choisi)]+30+i, 100+tour*85))
+                                    printText(str(mot_partiel[i]), 40, "black", (i*84+taille[len(mot_choisi)]+30+i, 100+tour*85), fenetre)
                                     pygame.display.flip()
 
                         for event in pygame.event.get():
@@ -362,27 +276,16 @@ def motus():
 
                 partie+=1
                 if tour!=10:
-                    police = pygame.font.Font(None, 40)
-                    texte = police.render('Perdu',True,pygame.Color("red"))
-                    fenetre.blit(texte, (50,500))
+                    printText('Perdu', 40, "red", (50,500), fenetre)
 
-                    police = pygame.font.Font(None, 30)
-                    texte = police.render('le mot etait ' + mot_choisi.lower(),True,pygame.Color("red"))
-                    fenetre.blit(texte, (10,530))
+                    printText('le mot etait ' + mot_choisi.lower(), 30, "red", (10,530), fenetre)
 
                     pygame.display.flip()
 
                 
-                bille = pygame.image.load("./image/motus/suivant.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (150, 35.7585))
-                position_bille = [830, 530] 
-                fenetre.blit(bille, position_bille)
+                printImage("./image/motus/suivant.png", (150, 35.7585), [830, 530], fenetre)
 
-                bille = pygame.image.load("./image/juste prix/fleche.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (50,34.35))
-                bille = pygame.transform.rotate(bille, 180)
-                position_bille = [5, 40] 
-                fenetre.blit(bille, position_bille)
+                printImage("./image/juste prix/fleche.png", (50,34.35), [5, 40], fenetre, rotation=180)
 
                                 
                 pygame.display.flip()
@@ -424,15 +327,9 @@ def motus():
                     else:
                         joueur = "2"
                         j2 = "1"
-                    police = pygame.font.Font(None, 55)
-                    texte = police.render("Joueur "+ joueur +" ne regardez pas",True,pygame.Color("black"))
-                    fenetre.blit(texte, (270, 200))
-                    police = pygame.font.Font(None, 55)
-                    texte = police.render("Joueur "+ j2 +" vous allez choisir un mot pour l'adversaire",True,pygame.Color("black"))
-                    fenetre.blit(texte, (30, 150))
-                    bille = pygame.image.load("./image/motus/suivant.png").convert_alpha()
-                    bille = pygame.transform.scale(bille, (600, 143.04))
-                    fenetre.blit(bille, (200, 350))
+                    printText("Joueur "+ joueur +" ne regardez pas", 55, "black", (500, 200), fenetre, Alignement="Center")
+                    printText("Joueur "+ j2 +" vous allez choisir un mot pour l'adversaire", 32, "black", (500, 150), fenetre, Alignement="Center")
+                    printImage("./image/motus/suivant.png", (600, 143.04), (500, 350), fenetre, Alignement="Center")
                     pygame.display.flip()
 
                     for event in pygame.event.get():
@@ -464,25 +361,15 @@ def motus():
 
                 
                 fenetre.fill("#4682B4")
-                police = pygame.font.Font(None, 60)
-                police.underline = True
-                texte = police.render("Choisissez un mot pour l'adversaire",True,pygame.Color("black"))
-                fenetre.blit(texte, (150, 10))
+                printText("Choisissez un mot pour l'adversaire", 60, "black", (150, 10), fenetre, underline=True)
                 pygame.display.flip()
 
                 c = 0
                 for i in range(3):
                     for j in range(5):
-                        bille = pygame.image.load("./image/motus/mots.png").convert_alpha()
-                        bille = pygame.transform.scale(bille, (250, 42.85))
-                        rectImage = bille.get_rect().width 
-                        position_bille = [i*250 + 60*(i+1), j*100 + 105] 
-                        fenetre.blit(bille, position_bille)
+                        rect = printImage("./image/motus/mots.png", (250, 42.85), (i*250 + 60*(i+1), j*100 + 105), fenetre).width
 
-                        police = pygame.font.Font(None, 32)
-                        texte = police.render(choix_mot[c],True,pygame.Color("black"))
-                        rectText = texte.get_rect().width 
-                        fenetre.blit(texte, ((i*250 + 60*(i+1))+rectImage/2 - rectText/2, (j*100 + 105)+10))
+                        printText(choix_mot[c], 32, "black", ((i*250 + 60*(i+1))+rect/2, (j*100 + 105)+10), fenetre, Alignement="Center")
                         pygame.display.flip()
                         c += 1
                             
@@ -548,15 +435,9 @@ def motus():
                 lettre = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "<", ">"]
                 fond = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]
 
-                police = pygame.font.Font(None, 32)
-                police.underline = True
-                texte = police.render("Joueur 1 :",True,pygame.Color("black"))
-                fenetre.blit(texte, (10, 200))
+                printText("Joueur 1 :", 32, "black", (10, 200), fenetre, underline=True)
 
-                police = pygame.font.Font(None, 32)
-                police.underline = True
-                texte = police.render("Joueur 2 :",True,pygame.Color("black"))
-                fenetre.blit(texte, (880, 200))
+                printText("Joueur 2 :", 32, "black", (880, 200), fenetre, underline=True)
 
 
                 end=0
@@ -569,51 +450,27 @@ def motus():
                     for i in range(1, len(mot_choisi)):
                         mot_partiel.append(".")
 
-                    bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-                    bille = pygame.transform.scale(bille, (650, 520))
-                    position_bille = [170, 70]
-                    fenetre.blit(bille, position_bille)
+                    printImage("./image/motus/bleu.png", (650, 520), [170, 70], fenetre)
 
-                    bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-                    bille = pygame.transform.scale(bille, (180, 150))
-                    position_bille = [10, 500] 
-                    fenetre.blit(bille, position_bille)
+                    printImage("./image/motus/bleu.png", (180, 150), [10, 500], fenetre)
 
-                    bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-                    bille = pygame.transform.scale(bille, (200, 100))
-                    position_bille = [825, 500] 
-                    fenetre.blit(bille, position_bille)
+                    printImage("./image/motus/bleu.png", (200, 100), [825, 500], fenetre)
 
                     
                     taille = [0, 0, 0, 0, 320, 290, 250, 210]
                     for i in range(len(mot_choisi)):
-                        bille = pygame.image.load("./image/motus/grille.png").convert_alpha()
-                        bille = pygame.transform.scale(bille, (82, 505))
-                        position_bille = [i*84+taille[len(mot_choisi)], 70] 
-                        fenetre.blit(bille, position_bille)
+                        printImage("./image/motus/grille.png", (82, 505), [i*84+taille[len(mot_choisi)], 70], fenetre)
 
-                        police = pygame.font.Font(None, 40)
-                        texte = police.render(mot_partiel[i],True,pygame.Color("black"))
-                        fenetre.blit(texte, (i*84+taille[len(mot_choisi)]+30+2*i, 100))
+                        printText(mot_partiel[i], 40, "black", (i*84+taille[len(mot_choisi)]+30+2*i, 100), fenetre)
                         pygame.display.flip()
 
-                    bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-                    bille = pygame.transform.scale(bille, (30, 30))
-                    position_bille = [15, 245] 
-                    fenetre.blit(bille, position_bille)
+                    printImage("./image/motus/bleu.png", (30, 30), [15, 245], fenetre)
 
-                    bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-                    bille = pygame.transform.scale(bille, (30, 30))
-                    position_bille = [960, 245] 
-                    fenetre.blit(bille, position_bille)
+                    printImage("./image/motus/bleu.png", (30, 30), [960, 245], fenetre)
 
-                    police = pygame.font.Font(None, 32)
-                    texte = police.render(str(points1),True,pygame.Color("black"))
-                    fenetre.blit(texte, (20, 250))
+                    printText(str(points1), 32, "black", (20, 250), fenetre)
 
-                    police = pygame.font.Font(None, 32)
-                    texte = police.render(str(points2),True,pygame.Color("black"))
-                    fenetre.blit(texte, (965, 250))
+                    printText(str(points2), 32, "black", (965, 250), fenetre)
                     pygame.display.flip()
 
                     if etape%2==0:
@@ -631,30 +488,16 @@ def motus():
                         
                         for i in range(28):
                             if fond[i] == 0:
-                                bille = pygame.image.load("./image/motus/carresB.jpg").convert_alpha()
-                                bille = pygame.transform.scale(bille, (35.71, 35.71))
-                                position_bille = [i*35.71, 0] 
-                                fenetre.blit(bille, position_bille)
+                                printImage("./image/motus/carresB.jpg", (35.71, 35.71), [i*35.71, 0], fenetre)
                             elif fond[i] == 1 :
-                                bille = pygame.image.load("./image/motus/carresR.jpg").convert_alpha()
-                                bille = pygame.transform.scale(bille, (35.71, 35.71))
-                                position_bille = [i*35.71, 0] 
-                                fenetre.blit(bille, position_bille)
+                                printImage("./image/motus/carresR.jpg", (35.71, 35.71), [i*35.71, 0], fenetre)
                             elif fond[i] == 2:
-                                bille = pygame.image.load("./image/motus/carresJ.png").convert_alpha()
-                                bille = pygame.transform.scale(bille, (35.71, 35.71))
-                                position_bille = [i*35.71, 0] 
-                                fenetre.blit(bille, position_bille)
+                                printImage("./image/motus/carresJ.png", (35.71, 35.71), [i*35.71, 0], fenetre)
                             else:
-                                bille = pygame.image.load("./image/motus/carresP.jpg").convert_alpha()
-                                bille = pygame.transform.scale(bille, (35.71, 35.71))
-                                position_bille = [i*35.71, 0] 
-                                fenetre.blit(bille, position_bille)
+                                printImage("./image/motus/carresP.jpg", (35.71, 35.71), [i*35.71, 0], fenetre)
                         
 
-                            police = pygame.font.Font(None, 25)
-                            texte = police.render(lettre[i],True,pygame.Color("black"))
-                            fenetre.blit(texte, (i*35.8+10, 10))
+                            printText(lettre[i], 25, pygame.Color("black"), (i*35.8+10, 10), fenetre)
                             pygame.display.flip()
 
                         mot_point = list(mot_partiel)
@@ -670,9 +513,7 @@ def motus():
                         taille = [0, 0, 0, 0, 320, 290, 250, 210]
                         for i in range(len(mot_choisi)):
 
-                            police = pygame.font.Font(None, 40)
-                            texte = police.render(mot_partiel[i],True,pygame.Color("black"))
-                            fenetre.blit(texte, (i*84+taille[len(mot_choisi)]+30+2*i, 100+tour*85))
+                            printText(mot_partiel[i], 40, pygame.Color("black"), (i*84+taille[len(mot_choisi)]+30+2*i, 100+tour*85), fenetre)
                             pygame.display.flip()
 
                         while fin==0:
@@ -687,14 +528,8 @@ def motus():
                                     mot_test = mot_partiel[0:nbr_lettre] 
 
                                 for i in range(len(mot_choisi)):
-                                    bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-                                    bille = pygame.transform.scale(bille, (60, 60))
-                                    position_bille = [i*84+taille[len(mot_choisi)]+12, 80+tour*85] 
-                                    fenetre.blit(bille, position_bille)
-
-                                    police = pygame.font.Font(None, 40)
-                                    texte = police.render(mot_partiel[i],True,pygame.Color("black"))
-                                    fenetre.blit(texte, (i*84+taille[len(mot_choisi)]+30+1.5*i, 100+tour*85))
+                                    printImage("./image/motus/bleu.png", (60, 60), [i*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
+                                    printText(mot_partiel[i], 40, pygame.Color("black"), (i*84+taille[len(mot_choisi)]+30+1.5*i, 100+tour*85), fenetre)
                                     pygame.display.flip()
                             
                             
@@ -738,25 +573,13 @@ def motus():
 
                                     for i in range(len(verif)):
                                         if verif[i]==2:
-                                            bille = pygame.image.load("./image/motus/rouge.jpg").convert_alpha()
-                                            bille = pygame.transform.scale(bille, (60, 60))
-                                            position_bille = [(i+1)*84+taille[len(mot_choisi)]+12, 80+tour*85] 
-                                            fenetre.blit(bille, position_bille)
-
-                                            police = pygame.font.Font(None, 40)
-                                            texte = police.render(mot_test[i+1],True,pygame.Color("black"))
-                                            fenetre.blit(texte, ((i+1)*84+taille[len(mot_choisi)]+30+i, 100+tour*85))
+                                            printImage("./image/motus/rouge.jpg", (60, 60), [(i+1)*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
+                                            printText(mot_test[i+1], 40, pygame.Color("black"), [(i+1)*84+taille[len(mot_choisi)]+30+i, 100+tour*85], fenetre)
                                             pygame.display.flip()
 
                                         elif verif[i] == 1:
-                                            bille = pygame.image.load("./image/motus/cerclejaune.png").convert_alpha()
-                                            bille = pygame.transform.scale(bille, (60, 60))
-                                            position_bille = [(i+1)*84+taille[len(mot_choisi)]+12, 80+tour*85] 
-                                            fenetre.blit(bille, position_bille)
-
-                                            police = pygame.font.Font(None, 40)
-                                            texte = police.render(mot_test[i+1],True,pygame.Color("black"))
-                                            fenetre.blit(texte, ((i+1)*84+taille[len(mot_choisi)]+30+i, 100+tour*85))
+                                            printImage("./image/motus/cerclejaune.png", (60, 60), [(i+1)*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
+                                            printText(mot_test[i+1], 40, pygame.Color("black"), [(i+1)*84+taille[len(mot_choisi)]+30+i, 100+tour*85], fenetre)
                                             pygame.display.flip()
                                     tour+=1
 
@@ -767,9 +590,7 @@ def motus():
                                             nbr_chance2 = tour
                                         tour=10
                                         
-                                        police = pygame.font.Font(None, 40)
-                                        texte = police.render('Bravo',True,pygame.Color("green"))
-                                        fenetre.blit(texte, (50,500))
+                                        printText('Bravo', 40, pygame.Color("green"), (50,500), fenetre)
                                         pygame.display.flip()
                                 
                             else:
@@ -779,14 +600,8 @@ def motus():
                                     mot_test = mot_partiel[0:nbr_lettre] 
 
                                     for i in range(len(mot_choisi)):
-                                        bille = pygame.image.load("./image/motus/bleu.png").convert_alpha()
-                                        bille = pygame.transform.scale(bille, (60, 60))
-                                        position_bille = [i*84+taille[len(mot_choisi)]+12, 80+tour*85] 
-                                        fenetre.blit(bille, position_bille)
-
-                                        police = pygame.font.Font(None, 40)
-                                        texte = police.render(mot_partiel[i],True,pygame.Color("black"))
-                                        fenetre.blit(texte, (i*84+taille[len(mot_choisi)]+30+i, 100+tour*85))
+                                        printImage("./image/motus/bleu.png", (60, 60), [i*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
+                                        printText(mot_partiel[i], 40, pygame.Color("black"), [i*84+taille[len(mot_choisi)]+30+i, 100+tour*85], fenetre)
                                         pygame.display.flip()
 
                             for event in pygame.event.get():
@@ -796,14 +611,8 @@ def motus():
 
                 
                     if tour!=10:
-                        police = pygame.font.Font(None, 40)
-                        texte = police.render('Perdu',True,pygame.Color("red"))
-                        fenetre.blit(texte, (50,500))
-
-                        police = pygame.font.Font(None, 30)
-                        texte = police.render('le mot etait ' + mot_choisi.lower(),True,pygame.Color("red"))
-                        fenetre.blit(texte, (10,530))
-
+                        printText('Perdu', 40, pygame.Color("red"), (50,500), fenetre)
+                        printText('le mot etait ' + mot_choisi.lower(), 30, pygame.Color("red"), (10,530), fenetre)
                         pygame.display.flip()
                         
                         if kijou%2==0:
@@ -812,17 +621,8 @@ def motus():
                             nbr_chance2 = tour
 
                     
-                    bille = pygame.image.load("./image/motus/suivant.png").convert_alpha()
-                    bille = pygame.transform.scale(bille, (150, 35.7585))
-                    position_bille = [830, 530] 
-                    fenetre.blit(bille, position_bille)
-
-                    bille = pygame.image.load("./image/juste prix/fleche.png").convert_alpha()
-                    bille = pygame.transform.scale(bille, (50,34.35))
-                    bille = pygame.transform.rotate(bille, 180)
-                    position_bille = [5, 40] 
-                    fenetre.blit(bille, position_bille)
-
+                    printImage("./image/motus/suivant.png", (150, 35.7585), [830, 530], fenetre)
+                    printImage("./image/juste prix/fleche.png", (50,34.35), [5, 40], fenetre, rotation=180)
                     pygame.display.flip()
 
                         
@@ -854,4 +654,5 @@ def motus():
                             if (event.type == QUIT): 
                                 return 0
     
-
+if __name__ == "__main__":
+    motus()

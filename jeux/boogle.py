@@ -1,10 +1,12 @@
 import random
 from pygame import *
 import pygame
-import time
+from module.pygameCore import *
 from threading import Timer
 
 def boogle():
+
+    # %% classes
     class De:
         def __init__(self, lettres=None):
             if lettres:
@@ -174,14 +176,8 @@ def boogle():
                 for j in range(1, len(self.grille[i]) - 1):
 
                     
-                    bille = pygame.image.load("./image/421/blanc.png").convert_alpha()
-                    bille = pygame.transform.scale(bille, (75, 75))
-                    position_bille = [312.5+(j-1)*100, 112.5+(i-1)*100] 
-                    fenetre.blit(bille, position_bille)
-
-                    police = pygame.font.Font(None, 60)
-                    texte = police.render(self.grille[i][j].face_visible,True,pygame.Color("black"))
-                    fenetre.blit(texte, (335+(j-1)*100, 135+(i-1)*100))
+                    rect = printImage("./image/421/blanc.png", (75, 75), [312.5+(j-1)*100, 112.5+(i-1)*100], fenetre).width
+                    printText(self.grille[i][j].face_visible, 60, pygame.Color("black"), (312.5+(j-1)*100+rect/2, 135+(i-1)*100), fenetre, Alignement="Center")
                     pygame.display.flip()
 
                     
@@ -320,18 +316,9 @@ def boogle():
             """
             Gère l'événement de fin de temps pour un tour.
             """
-            bille = pygame.image.load("./image/boogle/vert.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (800, 80))
-            fenetre.blit(bille, (100,10))
-
-            bille = pygame.image.load("./image/boogle/suivant.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (250, 60.913))
-            position_bille = [740, 270] 
-            fenetre.blit(bille, position_bille)
-
-            police = pygame.font.Font(None, 60)
-            texte = police.render("Fin du tour, appuyez sur entrée",True,pygame.Color("black"))
-            fenetre.blit(texte, (200, 10))
+            printImage("./image/boogle/vert.png", (800, 80), (100,10), fenetre)
+            printImage("./image/boogle/suivant.png", (250, 60.913), [740, 270], fenetre)
+            printText("Fin du tour, appuyez sur entrée", 60, pygame.Color("black"), (200, 10), fenetre)
             pygame.display.flip()
             self.fin_timer = True
 
@@ -359,9 +346,7 @@ def boogle():
                     
         def get_mot(self):
             
-            bille = pygame.image.load("./image/boogle/vert.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (1000, 80))
-            fenetre.blit(bille, (0,520))
+            printImage("./image/boogle/vert.png", (1000, 80), (0,520), fenetre)
             pygame.display.flip()
 
             chaine = ""
@@ -380,14 +365,8 @@ def boogle():
                         chaine += chainebis[j]
                     chainebis=""
 
-                bille = pygame.image.load("./image/boogle/vert.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (1000, 80))
-                fenetre.blit(bille, (0,520))
-
-                police = pygame.font.Font(None, 60)
-                texte = police.render(f"{chaine}",True,pygame.Color("black"))
-                rectText = texte.get_rect().width 
-                fenetre.blit(texte, (500-rectText/2, 540))
+                printImage("./image/boogle/vert.png", (1000, 80), (0,520), fenetre)
+                printText(f"{chaine}", 60, pygame.Color("black"), (500, 540), fenetre, Alignement="Center")
                 pygame.display.flip()
                 lettre = self.get_lettre()
             return chaine
@@ -402,32 +381,15 @@ def boogle():
                     self.grille.LancePlateau()
                     self.grille.AfficheGrille()
 
-                    bille = pygame.image.load("./image/boogle/vert.png").convert_alpha()
-                    bille = pygame.transform.scale(bille, (250, 100))
-                    fenetre.blit(bille, (10,250))
-
+                    printImage("./image/boogle/vert.png", (250, 100), (10,250), fenetre)
                     if(len(self.joueurs)==2):
-                        police = pygame.font.Font(None, 60)
-                        texte = police.render(f"Au tour du {joueur.name}",True,pygame.Color("black"))
-                        fenetre.blit(texte, (307, 10))
-
-                        police = pygame.font.Font(None, 50)
-                        texte = police.render(f"{self.joueurs[0].name} : {self.joueurs[0].score}",True,pygame.Color("black"))
-                        rectText = texte.get_rect().height
-                        fenetre.blit(texte, (10, 270-rectText/2))
-                        police = pygame.font.Font(None, 50)
-                        texte = police.render(f"{self.joueurs[1].name} : {self.joueurs[1].score}",True,pygame.Color("black"))
-                        fenetre.blit(texte, (10, 330-rectText/2))
+                        printText(f"Au tour du {joueur.name}", 60, pygame.Color("black"), (307, 10), fenetre)
+                        printText(f"{self.joueurs[0].name} : {self.joueurs[0].score}", 50, pygame.Color("black"), (10, 270), fenetre)
+                        printText(f"{self.joueurs[1].name} : {self.joueurs[1].score}", 50, pygame.Color("black"), (10, 330), fenetre)
                         pygame.display.flip()
                     else:
-                        police = pygame.font.Font(None, 60)
-                        texte = police.render("Choisissez un mot",True,pygame.Color("black"))
-                        fenetre.blit(texte, (320, 10))
-
-                        police = pygame.font.Font(None, 60)
-                        texte = police.render(f"Score : {self.joueurs[0].score}",True,pygame.Color("black"))
-                        rectText = texte.get_rect().height
-                        fenetre.blit(texte, (10, 300-rectText/2))
+                        printText("Choisissez un mot", 60, pygame.Color("black"), (320, 10), fenetre)
+                        printText(f"Score : {self.joueurs[0].score}", 60, pygame.Color("black"), (10, 300), fenetre)
                         pygame.display.flip()
 
                     self.fin_timer = False
@@ -453,23 +415,13 @@ def boogle():
                             joueur.score += score
                             joueur.Add_Mot(mot)
 
-                            bille = pygame.image.load("./image/boogle/vert.png").convert_alpha()
-                            bille = pygame.transform.scale(bille, (250, 100))
-                            fenetre.blit(bille, (10,250))
+                            printImage("./image/boogle/vert.png", (250, 100), (10,250), fenetre)
                             if(len(self.joueurs)==2):
-                                police = pygame.font.Font(None, 50)
-                                rectText = texte.get_rect().height
-                                texte = police.render(f"{self.joueurs[0].name} : {self.joueurs[0].score}",True,pygame.Color("black"))
-                                fenetre.blit(texte, (10, 270-rectText/2))
-                                police = pygame.font.Font(None, 50)
-                                texte = police.render(f"{self.joueurs[1].name} : {self.joueurs[1].score}",True,pygame.Color("black"))
-                                fenetre.blit(texte, (10, 330-rectText/2))
+                                printText(f"{self.joueurs[0].name} : {self.joueurs[0].score}", 50, pygame.Color("black"), (10, 270), fenetre)
+                                printText(f"{self.joueurs[1].name} : {self.joueurs[1].score}", 50, pygame.Color("black"), (10, 330), fenetre)
                                 pygame.display.flip()
                             else:
-                                police = pygame.font.Font(None, 60)
-                                texte = police.render(f"Score : {self.joueurs[0].score}",True,pygame.Color("black"))
-                                rectText = texte.get_rect().height
-                                fenetre.blit(texte, (10, 300-rectText/2))
+                                printText(f"Score : {self.joueurs[0].score}", 60, pygame.Color("black"), (10, 300), fenetre)
                                 pygame.display.flip()
                             
 
@@ -477,36 +429,20 @@ def boogle():
 
             # Déterminer et afficher le gagnant
             
-            bille = pygame.image.load("./image/boogle/vert.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (900, 100))
-            fenetre.blit(bille, (5,5))
+            printImage("./image/boogle/vert.png", (900, 100), (5,5), fenetre)
             if(len(self.joueurs)==2):
                 gagnant = self.Gagnant()
-
-                police = pygame.font.Font(None, 60)
-                texte = police.render(f"Victoire du {gagnant.name}",True,pygame.Color("black"))
-                fenetre.blit(texte, (307, 10))
+                printText(f"Victoire du {gagnant.name}", 60, pygame.Color("black"), (307, 10), fenetre)
                 pygame.display.flip()
             else:
-                police = pygame.font.Font(None, 60)
-                texte = police.render(f"Bravo tu as {joueur.score} points",True,pygame.Color("black"))
-                fenetre.blit(texte, (290, 10))
+                printText(f"Bravo tu as {joueur.score} points", 60, pygame.Color("black"), (290, 10), fenetre)
                 pygame.display.flip()
 
 
 
-    pygame.init()
-    pygame.font.init()
-    fenetre = pygame.display.set_mode((1000,600))
-    fenetre.fill("#A2B203")
-    pygame.display.set_caption("boogle")
-    pygame_icon = pygame.image.load('./image/boogle/icon.png')
-    pygame.display.set_icon(pygame_icon)
-    pygame.display.flip()
+    fenetre = initScreen((1000,600), "boogle", "#A2B203","./image/boogle/icon.png")
 
-    bille = pygame.image.load("./image/boogle/play.png").convert_alpha()
-    bille = pygame.transform.scale(bille, (700, 428.75))
-    fenetre.blit(bille, (150,50))
+    printImage("./image/boogle/play.png", (700, 428.75), (150,50), fenetre)
     pygame.display.flip()
             
 
@@ -527,16 +463,9 @@ def boogle():
         fenetre.fill("#A2B203")
         end = 0
         while end==0:
-            bille = pygame.image.load("./image/boogle/1joueur.png")
-            bille = pygame.transform.scale(bille, (750, 185.7))
-            position_bille = [150, 65] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/boogle/1joueur.png", (750, 185.7), (150, 65), fenetre)
             pygame.display.flip()
-
-            bille = pygame.image.load("./image/boogle/2joueur.png")
-            bille = pygame.transform.scale(bille, (750, 185.7))
-            position_bille = [150, 350] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/boogle/2joueur.png", (750, 185.7), (150, 350), fenetre)
             pygame.display.flip()
 
             for event in pygame.event.get():
@@ -561,18 +490,8 @@ def boogle():
             a=jeu.Jouer()
             
             if(a!=0):
-                bille = pygame.image.load("./image/boogle/rejouer.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (250, 68.059))
-                position_bille = [740, 270] 
-                fenetre.blit(bille, position_bille)
-
-                bille = pygame.image.load("./image/juste prix/fleche.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (50,34.35))
-                bille = pygame.transform.rotate(bille, 180)
-                position_bille = [5, 5] 
-                fenetre.blit(bille, position_bille)
-
-                                        
+                printImage("./image/boogle/rejouer.png", (250, 68.059), [740, 270], fenetre)
+                printImage("./image/juste prix/fleche.png", (50,34.35), [5, 5], fenetre, rotation=180)
                 pygame.display.flip()
 
                         
@@ -595,3 +514,5 @@ def boogle():
                 restart=1
 
 
+if __name__ == "__main__":
+    boogle()

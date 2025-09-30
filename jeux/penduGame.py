@@ -326,7 +326,7 @@ def pendu():
 
 
             if nb_joueur == 1:
-                x = 753.5*scale_x
+                x = 735*scale_x
             else:
                 x = 733.5*scale_x
             
@@ -339,7 +339,7 @@ def pendu():
 
             
             printImage("./image/pendu/cache.jpg", (30*scale_x, 20*scale_y), (x, y), fenetre) 
-            printText(str(pt), int(28*scale_y), "black", (x+5*scale_x, y), fenetre)
+            printText(str(pt), int(28*scale_y), "black", (x+10, y), fenetre)
 
             if nb_joueur == 2: 
                 kijou += 1
@@ -348,7 +348,7 @@ def pendu():
                 partie += 1
 
             printImage("./image/pendu/rejouer.png", (200*scale_x, 46.58*scale_y), (10*scale_x, 350*scale_y), fenetre)
-            printImage("./image/pendu/fleche.png", (50*scale_x,34.35*scale_y), (5*scale_x, 40*scale_y), fenetre)
+            printImage("./image/pendu/fleche.png", (50*scale_x,34.35*scale_y), (5*scale_x, 40*scale_y), fenetre, rotation=180)
             pygame.display.flip() 
 
             end = 0

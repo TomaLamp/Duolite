@@ -1,5 +1,5 @@
-from pickle import TRUE
 from pygame import *
+from module.pygameCore import *
 import pygame
 
 def puissance4():
@@ -43,27 +43,12 @@ def puissance4():
         x = 250 + (ligne-1)*75
         y = 510 - (case-1)*75
 
-        bille = pygame.image.load(pion).convert_alpha()
-        bille = pygame.transform.scale(bille, (50, 50))
-        bille = pygame.transform.rotate(bille, 90)
-        position_bille = [x, y] 
-        fenetre.blit(bille, position_bille)
+        printImage(pion, (50, 50), (x, y), fenetre, 90)
         pygame.display.flip()
 
 
-
-    pygame.init()
-    pygame.font.init()
-    fenetre = pygame.display.set_mode((1000,600))
-    fenetre.fill("#A2B203")
-    pygame.display.set_caption("Puissance 4")
-    pygame_icon = pygame.image.load("./image/puissance4/icon.png")
-    pygame.display.set_icon(pygame_icon)
-    pygame.display.flip()
-
-    bille = pygame.image.load("./image/puissance4/play.png").convert_alpha()
-    bille = pygame.transform.scale(bille, (600, 442.5))
-    fenetre.blit(bille, (200,80))
+    fenetre = initScreen((1000,600), "Puissance 4", "#A2B203", "./image/puissance4/icon.png")
+    printImage("./image/puissance4/play.png", (600, 442.5), (200,80), fenetre)
     pygame.display.flip()
 
     fin = 0
@@ -91,13 +76,7 @@ def puissance4():
         
 
         fenetre.fill("#A2B203")
-        pygame.display.flip()
-
-        bille = pygame.image.load("./image/puissance4/grille.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (462, 540))
-        bille = pygame.transform.rotate(bille, 90)
-        position_bille = [230, 120] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/puissance4/grille.png", (462, 540), (230, 120), fenetre, 90)
         pygame.display.flip()
         end = 0
         while end==0:
@@ -109,34 +88,12 @@ def puissance4():
                 colors = "yellow"
                 couleur = "jaune"
             
-            police = pygame.font.Font("./police/adventure.otf", 64)
-            texte = police.render("Au tour du " + couleur,True, colors)
-            fenetre.blit(texte, (280, 10))
+            printText("Au tour du " + couleur, 64, colors, (280, 10), fenetre, police="./police/adventure.otf")
+            printText("Rouge : ", 44, "red", (10, 300), fenetre, police="./police/adventure.otf")
+            printText(str(point_rouge), 54, "black", (10, 350), fenetre, police="./police/adventure.otf")
+            printText("Jaune : ", 44, "yellow", (860, 300), fenetre, police="./police/adventure.otf")
+            printText(str(point_jaune), 54, "black", (955, 350), fenetre, police="./police/adventure.otf")
             pygame.display.flip()
-
-            police = pygame.font.Font("./police/adventure.otf", 44)
-            texte = police.render("Rouge : ",True, "red")
-            fenetre.blit(texte, (10, 300))
-            pygame.display.flip()
-
-            police = pygame.font.Font("./police/adventure.otf", 54)
-            texte = police.render(str(point_rouge) ,True, "black")
-            fenetre.blit(texte, (10, 350))
-            pygame.display.flip()
-
-
-            police = pygame.font.Font("./police/adventure.otf", 44)
-            texte = police.render("Jaune : ",True, "yellow")
-            fenetre.blit(texte, (860, 300))
-            pygame.display.flip()
-
-            police = pygame.font.Font("./police/adventure.otf", 54)
-            texte = police.render(str(point_jaune) ,True, "black")
-            fenetre.blit(texte, (955, 350))
-            pygame.display.flip()
-
-            
-
 
             choix = False
             while not choix:
@@ -149,12 +106,12 @@ def puissance4():
                     if grille[prop][i] == 0:
                         if kijou%2 == 1:
                             grille[prop][i] = "rouge"
-                            choix = TRUE
+                            choix = True
                             j = i
                             break
                         else:
                             grille[prop][i] = "jaune"
-                            choix = TRUE
+                            choix = True
                             j = i
                             break
 
@@ -218,22 +175,16 @@ def puissance4():
                 nbr += 1
 
             
-            bille = pygame.image.load("./image/puissance4/fond.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (500, 100))
-            position_bille = [300, 0] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/puissance4/fond.png", (500, 100), (300, 0), fenetre)
             pygame.display.flip()
-
-            
 
             if hautDroite + basGauche > 3 or hautGauche + basDroite > 3 or droite+gauche > 3 or haut+bas > 3:
                 if kijou%2 == 1:
                     point_rouge += 1
                 else: 
                     point_jaune += 1
-                police = pygame.font.Font("./police/adventure.otf", 64)
-                texte = police.render("Gagné " + couleur,True, colors)
-                fenetre.blit(texte, (370, 10))
+                
+                printText("Gagné " + couleur , 64, colors, (500, 10), fenetre, police="./police/adventure.otf", Alignement="Center")
                 pygame.display.flip()
 
                 end = 1
@@ -280,11 +231,7 @@ def puissance4():
                 x = 250 + (prop+nbr)*75
                 y = 510 - (j+nbr2-1)*75
 
-                bille = pygame.image.load("./image/puissance4/red line.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (4*75-25+longueur, 50))
-                bille = pygame.transform.rotate(bille, rot)
-                position_bille = [x, y] 
-                fenetre.blit(bille, position_bille)
+                printImage("./image/puissance4/red line.png", (4*75-25+longueur, 50), (x, y), fenetre, rot)
                 pygame.display.flip()
 
             c = 0
@@ -297,19 +244,13 @@ def puissance4():
 
             
             if c==len(grille)*len(grille[1]) and (hautDroite + basGauche < 4 and hautGauche + basDroite < 4 and droite+gauche < 4 and haut+bas < 4):
-                police = pygame.font.Font("./police/adventure.otf", 84)
-                texte = police.render("Egalité",True, "black")
-                fenetre.blit(texte, (390, 10))
-                pygame.display.flip()
+                printText("Egalité", 84, "black", (500, 10), fenetre, police="./police/adventure.otf", Alignement="Center")
                 end=1
 
             
             kijou += 1    
 
-        bille = pygame.image.load("./image/puissance4/rejouer.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (300, 80.71))
-        position_bille = [10, 10] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/puissance4/rejouer.png", (300, 80.71), (10, 10), fenetre)
         pygame.display.flip()
 
         end = 0
@@ -320,7 +261,13 @@ def puissance4():
                         y = event.pos[1]
                         if x>10 and x<309 and y>10 and y<89:
                             end = 1
-                            
+
+                if (event.type == KEYDOWN):
+                    if event.key == K_RETURN:
+                        end = 1
                                 
                 if(event.type == QUIT): 
                         return 0
+                
+if __name__ == "__main__":
+    puissance4()

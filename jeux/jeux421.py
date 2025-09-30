@@ -1,8 +1,8 @@
 from pygame import *
 import pygame
 from math import *
-import random
 from time import *
+from module.pygameCore import *
 
 
 def jeux421():
@@ -27,50 +27,32 @@ def jeux421():
         if score[0]==0:
             for i in range(10):
                 a = random.randint(1,6)
-                bille = pygame.image.load("./image/421/de"+str(a)+".jpg").convert_alpha()
-                bille = pygame.transform.scale(bille, (100, 100))
-                position_bille = [200, 200] 
-                fenetre.blit(bille, position_bille)
+                printImage("./image/421/de"+str(a)+".jpg", (100, 100), [200, 200], fenetre)
                 pygame.display.flip()
                 sleep(0.1)
 
-            bille = pygame.image.load("./image/421/de"+str(l[0])+".jpg").convert_alpha()
-            bille = pygame.transform.scale(bille, (100, 100))
-            position_bille = [200, 200] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/421/de"+str(l[0])+".jpg", (100, 100), [200, 200], fenetre)
             pygame.display.flip()
         
         if score[1]==0:
             for i in range(10):
                 a = random.randint(1,6)
-                bille = pygame.image.load("./image/421/de"+str(a)+".jpg").convert_alpha()
-                bille = pygame.transform.scale(bille, (100, 100))
-                position_bille = [450, 200] 
-                fenetre.blit(bille, position_bille)
+                printImage("./image/421/de"+str(a)+".jpg", (100, 100), [450, 200], fenetre)
                 pygame.display.flip()
                 sleep(0.1)
 
-            bille = pygame.image.load("./image/421/de"+str(l[1])+".jpg").convert_alpha()
-            bille = pygame.transform.scale(bille, (100, 100))
-            position_bille = [450, 200] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/421/de"+str(l[1])+".jpg", (100, 100), [450, 200], fenetre)
             pygame.display.flip()
 
         if score[2]==0:
             for i in range(10):
                 a = random.randint(1,6)
-                bille = pygame.image.load("./image/421/de"+str(a)+".jpg").convert_alpha()
-                bille = pygame.transform.scale(bille, (100, 100))
-                position_bille = [700, 200] 
-                fenetre.blit(bille, position_bille)
+                printImage("./image/421/de"+str(a)+".jpg", (100, 100), [700, 200], fenetre)
                 pygame.display.flip()
                 sleep(0.1)
 
 
-            bille = pygame.image.load("./image/421/de"+str(l[2])+".jpg").convert_alpha()
-            bille = pygame.transform.scale(bille, (100, 100))
-            position_bille = [700, 200] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/421/de"+str(l[2])+".jpg", (100, 100), [700, 200], fenetre)
         
         pygame.display.flip()
 
@@ -82,11 +64,7 @@ def jeux421():
             l=''
 
         p=[200, 450, 700] 
-        
-        bille = pygame.image.load("./image/421/de"+l+str(val)+".jpg").convert_alpha()
-        bille = pygame.transform.scale(bille, (100, 100))
-        position_bille = [p[pos-1], 200] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/421/de"+l+str(val)+".jpg", (100, 100), [p[pos-1], 200], fenetre)
         pygame.display.flip()
 
 
@@ -107,19 +85,10 @@ def jeux421():
         return pts
 
 
-    pygame.init()
-    pygame.font.init()
-    fenetre = pygame.display.set_mode((1000,600))
-    fenetre.fill("#FFFF00")
-    pygame.display.set_caption("421")
-    pygame_icon = pygame.image.load('./image/421/icon.jpg')
-    pygame.display.set_icon(pygame_icon)
-    pygame.display.flip()
+    fenetre = initScreen((1000,600), "421", "#FFFF00", './image/421/icon.jpg')
 
 
-    bille = pygame.image.load("./image/421/play.png").convert_alpha()
-    bille = pygame.transform.scale(bille, (700, 472.73))
-    fenetre.blit(bille, (160,36))
+    printImage("./image/421/play.png", (700, 472.73), [160,36], fenetre)
     pygame.display.flip()
         
 
@@ -135,34 +104,17 @@ def jeux421():
             if (event.type == KEYDOWN) or (event.type == QUIT): 
                 return 0
 
-    bille = pygame.image.load("./image/421/jaune.png").convert_alpha()
-    bille = pygame.transform.scale(bille, (1000, 600))
-    position_bille = [0, 0] 
-    fenetre.blit(bille, position_bille)
+    printImage("./image/421/jaune.png", (1000, 600), [0, 0], fenetre)
 
+    printImage("./image/421/lancer.jpg", (350, 86.55), [100, 420], fenetre)
 
-    bille = pygame.image.load("./image/421/lancer.jpg").convert_alpha()
-    bille = pygame.transform.scale(bille, (350, 86.55))
-    position_bille = [100, 420] 
-    fenetre.blit(bille, position_bille)
+    printImage("./image/421/continuer.jpg", (350, 86.55), [550, 420], fenetre)
 
-    bille = pygame.image.load("./image/421/continuer.jpg").convert_alpha()
-    bille = pygame.transform.scale(bille, (350, 86.55))
-    position_bille = [550, 420] 
-    fenetre.blit(bille, position_bille)
+    printText("Joueur 1 :", 33, "black", (840, 55), fenetre)
 
-    police = pygame.font.Font(None, 33)
-    texte = police.render("Joueur 1 :",True, "black")
-    fenetre.blit(texte, (840, 55))
+    printText("Joueur 2 :", 33, "black", (840, 85), fenetre)
 
-    police = pygame.font.Font(None, 33)
-    texte = police.render("Joueur 2 :",True, "black")
-    fenetre.blit(texte, (840, 85))
-
-    police = pygame.font.Font(None, 33)
-    police.underline = True
-    texte = police.render("score :",True, "black")
-    fenetre.blit(texte, (870, 20))
+    printText("score :", 33, "black", (870, 20), fenetre, underline=True)
 
     pygame.display.flip()
 
@@ -174,75 +126,35 @@ def jeux421():
     end = 0
     while end==0:
 
-        bille = pygame.image.load("./image/421/jaune.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (30, 60))
-        position_bille = [110, 90] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/421/jaune.png", (30, 60), [110, 90], fenetre)
 
-        bille = pygame.image.load("./image/421/jaune.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (25, 25))
-        position_bille = [65, 10] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/421/jaune.png", (25, 25), [65, 10], fenetre)
 
-        
+        printText("Pot :", 33, "black", (10, 10), fenetre)
 
-        police = pygame.font.Font(None, 33)
-        texte = police.render("Pot :",True, "black")
-        fenetre.blit(texte, (10, 10))
+        printText("Point :", 33, "black", (10, 60), fenetre, underline=True)
 
-        police = pygame.font.Font(None, 33)
-        police.underline = True
-        texte = police.render("Point :",True, "black")
-        fenetre.blit(texte, (10, 60))
+        printText("Joueur 1:", 33, "black", (10, 90), fenetre)
 
-        police = pygame.font.Font(None, 33)
-        texte = police.render("Joueur 1:",True, "black")
-        fenetre.blit(texte, (10, 90))
+        printText("Joueur 2:", 33, "black", (10, 120), fenetre)
 
-        police = pygame.font.Font(None, 33)
-        texte = police.render("Joueur 2:",True, "black")
-        fenetre.blit(texte, (10, 120))
+        printText(str(point1), 33, "black", (115, 90), fenetre)
 
-        police = pygame.font.Font(None, 33)
-        texte = police.render(str(point1),True, "black")
-        fenetre.blit(texte, (115, 90))
+        printText(str(point2), 33, "black", (115, 120), fenetre)
 
-        police = pygame.font.Font(None, 33)
-        texte = police.render(str(point2),True, "black")
-        fenetre.blit(texte, (115, 120))
+        printText(str(pot), 33, "black", (65, 10), fenetre)
 
-        police = pygame.font.Font(None, 33)
-        texte = police.render(str(pot),True, "black")
-        fenetre.blit(texte, (65, 10))
+        printImage("./image/421/blanc.png", (100, 100), [200, 200], fenetre)
 
-        bille = pygame.image.load("./image/421/blanc.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (100, 100))
-        position_bille = [200, 200] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/421/blanc.png", (100, 100), [450, 200], fenetre)
 
-        bille = pygame.image.load("./image/421/blanc.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (100, 100))
-        position_bille = [450, 200] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/421/blanc.png", (100, 100), [700, 200], fenetre)
 
-        bille = pygame.image.load("./image/421/blanc.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (100, 100))
-        position_bille = [700, 200] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/421/jaune.png", (50, 70), [950, 50], fenetre)
 
-        bille = pygame.image.load("./image/421/jaune.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (50, 70))
-        position_bille = [950, 50] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/421/jaune.png", (520, 70), [250, 70], fenetre)
 
-        bille = pygame.image.load("./image/421/jaune.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (520, 70))
-        position_bille = [250, 70] 
-        fenetre.blit(bille, position_bille)
-
-        police = pygame.font.Font(None, 76)
-        texte = police.render("Au tour du joueur " + str(kijou%2+1),True, "red")
-        fenetre.blit(texte, (270, 70))
+        printText("Au tour du joueur " + str(kijou%2+1), 76, "red", (270, 70), fenetre)
 
         pygame.display.flip()
 
@@ -331,26 +243,17 @@ def jeux421():
             score1.sort(reverse=True)
 
         if kijou%2 == 0:
-            police = pygame.font.Font(None, 33)
-            texte = police.render(str(score1[0]) + str(score1[1]) + str(score1[2]),True, "black")
-            fenetre.blit(texte, (955, 55))
+            printText(str(score1[0]) + str(score1[1]) + str(score1[2]), 33, "black", (955, 55), fenetre)
             pygame.display.flip()
         else:
-            police = pygame.font.Font(None, 33)
-            texte = police.render(str(score1[0]) + str(score1[1]) + str(score1[2]),True, "black")
-            fenetre.blit(texte, (955, 85))
+            printText(str(score1[0]) + str(score1[1]) + str(score1[2]), 33, "black", (955, 85), fenetre)
             pygame.display.flip()
                     
         kijou+=1
 
-        bille = pygame.image.load("./image/421/jaune.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (500, 70))
-        position_bille = [270, 70] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/421/jaune.png", (500, 70), [270, 70], fenetre)
 
-        police = pygame.font.Font(None, 76)
-        texte = police.render("Au tour du joueur " + str(kijou%2+1),True, "red")
-        fenetre.blit(texte, (270, 70))
+        printText("Au tour du joueur " + str(kijou%2+1), 76, "red", (270, 70), fenetre)
         pygame.display.flip()
 
         coup = 0
@@ -436,14 +339,10 @@ def jeux421():
             score2.sort(reverse=True)
 
         if kijou%2==1:
-            police = pygame.font.Font(None, 33)
-            texte = police.render(str(score2[0]) + str(score2[1]) + str(score2[2]),True, "black")
-            fenetre.blit(texte, (955, 85))
+            printText(str(score2[0]) + str(score2[1]) + str(score2[2]), 33, "black", (955, 85), fenetre)
             pygame.display.flip()
         else:
-            police = pygame.font.Font(None, 33)
-            texte = police.render(str(score2[0]) + str(score2[1]) + str(score2[2]),True, "black")
-            fenetre.blit(texte, (955, 55))
+            printText(str(score2[0]) + str(score2[1]) + str(score2[2]), 33, "black", (955, 55), fenetre)
             pygame.display.flip()
 
 
@@ -654,27 +553,15 @@ def jeux421():
 
 
 
-        bille = pygame.image.load("./image/421/jaune.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (30, 60))
-        position_bille = [110, 90] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/421/jaune.png", (30, 60), [110, 90], fenetre)
 
-        police = pygame.font.Font(None, 33)
-        texte = police.render(str(point1),True, "black")
-        fenetre.blit(texte, (115, 90))
+        printText(str(point1), 33, "black", (115, 90), fenetre)
 
-        police = pygame.font.Font(None, 33)
-        texte = police.render(str(point2),True, "black")
-        fenetre.blit(texte, (115, 120))
+        printText(str(point2), 33, "black", (115, 120), fenetre)
 
-        bille = pygame.image.load("./image/421/jaune.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (25, 25))
-        position_bille = [65, 10] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/421/jaune.png", (25, 25), [65, 10], fenetre)
 
-        police = pygame.font.Font(None, 33)
-        texte = police.render(str(pot),True, "black")
-        fenetre.blit(texte, (65, 10))
+        printText(str(pot), 33, "black", (65, 10), fenetre)
 
         pygame.display.flip()
 
@@ -694,14 +581,9 @@ def jeux421():
             point2 = 0
             pot = 21
 
-            bille = pygame.image.load("./image/421/jaune.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (500, 70))
-            position_bille = [270, 70] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/421/jaune.png", (500, 70), [270, 70], fenetre)
 
-            police = pygame.font.Font(None, 76)
-            texte = police.render("Victoire du joueur " + j,True, "#556B2F")
-            fenetre.blit(texte, (250, 70))
+            printText("Victoire du joueur " + j, 76, "#556B2F", (250, 70), fenetre)
 
             pygame.display.flip()
 
@@ -716,3 +598,5 @@ def jeux421():
                     return 0
 
     
+if __name__ == "__main__":
+    jeux421()

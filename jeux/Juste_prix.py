@@ -1,9 +1,10 @@
 from pygame import *
 import pygame
+from module.pygameCore import *
+from random import randint
 
 def justePrix():
-    from random import randint
-
+    
     def choix_nombre():
         nombre = ""
         fin = 0
@@ -63,16 +64,8 @@ def justePrix():
                             return int(nombre)
 
                 if event.type == KEYDOWN or event.type == MOUSEBUTTONUP:
-                    bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                    bille = pygame.transform.scale(bille, (90, 50))
-                    position_bille = [445, 270]
-                    rectWidth = bille.get_rect().width 
-                    fenetre.blit(bille, position_bille) 
-
-                    police = pygame.font.Font(None, 72)
-                    texte = police.render(nombre,True, "black")
-                    rectTexte = texte.get_rect().width
-                    fenetre.blit(texte, (rectWidth/2 - rectTexte/2 +445, 270))
+                    rectwidth = printImage("./image/juste prix/fond.jpg", (90, 50), (445, 270), fenetre).width
+                    printText(nombre, 72, "black", (rectwidth/2 + 445, 270), fenetre, Alignement="Center")
                     pygame.display.flip()  
 
                 if (event.type == QUIT): 
@@ -81,21 +74,9 @@ def justePrix():
                 
                 
 
+    fenetre = initScreen((1000,600), "Juste prix", "#B707C6", './image/juste prix/icon.png')
 
-    pygame.init()
-    pygame.font.init()
-    fenetre = pygame.display.set_mode((1000,600))
-    fenetre.fill("#B707C6")
-    pygame.display.set_caption("Juste prix")
-    pygame_icon = pygame.image.load('./image/juste prix/icon.png')
-    pygame.display.set_icon(pygame_icon)
-    pygame.display.flip()
-
-
-    bille = pygame.image.load("./image/juste prix/play.png").convert_alpha()
-    bille = pygame.transform.scale(bille, (700, 549.5))
-    position_bille = [150,-10] 
-    fenetre.blit(bille, position_bille)
+    printImage("./image/juste prix/play.png", (700, 549.5), (150,-10), fenetre)
     pygame.display.flip()
 
     fin = 0
@@ -117,19 +98,9 @@ def justePrix():
 
         fenetre.fill("#B707C6")
 
-        bille = pygame.image.load("./image/juste prix/joueur1.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (700, 173.1))
-        position_bille = [160, 70] 
-        fenetre.blit(bille, position_bille)
-
-        bille = pygame.image.load("./image/juste prix/joueur2.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (700, 173.1))
-        position_bille = [160, 370] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/juste prix/joueur1.png", (700, 173.1), (160, 70), fenetre)
+        printImage("./image/juste prix/joueur2.png", (700, 173.1), (160, 370), fenetre)
         pygame.display.flip()
-
-
-
 
         fin = 0
         while fin == 0:
@@ -160,53 +131,29 @@ def justePrix():
         for i in range(4):
             c -= 5
             for j in range(3):
-                bille = pygame.image.load("./image/juste prix/nbr.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (50, 50))
-                position_bille = [400+70*j, 340+60*i] 
-                fenetre.blit(bille, position_bille)
+                printImage("./image/juste prix/nbr.png", (50, 50), (400+70*j, 340+60*i), fenetre)
 
                 if c<10 and c>0:
-                    police = pygame.font.Font(None, 33)
-                    texte = police.render(str(c),True, "black")
-                    fenetre.blit(texte, (420+70*j, 355+60*i))
-                    pygame.display.flip()
+                    printText(str(c), 33, "black", (420+70*j, 355+60*i), fenetre)
                 elif c==-2:
-                    bille = pygame.image.load("./image/juste prix/effacer.png").convert_alpha()
-                    bille = pygame.transform.scale(bille, (40, 40))
-                    position_bille = [405+70*j, 345+60*i] 
-                    fenetre.blit(bille, position_bille)
+                    printImage("./image/juste prix/effacer.png", (40, 40), (405+70*j, 345+60*i), fenetre)
                 elif c==-1:
-                    police = pygame.font.Font(None, 33)
-                    texte = police.render(str(0),True, "black")
-                    fenetre.blit(texte, (420+70*j, 355+60*i))
-                    pygame.display.flip()
+                    printText(str(0), 33, "black", (420+70*j, 355+60*i), fenetre)
                 elif c==0:
-                    bille = pygame.image.load("./image/juste prix/entrer.png").convert_alpha()
-                    bille = pygame.transform.scale(bille, (40, 40))
-                    position_bille = [405+70*j, 345+60*i] 
-                    fenetre.blit(bille, position_bille)
+                    printImage("./image/juste prix/entrer.png", (40, 40), (405+70*j, 345+60*i), fenetre)
+
+                pygame.display.flip()
                 
                 if j != 2: 
                     c+=1                      
 
 
+        printText(str(borne_min) + "<", 72, "black", (350, 270), fenetre)
+        printText("<" + str(borne_sup), 72, "black", (550, 270), fenetre)
 
-        police = pygame.font.Font(None, 72)
-        texte = police.render(str(borne_min) + "<", True, "black")
-        fenetre.blit(texte, (350, 270))
-        police = pygame.font.Font(None, 72)
-        texte = police.render( "<" + str(borne_sup), True, "black")
-        fenetre.blit(texte, (550, 270))
-        pygame.display.flip()
+        printText("Nombre d'essai max :  ", 36, "black", (10, 10), fenetre)
+        printText("ton nombre de coup :  ", 36, "black", (690, 10), fenetre)
 
-
-        police = pygame.font.Font(None, 36)
-        texte = police.render("Nombre d'essai max :  ",True, "black")
-        fenetre.blit(texte, (10, 10))
-
-        police = pygame.font.Font(None, 36)
-        texte = police.render("Ton nombre de coup :  ",True, "black")
-        fenetre.blit(texte, (690, 10))
         pygame.display.flip()
 
 
@@ -224,122 +171,52 @@ def justePrix():
                     mon_nombre = randint(2,999)  
                     ton_nombre = 0
 
-                    bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                    bille = pygame.transform.scale(bille, (30, 30))
-                    position_bille = [270, 10] 
-                    fenetre.blit(bille, position_bille)
-
-                    bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                    bille = pygame.transform.scale(bille, (1000, 200))
-                    position_bille = [20, 110] 
-                    fenetre.blit(bille, position_bille)
-
-                    bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                    bille = pygame.transform.scale(bille, (60, 60))
-                    position_bille = [5, 40] 
-                    fenetre.blit(bille, position_bille)
-
-                    police = pygame.font.Font(None, 36)
-                    texte = police.render("Tes points :  " + str(point),True, "black")
-                    fenetre.blit(texte, (10, 500))
-
-                    police = pygame.font.Font(None, 36)
-                    texte = police.render(str(nbr_essais_max),True, "black")
-                    fenetre.blit(texte, (270, 10))
-
-                    police = pygame.font.Font("./police/Sketchzone.otf", 76)
-                    texte = police.render("Choisissez un nombre : ",True, "Yellow")
-                    fenetre.blit(texte, (120, 70))
+                    printImage("./image/juste prix/fond.jpg", (30, 30), (270, 10), fenetre)
+                    printImage("./image/juste prix/fond.jpg", (1000, 200), (20, 110), fenetre)
+                    printImage("./image/juste prix/fond.jpg", (60, 60), (5, 40), fenetre)
+                    printText("Tes points :  " + str(point), 36, "black", (10, 500), fenetre)
+                    printText(str(nbr_essais_max), 36, "black", (270, 10), fenetre)
+                    printText("Choisissez un nombre : ", 76, "Yellow", (120, 70), fenetre, police="./police/Sketchzone.otf")
                     pygame.display.flip()
 
                     while ton_nombre != mon_nombre and nbr_essais <= nbr_essais_max:
 
-                        bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                        bille = pygame.transform.scale(bille, (30, 30))
-                        position_bille = [960, 10] 
-                        fenetre.blit(bille, position_bille)
-
-                        police = pygame.font.Font(None, 36)
-                        texte = police.render(str(nbr_essais),True, "black")
-                        fenetre.blit(texte, (960, 10))
-
-                        bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                        bille = pygame.transform.scale(bille, (450, 50))
-                        position_bille = [300, 270] 
-                        fenetre.blit(bille, position_bille)
-
-                        police = pygame.font.Font(None, 72)
-                        texte = police.render((3-len(str(borne_min)))* "  " + str(borne_min) + "<", True, "black")
-                        fenetre.blit(texte, (320, 270))
-                        police = pygame.font.Font(None, 72)
-                        texte = police.render( "<" + str(borne_sup), True, "black")
-                        fenetre.blit(texte, (550, 270))
+                        printImage("./image/juste prix/fond.jpg", (30, 30), (960, 10), fenetre)
+                        printText(str(nbr_essais), 36, "black", (960, 10), fenetre)
+                        printImage("./image/juste prix/fond.jpg", (450, 50), (300, 270), fenetre)
+                        printText((3-len(str(borne_min)))* "  " + str(borne_min) + "<", 72, "black", (320, 270), fenetre)
+                        printText("<" + str(borne_sup), 72, "black", (550, 270), fenetre)
                         pygame.display.flip()
 
                         ton_nombre = choix_nombre()
                         if ton_nombre == "NULL":
                             return 0
 
-                        bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                        bille = pygame.transform.scale(bille, (450, 70))
-                        position_bille = [400, 190] 
-                        fenetre.blit(bille, position_bille)
+                        printImage("./image/juste prix/fond.jpg", (450, 70), (400, 190), fenetre)
 
                         if ton_nombre < mon_nombre and borne_min < ton_nombre and borne_sup > ton_nombre:
                             
-                            police = pygame.font.Font("./police/Sketchzone.otf", 66)
-                            texte = police.render("Plus",True, "green")
-                            fenetre.blit(texte, (440, 180))
-                            pygame.display.flip()
-
+                            printText("Plus", 66, "green", (440, 180), fenetre, police="./police/Sketchzone.otf")
                             nbr_essais += 1
                             borne_min = ton_nombre
+
                         elif ton_nombre > mon_nombre and borne_min < ton_nombre and borne_sup > ton_nombre:
                             
-                            police = pygame.font.Font("./police/Sketchzone.otf", 66)
-                            texte = police.render("Moins",True, "red")
-                            fenetre.blit(texte, (420, 180))
-                            pygame.display.flip()
-
+                            printText("Moins", 66, "red", (420, 180), fenetre, police="./police/Sketchzone.otf")
                             borne_sup = ton_nombre
                             nbr_essais += 1
+
                         elif ton_nombre == mon_nombre:
                             point += 13 - nbr_essais
 
-                            bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                            bille = pygame.transform.scale(bille, (200, 50))
-                            position_bille = [10, 500] 
-                            fenetre.blit(bille, position_bille)
-
-                            police = pygame.font.Font(None, 36)
-                            texte = police.render("Tes points :  " + str(point),True, "black")
-                            fenetre.blit(texte, (10, 500))
-                        
-                            bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                            bille = pygame.transform.scale(bille, (1000, 100))
-                            position_bille = [120, 70] 
-                            fenetre.blit(bille, position_bille)
-
-                            police = pygame.font.Font("./police/Sketchzone.otf", 52)
-                            texte = police.render("Bravo ! Vous avez trouvé en "+str(nbr_essais)+" essais",True, "Green")
-                            fenetre.blit(texte, (55, 110))
-
-                            police = pygame.font.Font("./police/Sketchzone.otf", 52)
-                            texte = police.render("Le nombre était : "+str(mon_nombre),True, "Green")
-                            fenetre.blit(texte, (240, 180))
-                            pygame.display.flip()
-
-                            bille = pygame.image.load("./image/juste prix/suivant.png").convert_alpha()
-                            bille = pygame.transform.scale(bille, (300, 80.7))
-                            position_bille = [680, 500] 
-                            fenetre.blit(bille, position_bille)
-                            pygame.display.flip()
-
-                            bille = pygame.image.load("./image/juste prix/fleche.png").convert_alpha()
-                            bille = pygame.transform.scale(bille, (50,34.35))
-                            bille = pygame.transform.rotate(bille, 180)
-                            position_bille = [5, 40] 
-                            fenetre.blit(bille, position_bille)
+                            printImage("./image/juste prix/fond.jpg", (200, 50), (10, 500), fenetre)
+                            printText("Tes points :  " + str(point), 36, "black", (10, 500), fenetre)
+                            printImage("./image/juste prix/fond.jpg", (1000, 100), (120, 70), fenetre)
+                            printText("Bravo ! Vous avez trouvé en "+str(nbr_essais)+" essais", 52, "Green", (55, 110), fenetre, police="./police/Sketchzone.otf")
+                            printText("Le nombre était : "+str(mon_nombre), 52, "Green", (240, 180), fenetre, police="./police/Sketchzone.otf")
+                            printImage("./image/juste prix/suivant.png", (300, 80.7), (680, 500), fenetre)
+                            printImage("./image/juste prix/fleche.png", (50, 34.35), (5, 40), fenetre, rotation=180)
+                            
                             pygame.display.flip() 
 
                             fin = 0
@@ -350,10 +227,7 @@ def justePrix():
                                         y = event.pos[1]
                                         if x > 680 and x < 977 and y > 500 and y < 579:
                                             fin=1
-                                            bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                                            bille = pygame.transform.scale(bille, (300, 82))
-                                            position_bille = [680, 500] 
-                                            fenetre.blit(bille, position_bille)
+                                            printImage("./image/juste prix/fond.jpg", (300, 82), (680, 500), fenetre)
                                             pygame.display.flip()
                                         if(x>21 and x<51 and y>50 and y<61) or (x>5 and x<20 and y>41 and y<71):
                                             fin=1
@@ -363,39 +237,16 @@ def justePrix():
                                     if (event.type == QUIT): 
                                         return 0
 
-                        
+                        pygame.display.flip()
+
                         if nbr_essais>nbr_essais_max and ton_nombre != mon_nombre :
-
-                            bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                            bille = pygame.transform.scale(bille, (450, 70))
-                            position_bille = [400, 190] 
-                            fenetre.blit(bille, position_bille)
-
-                            bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                            bille = pygame.transform.scale(bille, (1000, 130))
-                            position_bille = [120, 70] 
-                            fenetre.blit(bille, position_bille)
-
-                            police = pygame.font.Font("./police/Sketchzone.otf", 62)
-                            texte = police.render("Perdu ! Vous n'avez plus d'essai",True, "Red")
-                            fenetre.blit(texte, (50, 110))
-
-                            police = pygame.font.Font("./police/Sketchzone.otf", 62)
-                            texte = police.render("Le nombre était : "+str(mon_nombre),True, "Red")
-                            fenetre.blit(texte, (210, 180))
-                            pygame.display.flip()
-
-                            bille = pygame.image.load("./image/juste prix/rejouer.png").convert_alpha()
-                            bille = pygame.transform.scale(bille, (300, 80.7))
-                            position_bille = [680, 500] 
-                            fenetre.blit(bille, position_bille)
-                            pygame.display.flip()
-
-                            bille = pygame.image.load("./image/juste prix/fleche.png").convert_alpha()
-                            bille = pygame.transform.scale(bille, (50,34.35))
-                            bille = pygame.transform.rotate(bille, 180)
-                            position_bille = [5, 40] 
-                            fenetre.blit(bille, position_bille)
+                            
+                            printImage("./image/juste prix/fond.jpg", (450, 70), (400, 190), fenetre)
+                            printImage("./image/juste prix/fond.jpg", (1000, 130), (120, 70), fenetre)
+                            printText("Perdu ! Vous n'avez plus d'essai", 62, "Red", (50, 110), fenetre, police="./police/Sketchzone.otf")
+                            printText("Le nombre était : "+str(mon_nombre), 62, "Red", (210, 180), fenetre, police="./police/Sketchzone.otf")
+                            printImage("./image/juste prix/rejouer.png", (300, 80.7), (680, 500), fenetre)
+                            printImage("./image/juste prix/fleche.png", (50, 34.35), (5, 40), fenetre, rotation=180)
                             pygame.display.flip() 
 
                             fin = 0
@@ -407,14 +258,8 @@ def justePrix():
                                         if x > 680 and x < 977 and y > 500 and y < 579:
                                             fin = 1
                                             end=1
-                                            bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                                            bille = pygame.transform.scale(bille, (300, 82))
-                                            position_bille = [680, 500] 
-                                            fenetre.blit(bille, position_bille)
-                                            bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                                            bille = pygame.transform.scale(bille, (200, 50))
-                                            position_bille = [10, 500] 
-                                            fenetre.blit(bille, position_bille)
+                                            printImage("./image/juste prix/fond.jpg", (300, 82), (680, 500), fenetre)
+                                            printImage("./image/juste prix/fond.jpg", (200, 50), (10, 500), fenetre)
                                             pygame.display.flip()
                                         if(x>21 and x<51 and y>50 and y<61) or (x>5 and x<20 and y>41 and y<71):
                                             fin=1
@@ -461,88 +306,52 @@ def justePrix():
                         joueur = "Joueur 2"
 
                     
-                    bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                    bille = pygame.transform.scale(bille, (30, 30))
-                    position_bille = [270, 10] 
-                    fenetre.blit(bille, position_bille)
+                    printImage("./image/juste prix/fond.jpg", (30, 30), [270, 10], fenetre)
 
-                    bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                    bille = pygame.transform.scale(bille, (1000, 200))
-                    position_bille = [20, 110] 
-                    fenetre.blit(bille, position_bille)
+                    printImage("./image/juste prix/fond.jpg", (1000, 200), [20, 110], fenetre)
 
-                    bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                    bille = pygame.transform.scale(bille, (60, 60))
-                    position_bille = [5, 40] 
-                    fenetre.blit(bille, position_bille)
+                    printImage("./image/juste prix/fond.jpg", (60, 60), [5, 40], fenetre)
 
-                    police = pygame.font.Font(None, 36)
-                    texte = police.render("Points joueur 1 :  " + str(pointj1),True, "black")
-                    fenetre.blit(texte, (10, 500))
+                    printText("Points joueur 1 :  " + str(pointj1), 36, "black", (10, 500), fenetre)
 
-                    police = pygame.font.Font(None, 36)
-                    texte = police.render("Points joueur 2 :  " + str(pointj2),True, "black")
-                    fenetre.blit(texte, (10, 550))
+                    printText("Points joueur 2 :  " + str(pointj2), 36, "black", (10, 550), fenetre)
 
-                    police = pygame.font.Font(None, 36)
-                    texte = police.render(str(nbr_essais_max),True, "black")
-                    fenetre.blit(texte, (270, 10))
+                    printText(str(nbr_essais_max), 36, "black", (270, 10), fenetre)
 
-                    police = pygame.font.Font("./police/Sketchzone.otf", 66)
-                    texte = police.render(joueur +" Choisissez un nombre : ",True, "Yellow")
-                    fenetre.blit(texte, (10, 70))
+                    printText(joueur +" Choisissez un nombre : ", 66, "Yellow", (10, 70), fenetre, police="./police/Sketchzone.otf")
                     pygame.display.flip()
 
 
                     mon_nombre = randint(1,borne_sup) 
                     while ton_nombre != mon_nombre and nbr_essais <= nbr_essais_max:
 
-                        bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                        bille = pygame.transform.scale(bille, (30, 30))
-                        position_bille = [960, 10] 
-                        fenetre.blit(bille, position_bille)
+                        printImage("./image/juste prix/fond.jpg", (30, 30), [960, 10], fenetre)
 
-                        police = pygame.font.Font(None, 36)
-                        texte = police.render(str(nbr_essais),True, "black")
-                        fenetre.blit(texte, (960, 10))
+                        printText(str(nbr_essais), 36, "black", (960, 10), fenetre)
 
-                        bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                        bille = pygame.transform.scale(bille, (450, 50))
-                        position_bille = [300, 270] 
-                        fenetre.blit(bille, position_bille)
+                        printImage("./image/juste prix/fond.jpg", (450, 50), [300, 270], fenetre)
 
-                        police = pygame.font.Font(None, 72)
-                        texte = police.render((3-len(str(borne_min)))* "  " + str(borne_min) + "<", True, "black")
-                        fenetre.blit(texte, (320, 270))
-                        police = pygame.font.Font(None, 72)
-                        texte = police.render( "<" + str(borne_sup), True, "black")
-                        fenetre.blit(texte, (550, 270))
+                        printText((3-len(str(borne_min)))* "  " + str(borne_min) + "<", 72, "black", (320, 270), fenetre)
+                        printText("<" + str(borne_sup), 72, "black", (550, 270), fenetre)
                         pygame.display.flip()
 
                         ton_nombre = choix_nombre()
                         if ton_nombre=="NULL":
                             return 0
 
-                        bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                        bille = pygame.transform.scale(bille, (450, 90))
-                        position_bille = [400, 170] 
-                        fenetre.blit(bille, position_bille)
+                        printImage("./image/juste prix/fond.jpg", (450, 90), [400, 170], fenetre)
 
                         
                         if ton_nombre < mon_nombre and borne_min < ton_nombre and borne_sup > ton_nombre:
                             
-                            police = pygame.font.Font("./police/Sketchzone.otf", 66)
-                            texte = police.render("Plus",True, "green")
-                            fenetre.blit(texte, (440, 170))
+                            printText("Plus", 66, "green", (440, 170), fenetre, police="./police/Sketchzone.otf")
                             pygame.display.flip()
 
                             nbr_essais += 1
                             borne_min = ton_nombre
                         elif ton_nombre > mon_nombre and borne_min < ton_nombre and borne_sup > ton_nombre:
                             
-                            police = pygame.font.Font("./police/Sketchzone.otf", 66)
-                            texte = police.render("Moins",True, "red")
-                            fenetre.blit(texte, (420, 170))
+                            printText("Moins", 66, "red", (420, 170), fenetre, police="./police/Sketchzone.otf")
                             pygame.display.flip()
 
                             borne_sup = ton_nombre
@@ -550,30 +359,16 @@ def justePrix():
                         elif ton_nombre == mon_nombre:
                             kijou += 1
                         
-                            bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                            bille = pygame.transform.scale(bille, (1000, 100))
-                            position_bille = [10, 70] 
-                            fenetre.blit(bille, position_bille)
+                            printImage("./image/juste prix/fond.jpg", (1000, 100), [10, 70], fenetre)
 
-                            police = pygame.font.Font("./police/Sketchzone.otf", 52)
-                            texte = police.render("Bravo ! Vous avez trouvé en "+str(nbr_essais)+" essais",True, "Green")
-                            fenetre.blit(texte, (55, 110))
+                            printText("Bravo ! Vous avez trouvé en "+str(nbr_essais)+" essais", 52, "Green", (55, 110), fenetre, police="./police/Sketchzone.otf")
 
-                            police = pygame.font.Font("./police/Sketchzone.otf", 52)
-                            texte = police.render("Le nombre était : "+str(mon_nombre),True, "Green")
-                            fenetre.blit(texte, (240, 180))
+                            printText("Le nombre était : "+str(mon_nombre), 52, "Green", (240, 180), fenetre, police="./police/Sketchzone.otf")
                             pygame.display.flip()
 
-                            bille = pygame.image.load("./image/juste prix/suivant.png").convert_alpha()
-                            bille = pygame.transform.scale(bille, (300, 80.7))
-                            position_bille = [680, 500] 
-                            fenetre.blit(bille, position_bille)
+                            printImage("./image/juste prix/suivant.png", (300, 80.7), [680, 500], fenetre)
 
-                            bille = pygame.image.load("./image/juste prix/fleche.png").convert_alpha()
-                            bille = pygame.transform.scale(bille, (50,34.35))
-                            bille = pygame.transform.rotate(bille, 180)
-                            position_bille = [5, 40] 
-                            fenetre.blit(bille, position_bille)
+                            printImage("./image/juste prix/fleche.png", (50,34.35), [5, 40], fenetre, rotation=180)
 
                             pygame.display.flip()
 
@@ -585,10 +380,7 @@ def justePrix():
                                         y = event.pos[1]
                                         if x > 680 and x < 977 and y > 500 and y < 579:
                                             fin=1
-                                            bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                                            bille = pygame.transform.scale(bille, (300, 82))
-                                            position_bille = [680, 500] 
-                                            fenetre.blit(bille, position_bille)
+                                            printImage("./image/juste prix/fond.jpg", (300, 82), [680, 500], fenetre)
                                             pygame.display.flip()
                                         if(x>21 and x<51 and y>50 and y<61) or (x>5 and x<20 and y>41 and y<71):
                                                 fin=1
@@ -607,42 +399,21 @@ def justePrix():
                             else:
                                 pointj1 += 1
                             
-                            bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                            bille = pygame.transform.scale(bille, (300, 100))
-                            position_bille = [10, 500] 
-                            fenetre.blit(bille, position_bille)
+                            printImage("./image/juste prix/fond.jpg", (300, 100), [10, 500], fenetre)
 
-                            police = pygame.font.Font(None, 36)
-                            texte = police.render("Points joueur 1 :  " + str(pointj1),True, "black")
-                            fenetre.blit(texte, (10, 500))
+                            printText("Points joueur 1 :  " + str(pointj1), 36, "black", (10, 500), fenetre)
 
-                            police = pygame.font.Font(None, 36)
-                            texte = police.render("Points joueur 2 :  " + str(pointj2),True, "black")
-                            fenetre.blit(texte, (10, 550))
+                            printText("Points joueur 2 :  " + str(pointj2), 36, "black", (10, 550), fenetre)
 
-                            bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                            bille = pygame.transform.scale(bille, (1000, 200))
-                            position_bille = [10, 70] 
-                            fenetre.blit(bille, position_bille)
+                            printImage("./image/juste prix/fond.jpg", (1000, 200), [10, 70], fenetre)
 
-                            police = pygame.font.Font("./police/Sketchzone.otf", 62)
-                            texte = police.render("Perdu ! Vous n'avez plus d'essai",True, "Red")
-                            fenetre.blit(texte, (50, 110))
+                            printText("Perdu ! Vous n'avez plus d'essai", 62, "Red", (50, 110), fenetre, police="./police/Sketchzone.otf")
 
-                            police = pygame.font.Font("./police/Sketchzone.otf", 62)
-                            texte = police.render("Le nombre était : "+str(mon_nombre),True, "Red")
-                            fenetre.blit(texte, (210, 180))
+                            printText("Le nombre était : "+str(mon_nombre), 62, "Red", (210, 180), fenetre, police="./police/Sketchzone.otf")
 
-                            bille = pygame.image.load("./image/juste prix/rejouer.png").convert_alpha()
-                            bille = pygame.transform.scale(bille, (300, 80.7))
-                            position_bille = [680, 500] 
-                            fenetre.blit(bille, position_bille)
+                            printImage("./image/juste prix/rejouer.png", (300, 80.7), [680, 500], fenetre)
 
-                            bille = pygame.image.load("./image/juste prix/fleche.png").convert_alpha()
-                            bille = pygame.transform.scale(bille, (50,34.35))
-                            bille = pygame.transform.rotate(bille, 180)
-                            position_bille = [5, 40] 
-                            fenetre.blit(bille, position_bille)
+                            printImage("./image/juste prix/fleche.png", (50,34.35), [5, 40], fenetre, rotation=180)
 
                             pygame.display.flip()
 
@@ -655,14 +426,8 @@ def justePrix():
                                         if x > 680 and x < 977 and y > 500 and y < 579:
                                             fin = 1
                                             end=1
-                                            bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                                            bille = pygame.transform.scale(bille, (300, 82))
-                                            position_bille = [680, 500] 
-                                            fenetre.blit(bille, position_bille)
-                                            bille = pygame.image.load("./image/juste prix/fond.jpg").convert_alpha()
-                                            bille = pygame.transform.scale(bille, (200, 50))
-                                            position_bille = [10, 500] 
-                                            fenetre.blit(bille, position_bille)
+                                            printImage("./image/juste prix/fond.jpg", (300, 82), [680, 500], fenetre)
+                                            printImage("./image/juste prix/fond.jpg", (200, 50), [10, 500], fenetre)
                                             pygame.display.flip()
                                         if(x>21 and x<51 and y>50 and y<61) or (x>5 and x<20 and y>41 and y<71):
                                             fin=1
@@ -672,6 +437,9 @@ def justePrix():
 
                                     if (event.type == QUIT): 
                                         return 0
+                                    
+if __name__ == "__main__":
+    justePrix()
                     
 
 

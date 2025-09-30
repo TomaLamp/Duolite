@@ -2,6 +2,7 @@ from pygame import *
 import pygame
 from random import *
 from time import *
+from module.pygameCore import *
 
 def yams():
 
@@ -10,82 +11,52 @@ def yams():
             if score[0]==0:
                 for i in range(10):
                     a = randint(1,6)
-                    bille = pygame.image.load("./image/421/de"+str(a)+".jpg").convert_alpha()
-                    bille = pygame.transform.scale(bille, (100, 100))
-                    position_bille = [83, 250] 
-                    fenetre.blit(bille, position_bille)
+                    printImage(f"./image/421/de{a}.jpg", (100, 100), [83, 250], fenetre)
                     pygame.display.flip()
                     sleep(0.1)
 
-                bille = pygame.image.load("./image/421/de"+str(l[0])+".jpg").convert_alpha()
-                bille = pygame.transform.scale(bille, (100, 100))
-                position_bille = [83, 250] 
-                fenetre.blit(bille, position_bille)
+                printImage(f"./image/421/de{l[0]}.jpg", (100, 100), [83, 250], fenetre)
                 pygame.display.flip()
             
             if score[1]==0:
                 for i in range(10):
                     a = randint(1,6)
-                    bille = pygame.image.load("./image/421/de"+str(a)+".jpg").convert_alpha()
-                    bille = pygame.transform.scale(bille, (100, 100))
-                    position_bille = [266, 250] 
-                    fenetre.blit(bille, position_bille)
+                    printImage(f"./image/421/de{a}.jpg", (100, 100), [266, 250], fenetre)
                     pygame.display.flip()
                     sleep(0.1)
 
-                bille = pygame.image.load("./image/421/de"+str(l[1])+".jpg").convert_alpha()
-                bille = pygame.transform.scale(bille, (100, 100))
-                position_bille = [266, 250] 
-                fenetre.blit(bille, position_bille)
+                printImage(f"./image/421/de{l[1]}.jpg", (100, 100), [266, 250], fenetre)
                 pygame.display.flip()
 
             if score[2]==0:
                 for i in range(10):
                     a = randint(1,6)
-                    bille = pygame.image.load("./image/421/de"+str(a)+".jpg").convert_alpha()
-                    bille = pygame.transform.scale(bille, (100, 100))
-                    position_bille = [449, 250] 
-                    fenetre.blit(bille, position_bille)
+                    printImage(f"./image/421/de{a}.jpg", (100, 100), [449, 250], fenetre)
                     pygame.display.flip()
                     sleep(0.1)
 
 
-                bille = pygame.image.load("./image/421/de"+str(l[2])+".jpg").convert_alpha()
-                bille = pygame.transform.scale(bille, (100, 100))
-                position_bille = [449, 250] 
-                fenetre.blit(bille, position_bille)
+                printImage(f"./image/421/de{l[2]}.jpg", (100, 100), [449, 250], fenetre)
 
             if score[3]==0:
                 for i in range(10):
                     a = randint(1,6)
-                    bille = pygame.image.load("./image/421/de"+str(a)+".jpg").convert_alpha()
-                    bille = pygame.transform.scale(bille, (100, 100))
-                    position_bille = [632, 250] 
-                    fenetre.blit(bille, position_bille)
+                    printImage(f"./image/421/de{a}.jpg", (100, 100), [632, 250], fenetre)
                     pygame.display.flip()
                     sleep(0.1)
 
 
-                bille = pygame.image.load("./image/421/de"+str(l[3])+".jpg").convert_alpha()
-                bille = pygame.transform.scale(bille, (100, 100))
-                position_bille = [632, 250] 
-                fenetre.blit(bille, position_bille)
+                printImage(f"./image/421/de{l[3]}.jpg", (100, 100), [632, 250], fenetre)
 
             if score[4]==0:
                 for i in range(10):
                     a = randint(1,6)
-                    bille = pygame.image.load("./image/421/de"+str(a)+".jpg").convert_alpha()
-                    bille = pygame.transform.scale(bille, (100, 100))
-                    position_bille = [817, 250] 
-                    fenetre.blit(bille, position_bille)
+                    printImage(f"./image/421/de{a}.jpg", (100, 100), [817, 250], fenetre)
                     pygame.display.flip()
                     sleep(0.1)
 
 
-                bille = pygame.image.load("./image/421/de"+str(l[4])+".jpg").convert_alpha()
-                bille = pygame.transform.scale(bille, (100, 100))
-                position_bille = [817, 250] 
-                fenetre.blit(bille, position_bille)
+                printImage(f"./image/421/de{l[4]}.jpg", (100, 100), [817, 250], fenetre)
             
             pygame.display.flip()
 
@@ -98,10 +69,7 @@ def yams():
 
             p=[83, 266, 449, 632, 817] 
             
-            bille = pygame.image.load("./image/421/de"+l+str(val)+".jpg").convert_alpha()
-            bille = pygame.transform.scale(bille, (100, 100))
-            position_bille = [p[pos-1], 250] 
-            fenetre.blit(bille, position_bille)
+            printImage(f"./image/421/de{l}{val}.jpg", (100, 100), [p[pos-1], 250], fenetre)
             pygame.display.flip()
 
     def tirage(d1, d2, d3, d4, d5):
@@ -121,20 +89,11 @@ def yams():
             return l
 
 
-    pygame.init()
-    pygame.font.init()
-    fenetre = pygame.display.set_mode((1000,600))
-    fenetre.fill("orange")
-    pygame.display.set_caption("Yams")
-    pygame_icon = pygame.image.load('./image/yams/icon.jpg')
-    pygame.display.set_icon(pygame_icon)
-    pygame.display.flip()
+    fenetre = initScreen((1000,600), "Yams", "orange", './image/yams/icon.jpg')
 
 
 
-    bille = pygame.image.load("./image/yams/play.png").convert_alpha()
-    bille = pygame.transform.scale(bille, (700, 356.84))
-    fenetre.blit(bille, (150,110))
+    printImage("./image/yams/play.png", (700, 356.84), (150,110), fenetre)
     pygame.display.flip()
             
 
@@ -153,31 +112,11 @@ def yams():
     fenetre.fill("orange")
     restart=0
     while restart==0:
-
-
-        bille = pygame.image.load("./image/yams/relancer.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (350, 86.55))
-        position_bille = [100, 460] 
-        fenetre.blit(bille, position_bille)
-
-        bille = pygame.image.load("./image/yams/suivant.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (350, 86.55))
-        position_bille = [550, 460] 
-        fenetre.blit(bille, position_bille)
-
-        bille = pygame.image.load("./image/yams/point.png")
-        bille = pygame.transform.scale(bille, (950, 88.197))
-        position_bille = [50, 0] 
-        fenetre.blit(bille, position_bille)
-
-        police = pygame.font.Font(None, 18)
-        texte = police.render("Joueur 1",True, "black")
-        fenetre.blit(texte, (1, 35))
-
-        police = pygame.font.Font(None, 18)
-        texte = police.render("Joueur 2",True, "black")
-        fenetre.blit(texte, (1, 68))
-
+        printImage("./image/yams/relancer.png", (350, 86.55), [100, 460], fenetre)
+        printImage("./image/yams/suivant.png", (350, 86.55), [550, 460], fenetre)
+        printImage("./image/yams/point.png", (950, 88.197), [50, 0], fenetre)
+        printText("Joueur 1", 18, "black", (1, 35), fenetre)
+        printText("Joueur 2", 18, "black", (1, 68), fenetre)
 
         kijou = 0
 
@@ -201,41 +140,13 @@ def yams():
             else:
                 joueur = "joueur 2"
 
-            bille = pygame.image.load("./image/421/blanc.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (100, 100))
-            position_bille = [83, 250] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/421/blanc.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (100, 100))
-            position_bille = [266, 250] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/421/blanc.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (100, 100))
-            position_bille = [449, 250] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/421/blanc.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (100, 100))
-            position_bille = [632, 250] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/421/blanc.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (100, 100))
-            position_bille = [817, 250] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/yams/cache.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (1000, 100))
-            position_bille = [0, 140] 
-            fenetre.blit(bille, position_bille)
-
-            police = pygame.font.Font(None, 76)
-            texte = police.render(joueur+ ", lancez les dés",True, "black")
-            rectText = texte.get_rect().width 
-            fenetre.blit(texte, (500-rectText/2, 150))
-
+            printImage("./image/421/blanc.png", (100, 100), [83, 250], fenetre)
+            printImage("./image/421/blanc.png", (100, 100), [266, 250], fenetre)
+            printImage("./image/421/blanc.png", (100, 100), [449, 250], fenetre)
+            printImage("./image/421/blanc.png", (100, 100), [632, 250], fenetre)
+            printImage("./image/421/blanc.png", (100, 100), [817, 250], fenetre)
+            printImage("./image/yams/cache.png", (1000, 100), [0, 140], fenetre)
+            printText(joueur+ ", lancez les dés", 76, "black", (500, 150), fenetre, Alignement="Center")
             pygame.display.flip()
 
 
@@ -252,7 +163,6 @@ def yams():
                     if (event.type == MOUSEBUTTONUP):
                             x = event.pos[0]
                             y = event.pos[1]
-                            print(x ,y)
                             if x > 99 and x < 449 and y > 460 and y < 540:
                                 lancer = tirage(d1, d2, d3, d4, d5)
                                 affich(lancer, score1)
@@ -347,7 +257,6 @@ def yams():
             if score1[4] == 0:
                 score1[4] = lancer[4]
             score1.sort()
-            print(score1)
 
 
             t1 = 0
@@ -441,22 +350,13 @@ def yams():
                     full=1
 
 
-            bille = pygame.image.load("./image/yams/cache.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (1000, 100))
-            position_bille = [0, 140] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/yams/cache.png", (1000, 100), [0, 140], fenetre)
 
             if test!=0:
-                police = pygame.font.Font(None, 76)
-                texte = police.render(joueur +", mettez vos points",True, "black")
-                rectText = texte.get_rect().width 
-                fenetre.blit(texte, (500-rectText/2, 150))
+                printText(joueur +", mettez vos points", 76, "black", (500, 150), fenetre, Alignement="Center")
                 pygame.display.flip()
             else:
-                police = pygame.font.Font(None, 76)
-                texte = police.render(joueur +", enlevez une case",True, "black")
-                rectText = texte.get_rect().width 
-                fenetre.blit(texte, (500-rectText/2, 150))
+                printText(joueur +", enlevez une case", 76, "black", (500, 150), fenetre, Alignement="Center")
                 pygame.display.flip()
 
             if kijou%2==0:
@@ -740,15 +640,10 @@ def yams():
                                     
 
                             if c!=0 and xp!=0 and test!=0:
-                                police = pygame.font.Font(None, 20)
-                                texte = police.render(c,True, "black")
-                                fenetre.blit(texte, (xp, yp))
+                                printText(c, 20, "black", (xp, yp), fenetre)
                                 pygame.display.flip()
                             elif test==0 and xp!=0:
-                                bille = pygame.image.load("./image/yams/croix.png").convert_alpha()
-                                bille = pygame.transform.scale(bille, (25, 25))
-                                position_bille = [xp, yc] 
-                                fenetre.blit(bille, position_bille)
+                                printImage("./image/yams/croix.png", (25, 25), [xp, yc], fenetre)
                                 pygame.display.flip()
 
                             
@@ -756,105 +651,51 @@ def yams():
                                 if tot1j1>=63 and bonus1==0:
                                     bonus1 = 1
                                     totj1 += 30
-                                    police = pygame.font.Font(None, 20)
-                                    texte = police.render(str(30),True, "red")
-                                    rectText = texte.get_rect().width
-                                    fenetre.blit(texte, (450, yp))
+                                    printText(str(30), 20, "red", (450, yp), fenetre)
                                     pygame.display.flip()
                                 elif point_rempli1[0] == point_rempli1[1] == point_rempli1[2] == point_rempli1[3] == point_rempli1[4] == point_rempli1[5] == 1 and bonus1==0:
                                     bonus1 = 1
-                                    bille = pygame.image.load("./image/yams/croix.png").convert_alpha()
-                                    bille = pygame.transform.scale(bille, (25, 25))
-                                    position_bille = [445, yc] 
-                                    fenetre.blit(bille, position_bille)
+                                    printImage("./image/yams/croix.png", (25, 25), [445, yc], fenetre)
                                     pygame.display.flip()
                             else:
                                     if tot1j2>=63 and bonus2==0:
                                         bonus2 = 1
                                         totj2 += 30
-                                        police = pygame.font.Font(None, 20)
-                                        texte = police.render(str(30),True, "red")
-                                        rectText = texte.get_rect().width
-                                        fenetre.blit(texte, (450, yp))
+                                        printText(str(30), 20, "red", (450, yp), fenetre)
                                         pygame.display.flip()
                                     elif point_rempli2[0] == point_rempli2[1] == point_rempli2[2] == point_rempli2[3] == point_rempli2[4] == point_rempli2[5] == 1 and bonus2==0:
                                         bonus2 = 1
-                                        bille = pygame.image.load("./image/yams/croix.png").convert_alpha()
-                                        bille = pygame.transform.scale(bille, (25, 25))
-                                        position_bille = [445, yc] 
-                                        fenetre.blit(bille, position_bille)
+                                        printImage("./image/yams/croix.png", (25, 25), [445, yc], fenetre)
                                         pygame.display.flip()
 
                             
                             if kijou%2==0:
                                 if tot1j1!=0:
-                                    bille = pygame.image.load("./image/yams/cache.png").convert_alpha()
-                                    bille = pygame.transform.scale(bille, (25, 25))
-                                    position_bille = [370, yc] 
-                                    fenetre.blit(bille, position_bille)
-
-                                    police = pygame.font.Font(None, 20)
-                                    texte = police.render(str(tot1j1),True, "red")
-                                    rectText = texte.get_rect().width
-                                    fenetre.blit(texte, (387-rectText/2, yp))
+                                    printImage("./image/yams/cache.png", (25, 25), [370, yc], fenetre)
+                                    printText(str(tot1j1), 20, "red", (387, yp), fenetre, Alignement="Center")
                                     pygame.display.flip()
                                 if tot2j1!=0:
-                                    bille = pygame.image.load("./image/yams/cache.png").convert_alpha()
-                                    bille = pygame.transform.scale(bille, (25, 25))
-                                    position_bille = [650, yc] 
-                                    fenetre.blit(bille, position_bille)
-
-                                    police = pygame.font.Font(None, 20)
-                                    texte = police.render(str(tot2j1),True, "red")
-                                    rectText = texte.get_rect().width
-                                    fenetre.blit(texte, (659-rectText/2, yp))
+                                    printImage("./image/yams/cache.png", (25, 25), [650, yc], fenetre)
+                                    printText(str(tot2j1), 20, "red", (659, yp), fenetre, Alignement="Center")
                                     pygame.display.flip()
 
                                 
-                                bille = pygame.image.load("./image/yams/cache.png").convert_alpha()
-                                bille = pygame.transform.scale(bille, (40, 25))
-                                position_bille = [950, yc] 
-                                fenetre.blit(bille, position_bille)
-
-                                police = pygame.font.Font(None, 30)
-                                texte = police.render(str(totj1),True, "green")
-                                rectText = texte.get_rect().width
-                                fenetre.blit(texte, (967-rectText/2, yp))
+                                printImage("./image/yams/cache.png", (40, 25), [950, yc], fenetre)
+                                printText(str(totj1), 30, "green", (967, yp), fenetre, Alignement="Center")
                                 pygame.display.flip()
                             else:
                                     if tot1j2!=0:
-                                        bille = pygame.image.load("./image/yams/cache.png").convert_alpha()
-                                        bille = pygame.transform.scale(bille, (25, 25))
-                                        position_bille = [370, yc] 
-                                        fenetre.blit(bille, position_bille)
-
-                                        police = pygame.font.Font(None, 20)
-                                        texte = police.render(str(tot1j2),True, "red")
-                                        rectText = texte.get_rect().width
-                                        fenetre.blit(texte, (387-rectText/2, yp))
+                                        printImage("./image/yams/cache.png", (25, 25), [370, yc], fenetre)
+                                        printText(str(tot1j2), 20, "red", (387, yp), fenetre, Alignement="Center")
                                         pygame.display.flip()
                                     if tot2j2!=0:
-                                        bille = pygame.image.load("./image/yams/cache.png").convert_alpha()
-                                        bille = pygame.transform.scale(bille, (25, 25))
-                                        position_bille = [650, yc] 
-                                        fenetre.blit(bille, position_bille)
-
-                                        police = pygame.font.Font(None, 20)
-                                        texte = police.render(str(tot2j2),True, "red")
-                                        rectText = texte.get_rect().width
-                                        fenetre.blit(texte, (659-rectText/2, yp))
+                                        printImage("./image/yams/cache.png", (25, 25), [650, yc], fenetre)
+                                        printText(str(tot2j2), 20, "red", (659, yp), fenetre, Alignement="Center")
                                         pygame.display.flip()
 
                                     
-                                    bille = pygame.image.load("./image/yams/cache.png").convert_alpha()
-                                    bille = pygame.transform.scale(bille, (40, 25))
-                                    position_bille = [950, yc] 
-                                    fenetre.blit(bille, position_bille)
-
-                                    police = pygame.font.Font(None, 30)
-                                    texte = police.render(str(totj2),True, "green")
-                                    rectText = texte.get_rect().width
-                                    fenetre.blit(texte, (967-rectText/2, yp))
+                                    printImage("./image/yams/cache.png", (40, 25), [950, yc], fenetre)
+                                    printText(str(totj2), 30, "green", (967, yp), fenetre, Alignement="Center")
                                     pygame.display.flip()
 
                         
@@ -862,26 +703,12 @@ def yams():
                         if point_rempli1 == [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] and point_rempli2 == [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]:
                             end=1
                             if totj1>totj2:   
-                                bille = pygame.image.load("./image/yams/cache.png").convert_alpha()
-                                bille = pygame.transform.scale(bille, (1000, 100))
-                                position_bille = [0, 140] 
-                                fenetre.blit(bille, position_bille)
-
-                                police = pygame.font.Font(None, 76)
-                                texte = police.render("Victoire du joueur 1",True, "green")
-                                rectText = texte.get_rect().width 
-                                fenetre.blit(texte, (500-rectText/2, 150))
+                                printImage("./image/yams/cache.png", (1000, 100), [0, 140], fenetre)
+                                printText("Victoire du joueur 1", 76, "green", (500, 150), fenetre, Alignement="Center")
                                 pygame.display.flip()
                             else:
-                                bille = pygame.image.load("./image/yams/cache.png").convert_alpha()
-                                bille = pygame.transform.scale(bille, (1000, 100))
-                                position_bille = [0, 140] 
-                                fenetre.blit(bille, position_bille)
-
-                                police = pygame.font.Font(None, 76)
-                                texte = police.render("Victoire du joueur 2",True, "green")
-                                rectText = texte.get_rect().width 
-                                fenetre.blit(texte, (500-rectText/2, 150))
+                                printImage("./image/yams/cache.png", (1000, 100), [0, 140], fenetre)
+                                printText("Victoire du joueur 2", 76, "green", (500, 150), fenetre, Alignement="Center")
                                 pygame.display.flip()
 
                         

@@ -1,6 +1,7 @@
 from pygame import *
 import pygame
 from random import *
+from module.pygameCore import *
 
 
 def mastermind():
@@ -12,29 +13,14 @@ def mastermind():
 
         for i in range(len(l)):
             if l[i]=="blanc":
-                bille = pygame.image.load("./image/mastermind/p_blanc.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (20, 20))
-                position_bille = [xb[i]+i,yb[17-tour]+3] 
-                fenetre.blit(bille, position_bille)
+                printImage("./image/mastermind/p_blanc.png", (20, 20), [xb[i]+i,yb[17-tour]+3], fenetre)
             else:
-                bille = pygame.image.load("./image/mastermind/p_"+l[i]+".png").convert_alpha()
-                bille = pygame.transform.scale(bille, (25, 25))
-                position_bille = [xb[i],yb[17-tour]] 
-                fenetre.blit(bille, position_bille)
+                printImage(f"./image/mastermind/p_{l[i]}.png", (25, 25), [xb[i],yb[17-tour]], fenetre)
             pygame.display.flip()
 
+    fenetre = initScreen((1000,600), "mastermind", "#DD00E4", './image/mastermind/icon.jpg')
 
-    pygame.init()
-    pygame.font.init()
-    fenetre = pygame.display.set_mode((1000,600))
-    fenetre.fill("#DD00E4")
-    pygame.display.set_caption("mastermind")
-    pygame_icon = pygame.image.load('./image/mastermind/icon.jpg')
-    pygame.display.set_icon(pygame_icon)
-
-    bille = pygame.image.load("./image/mastermind/play.png").convert_alpha()
-    bille = pygame.transform.scale(bille, (700, 426.84))
-    fenetre.blit(bille, (150,60))
+    printImage("./image/mastermind/play.png", (700, 426.84), (150,60), fenetre)
     pygame.display.flip()
                 
 
@@ -58,16 +44,9 @@ def mastermind():
         fenetre.fill("#DD00E4")
         end = 0
         while end==0:
-            bille = pygame.image.load("./image/mastermind/1joueur.png")
-            bille = pygame.transform.scale(bille, (750, 185.7))
-            position_bille = [125, 65] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/mastermind/1joueur.png", (750, 185.7), [125, 65], fenetre)
             pygame.display.flip()
-
-            bille = pygame.image.load("./image/mastermind/2joueur.png")
-            bille = pygame.transform.scale(bille, (750, 185.7))
-            position_bille = [125, 350] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/mastermind/2joueur.png", (750, 185.7), [125, 350], fenetre)
             pygame.display.flip()
 
             for event in pygame.event.get():
@@ -89,55 +68,16 @@ def mastermind():
 
 
         fenetre.fill("#DD00E4")
-        bille = pygame.image.load("./image/mastermind/blanc.jpg").convert_alpha()
-        bille = pygame.transform.scale(bille, (50, 50))
-        position_bille = [30,470] 
-        fenetre.blit(bille, position_bille)
-
-        bille = pygame.image.load("./image/mastermind/rouge.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (50, 50))
-        position_bille = [80,470] 
-        fenetre.blit(bille, position_bille)
-
-        bille = pygame.image.load("./image/mastermind/vert.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (50, 50))
-        position_bille = [130,470] 
-        fenetre.blit(bille, position_bille)
-
-        bille = pygame.image.load("./image/mastermind/orange.jpg").convert_alpha()
-        bille = pygame.transform.scale(bille, (50, 50))
-        position_bille = [30,520] 
-        fenetre.blit(bille, position_bille)
-
-        bille = pygame.image.load("./image/mastermind/bleu.jpg").convert_alpha()
-        bille = pygame.transform.scale(bille, (50, 50))
-        position_bille = [80,520] 
-        fenetre.blit(bille, position_bille)
-
-        bille = pygame.image.load("./image/mastermind/jaune.jpg").convert_alpha()
-        bille = pygame.transform.scale(bille, (50, 50))
-        position_bille = [130,520] 
-        fenetre.blit(bille, position_bille)
-
-        bille = pygame.image.load("./image/mastermind/blanc.jpg").convert_alpha()
-        bille = pygame.transform.scale(bille, (50, 100))
-        position_bille = [180,470] 
-        fenetre.blit(bille, position_bille)
-
-        bille = pygame.image.load("./image/mastermind/effacer.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (20, 20))
-        position_bille = [195,480] 
-        fenetre.blit(bille, position_bille)
-
-        police = pygame.font.Font(None, 20)
-        texte = police.render("Supp",True, "black")
-        fenetre.blit(texte, (188, 520))
-
-        bille = pygame.image.load("./image/mastermind/suivant.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (200, 49.33))
-        position_bille = [770,495] 
-        fenetre.blit(bille, position_bille)
-
+        printImage("./image/mastermind/blanc.jpg", (50, 50), [30,470], fenetre)
+        printImage("./image/mastermind/rouge.png", (50, 50), [80,470], fenetre)
+        printImage("./image/mastermind/vert.png", (50, 50), [130,470], fenetre)
+        printImage("./image/mastermind/orange.jpg", (50, 50), [30,520], fenetre)
+        printImage("./image/mastermind/bleu.jpg", (50, 50), [80,520], fenetre)
+        printImage("./image/mastermind/jaune.jpg", (50, 50), [130,520], fenetre)
+        printImage("./image/mastermind/blanc.jpg", (50, 100), [180,470], fenetre)
+        printImage("./image/mastermind/effacer.png", (20, 20), [195,480], fenetre)
+        printText("Supp", 20, "black", (188, 520), fenetre)
+        printImage("./image/mastermind/suivant.png", (200, 49.33), [770,495], fenetre)
 
         yc = [128, 156, 184, 213, 242, 270, 299, 327, 355, 384, 413, 442, 470, 499, 527, 555]
         xc = 416
@@ -152,68 +92,25 @@ def mastermind():
         restart=0
         while restart==0:
 
-            bille = pygame.image.load("./image/mastermind/cache.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (70, 60))
-            position_bille = [0,0] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/mastermind/cache.png", (70, 60), [0,0], fenetre)
 
             kijou=kijou_start
             if nbjoueur==1:
-                bille = pygame.image.load("./image/mastermind/cache.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (800, 55))
-                position_bille = [140,10] 
-                fenetre.blit(bille, position_bille)
-
-                police = pygame.font.Font(None, 60)
-                texte = police.render("Choisissez une combinaison",True, "black")
-                fenetre.blit(texte, (235,20))
-
-                police = pygame.font.Font(None, 30)
-                police.underline = True
-                texte = police.render("Mes points :",True, "black")
-                fenetre.blit(texte, (10,180))
-
-                police = pygame.font.Font(None, 30)
-                police.underline = True
-                texte = police.render("Parties jouées :",True, "black")
-                fenetre.blit(texte, (835,180))
-
-                police = pygame.font.Font(None, 30)
-                texte = police.render(str(point1),True, "black")
-                fenetre.blit(texte, (10,220))
-
-                police = pygame.font.Font(None, 30)
-                texte = police.render(str(partie),True, "black")
-                fenetre.blit(texte, (970,220))
+                printImage("./image/mastermind/cache.png", (800, 55), [140,10], fenetre)
+                printText("Choisissez une combinaison", 60, "black", (235,20), fenetre)
+                printText("Mes points :", 30, "black", (10,180), fenetre, underline=True)
+                printText("Parties jouées :", 30, "black", (835,180), fenetre, underline=True)
+                printText(str(point1), 30, "black", (10,220), fenetre)
+                printText(str(partie), 30, "black", (970,220), fenetre)
             else:
 
-                police = pygame.font.Font(None, 30)
-                police.underline = True
-                texte = police.render("Joueur 1 :",True, "black")
-                fenetre.blit(texte, (10,180))
+                printText("Joueur 1 :", 30, "black", (10,180), fenetre, underline=True)
+                printText("Joueur 2 :", 30, "black", (890,180), fenetre, underline=True)
+                printText(str(point1), 30, "black", (10,220), fenetre)
+                printText(str(point2), 30, "black", (970,220), fenetre)
 
-                police = pygame.font.Font(None, 30)
-                police.underline = True
-                texte = police.render("Joueur 2 :",True, "black")
-                fenetre.blit(texte, (890,180))
-
-                police = pygame.font.Font(None, 30)
-                texte = police.render(str(point1),True, "black")
-                fenetre.blit(texte, (10,220))
-
-                police = pygame.font.Font(None, 30)
-                texte = police.render(str(point2),True, "black")
-                fenetre.blit(texte, (970,220))
-
-            bille = pygame.image.load("./image/mastermind/cache.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (450, 550))
-            position_bille = [285,78] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/mastermind/plateau.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (182, 506))
-            position_bille = [410,80] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/mastermind/cache.png", (450, 550), [285,78], fenetre)
+            printImage("./image/mastermind/plateau.png", (182, 506), [410,80], fenetre)
             pygame.display.flip()
 
             couleur = ["rouge","blanc","vert","orange","bleu","jaune"]
@@ -226,19 +123,11 @@ def mastermind():
             while end==0 and tour<17:
 
                 if nbjoueur==2:
-                    bille = pygame.image.load("./image/mastermind/cache.png").convert_alpha()
-                    bille = pygame.transform.scale(bille, (800, 55))
-                    position_bille = [140,10] 
-                    fenetre.blit(bille, position_bille)
-
+                    printImage("./image/mastermind/cache.png", (800, 55), [140,10], fenetre)
                     if kijou%2==0:
-                        police = pygame.font.Font(None, 60)
-                        texte = police.render("Joueur 1 Choisissez une combinaison",True, "black")
-                        fenetre.blit(texte, (150,20))
+                        printText("Joueur 1 Choisissez une combinaison", 60, "black", (150,20), fenetre)
                     else:
-                        police = pygame.font.Font(None, 60)
-                        texte = police.render("Joueur 2 Choisissez une combinaison",True, "black")
-                        fenetre.blit(texte, (150,20))
+                        printText("Joueur 2 Choisissez une combinaison", 60, "black", (150,20), fenetre)
                     pygame.display.flip()
 
                 choix=[]
@@ -268,10 +157,7 @@ def mastermind():
                             if x > 180 and x < 230 and y > 470 and y < 570 and len(choix)!=0:
                                 del choix[-1]
 
-                                bille = pygame.image.load("./image/mastermind/fond.png").convert_alpha()
-                                bille = pygame.transform.scale(bille, (170, 22.58))
-                                position_bille = [xc,yc[16-tour]] 
-                                fenetre.blit(bille, position_bille)
+                                printImage("./image/mastermind/fond.png", (170, 22.58), [xc,yc[16-tour]], fenetre)
                                 pygame.display.flip()
 
                                 affich_combi(choix, tour)
@@ -301,25 +187,13 @@ def mastermind():
                                     fin=1
                                     end=1
 
-                                bille = pygame.image.load("./image/mastermind/blanc.jpg").convert_alpha()
-                                bille = pygame.transform.scale(bille, (30*place, 22.58))
-                                position_bille = [592,yc[16-tour]+3] 
-                                fenetre.blit(bille, position_bille)
-
-                                bille = pygame.image.load("./image/mastermind/rouge.png").convert_alpha()
-                                bille = pygame.transform.scale(bille, (30*bon, 22.58))
-                                position_bille = [410-30*bon,yc[16-tour]+3] 
-                                fenetre.blit(bille, position_bille)
-
+                                printImage("./image/mastermind/blanc.jpg", (30*place, 22.58), [592,yc[16-tour]+3], fenetre)
+                                printImage("./image/mastermind/rouge.png", (30*bon, 22.58), [410-30*bon,yc[16-tour]+3], fenetre)
                                 if place!=0:
-                                    police = pygame.font.Font(None, 20)
-                                    texte = police.render(str(place),True, "black")
-                                    fenetre.blit(texte, (595,yc[16-tour]+8))
+                                    printText(str(place), 20, "black", (595,yc[16-tour]+8), fenetre)
                                 if bon!=0:
-                                    police = pygame.font.Font(None, 20)
-                                    texte = police.render(str(bon),True, "black")
-                                    fenetre.blit(texte, (395,yc[16-tour]+8))
-
+                                    printText(str(bon), 20, "black", (395,yc[16-tour]+8), fenetre)
+                                
                                 pygame.display.flip()
                                 tour+=1
                             
@@ -337,86 +211,37 @@ def mastermind():
                 point1+= 17-tour
                 partie+=1
 
-                bille = pygame.image.load("./image/mastermind/cache.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (800, 55))
-                position_bille = [140,10] 
-                fenetre.blit(bille, position_bille)
-
+                printImage("./image/mastermind/cache.png", (800, 55), [140,10], fenetre)
                 if end==1:
-                    police = pygame.font.Font(None, 60)
-                    texte = police.render("Gagné",True, "green")
-                    fenetre.blit(texte, (438,20))
+                    printText("Gagné", 60, "green", (438,20), fenetre)
                 else:
-                    police = pygame.font.Font(None, 60)
-                    texte = police.render("Perdu",True, "red")
-                    fenetre.blit(texte, (438,20))
-
-
-                bille = pygame.image.load("./image/mastermind/cache.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (30, 30))
-                position_bille = [10,220] 
-                fenetre.blit(bille, position_bille)
-
-                bille = pygame.image.load("./image/mastermind/cache.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (30, 30))
-                position_bille = [970,220] 
-                fenetre.blit(bille, position_bille)
-
-                police = pygame.font.Font(None, 30)
-                texte = police.render(str(point1),True, "black")
-                fenetre.blit(texte, (10,220))
-
-                police = pygame.font.Font(None, 30)
-                texte = police.render(str(partie),True, "black")
-                fenetre.blit(texte, (970,220))
-
+                    printText("Perdu", 60, "red", (438,20), fenetre)
+                
+                printImage("./image/mastermind/cache.png", (30, 30), [10,220], fenetre)
+                printImage("./image/mastermind/cache.png", (30, 30), [970,220], fenetre)
+                printText(str(point1), 30, "black", (10,220), fenetre)
+                printText(str(partie), 30, "black", (970,220), fenetre)
                 pygame.display.flip()
 
             else:
 
-                bille = pygame.image.load("./image/mastermind/cache.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (800, 55))
-                position_bille = [140,10] 
-                fenetre.blit(bille, position_bille)
-
+                printImage("./image/mastermind/cache.png", (800, 55), [140,10], fenetre)
                 if kijou%2==0:
                     point1+=17-tour
-                    police = pygame.font.Font(None, 60)
-                    texte = police.render("Victoire joueur 1",True, "green")
-                    fenetre.blit(texte, (350,20))
+                    printText("Victoire joueur 1", 60, "green", (350,20), fenetre)
                 else:
                     point2+=17-tour
-                    police = pygame.font.Font(None, 60)
-                    texte = police.render("Victoire joueur 2",True, "green")
-                    fenetre.blit(texte, (350,20))
-
-                bille = pygame.image.load("./image/mastermind/cache.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (30, 30))
-                position_bille = [10,220] 
-                fenetre.blit(bille, position_bille)
-
-                bille = pygame.image.load("./image/mastermind/cache.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (30, 30))
-                position_bille = [970,220] 
-                fenetre.blit(bille, position_bille)
-
-                police = pygame.font.Font(None, 30)
-                texte = police.render(str(point1),True, "black")
-                fenetre.blit(texte, (10,220))
-
-                police = pygame.font.Font(None, 30)
-                texte = police.render(str(point2),True, "black")
-                fenetre.blit(texte, (970,220))
-
+                    printText("Victoire joueur 2", 60, "green", (350,20), fenetre)
+                
+                printImage("./image/mastermind/cache.png", (30, 30), [10,220], fenetre)
+                printImage("./image/mastermind/cache.png", (30, 30), [970,220], fenetre)
+                printText(str(point1), 30, "black", (10,220), fenetre)
+                printText(str(point2), 30, "black", (970,220), fenetre)
                 pygame.display.flip()
             
             kijou_start+=1
 
-            bille = pygame.image.load("./image/juste prix/fleche.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (50,34.35))
-            bille = pygame.transform.rotate(bille, 180)
-            position_bille = [5, 10] 
-            fenetre.blit(bille, position_bille)
+            printImage("./image/juste prix/fleche.png", (50,34.35), [5, 10], fenetre, rotation=180)
             pygame.display.flip() 
 
             end=0
@@ -435,3 +260,5 @@ def mastermind():
                     if (event.type == KEYDOWN) or (event.type == QUIT): 
                         return 0
 
+if __name__ == "__main__":
+    mastermind()

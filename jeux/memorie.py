@@ -1,23 +1,15 @@
 from pygame import *
 import pygame
 from random import *
+from module.pygameCore import *
 
 
 def memory():
 
-    pygame.init()
-    pygame.font.init()
-    fenetre = pygame.display.set_mode((1000,600))
-    fenetre.fill("red")
-    pygame.display.set_caption("memorie")
-    pygame_icon = pygame.image.load('./image/memorie/icon.png')
-    pygame.display.set_icon(pygame_icon)
+    fenetre = initScreen((1000,600), "memorie", "red", './image/memorie/icon.png')
 
 
-
-    bille = pygame.image.load("./image/memorie/play.png").convert_alpha()
-    bille = pygame.transform.scale(bille, (700, 350.315))
-    fenetre.blit(bille, (150,110))
+    printImage("./image/memorie/play.png", (700, 350.315), (150,110), fenetre)
     pygame.display.flip()
                 
 
@@ -55,10 +47,7 @@ def memory():
         for j in range(6):
             for i in range(6):
                 k = placement[j][i]
-                bille = pygame.image.load("./image/memorie/dos.png").convert_alpha()
-                bille = pygame.transform.scale(bille, (80, 80))
-                position_bille = [200+100*j,85+85*i] 
-                fenetre.blit(bille, position_bille)
+                printImage("./image/memorie/dos.png", (80, 80), [200+100*j,85+85*i], fenetre)
                 pygame.display.flip()
 
                 c+=1
@@ -78,47 +67,15 @@ def memory():
                 joueur = "joueur 2"
                 couleur = "yellow"
 
-            bille = pygame.image.load("./image/memorie/suivant.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (200, 53.678))
-            position_bille = [790,530] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/memorie/rouge.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (500, 50))
-            position_bille = [300,20] 
-            fenetre.blit(bille, position_bille)
-
-            police = pygame.font.Font(None, 62)
-            texte = police.render("Au tour du "+joueur,True, couleur)
-            fenetre.blit(texte, (300, 20))
-
-            police = pygame.font.Font(None, 40)
-            police.underline = True
-            texte = police.render("joueur 1 :",True, "black")
-            fenetre.blit(texte, (10, 200))
-
-            police = pygame.font.Font(None, 40)
-            police.underline = True
-            texte = police.render("joueur 2 :",True, "black")
-            fenetre.blit(texte, (860, 200))
-
-            bille = pygame.image.load("./image/memorie/rouge.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (50, 50))
-            position_bille = [20,250] 
-            fenetre.blit(bille, position_bille)
-
-            bille = pygame.image.load("./image/memorie/rouge.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (50, 50))
-            position_bille = [960,250] 
-            fenetre.blit(bille, position_bille)
-
-            police = pygame.font.Font(None, 40)
-            texte = police.render(str(point1),True, "black")
-            fenetre.blit(texte, (20, 250))
-
-            police = pygame.font.Font(None, 40)
-            texte = police.render(str(point2),True, "black")
-            fenetre.blit(texte, (960, 250))
+            printImage("./image/memorie/suivant.png", (200, 53.678), [790,530], fenetre)
+            printImage("./image/memorie/rouge.png", (500, 50), [300,20], fenetre)
+            printText("Au tour du "+joueur, 62, couleur, (300, 20), fenetre)
+            printText("joueur 1 :", 40, "black", (10, 200), fenetre, underline=True)
+            printText("joueur 2 :", 40, "black", (860, 200), fenetre, underline=True)
+            printImage("./image/memorie/rouge.png", (50, 50), [20,250], fenetre)
+            printImage("./image/memorie/rouge.png", (50, 50), [960,250], fenetre)
+            printText(str(point1), 40, "black", (20, 250), fenetre)
+            printText(str(point2), 40, "black", (960, 250), fenetre)
                                 
             pygame.display.flip()
             i=-1
@@ -158,10 +115,7 @@ def memory():
                         if i!=-1 and j!=-1:
                             k = placement[i][j]
                             if k!= 0:
-                                bille = pygame.image.load("./image/memorie/cartes/mem"+str(k)+".jpg").convert_alpha()
-                                bille = pygame.transform.scale(bille, (80, 80))
-                                position_bille = [200+100*i,85+85*j] 
-                                fenetre.blit(bille, position_bille)
+                                printImage(f"./image/memorie/cartes/mem{k}.jpg", (80, 80), [200+100*i,85+85*j], fenetre)
                                 pygame.display.flip()
 
 
@@ -188,38 +142,18 @@ def memory():
                                         elif point1<point2:
                                             vic = "joueur 2"
 
-                                        bille = pygame.image.load("./image/memorie/rouge.png").convert_alpha()
-                                        bille = pygame.transform.scale(bille, (50, 50))
-                                        position_bille = [20,250] 
-                                        fenetre.blit(bille, position_bille)
-
-                                        bille = pygame.image.load("./image/memorie/rouge.png").convert_alpha()
-                                        bille = pygame.transform.scale(bille, (50, 50))
-                                        position_bille = [960,250] 
-                                        fenetre.blit(bille, position_bille)
-
-                                        police = pygame.font.Font(None, 40)
-                                        texte = police.render(str(point1),True, "black")
-                                        fenetre.blit(texte, (20, 250))
-
-                                        police = pygame.font.Font(None, 40)
-                                        texte = police.render(str(point2),True, "black")
-                                        fenetre.blit(texte, (960, 250))
+                                        printImage("./image/memorie/rouge.png", (50, 50), [20,250], fenetre)
+                                        printImage("./image/memorie/rouge.png", (50, 50), [960,250], fenetre)
+                                        printText(str(point1), 40, "black", (20, 250), fenetre)
+                                        printText(str(point2), 40, "black", (960, 250), fenetre)
                                         
                                         
-                                        bille = pygame.image.load("./image/memorie/rouge.png").convert_alpha()
-                                        bille = pygame.transform.scale(bille, (500, 50))
-                                        position_bille = [300,20] 
-                                        fenetre.blit(bille, position_bille)
+                                        printImage("./image/memorie/rouge.png", (500, 50), [300,20], fenetre)
 
                                         if point1!=point2:
-                                            police = pygame.font.Font(None, 62)
-                                            texte = police.render("Victoire du "+vic,True, "#4E8102")
-                                            fenetre.blit(texte, (300, 20))
+                                            printText("Victoire du "+vic, 62, "#4E8102", (300, 20), fenetre)
                                         else:
-                                            police = pygame.font.Font(None, 62)
-                                            texte = police.render("Egalité",True, "#4E8102")
-                                            fenetre.blit(texte, (430, 20))
+                                            printText("Egalité", 62, "#4E8102", (430, 20), fenetre)
 
                                         pygame.display.flip()
 
@@ -239,15 +173,8 @@ def memory():
                                 else:
                                     kijou+=1
 
-                                    bille = pygame.image.load("./image/memorie/dos.png").convert_alpha()
-                                    bille = pygame.transform.scale(bille, (80, 80))
-                                    position_bille = [200+100*i,85+85*j] 
-                                    fenetre.blit(bille, position_bille)
-
-                                    bille = pygame.image.load("./image/memorie/dos.png").convert_alpha()
-                                    bille = pygame.transform.scale(bille, (80, 80))
-                                    position_bille = [200+100*i1,85+85*j1] 
-                                    fenetre.blit(bille, position_bille)
+                                    printImage("./image/memorie/dos.png", (80, 80), [200+100*i,85+85*j], fenetre)
+                                    printImage("./image/memorie/dos.png", (80, 80), [200+100*i1,85+85*j1], fenetre)
 
         
 
@@ -267,3 +194,6 @@ def memory():
                             
                 if (event.type == QUIT): 
                     return 0
+                
+if __name__ == "__main__":
+    memory()

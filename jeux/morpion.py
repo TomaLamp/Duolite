@@ -1,7 +1,11 @@
 from pygame import *
 import pygame
+from module.pygameCore import *
 
 def morpion():
+
+    # %% fonctions
+
     def get_case():
         end = 0
         while end==0:
@@ -41,29 +45,15 @@ def morpion():
         x = 200 + (case)*120
         y = 110 + (ligne)*110
 
-        bille = pygame.image.load(pion).convert_alpha()
-        bille = pygame.transform.scale(bille, (120, 120))
-        bille = pygame.transform.rotate(bille, 90)
-        position_bille = [x, y] 
-        fenetre.blit(bille, position_bille)
-        pygame.display.flip()
+        printImage(pion, (120, 120), [x, y], fenetre, rotation=90)
 
 
-    pygame.init()
-    pygame.font.init()
-    fenetre = pygame.display.set_mode((1000,600))
-    fenetre.fill("#FAF723")
-    pygame.display.set_caption("Morpion")
-    pygame_icon = pygame.image.load("./image/morpion/icon.jpg")
-    pygame.display.set_icon(pygame_icon)
+    # %% main
+
+    fenetre = initScreen((1000,600), "Morpion", "#FAF723", "./image/morpion/icon.jpg")
+    printImage("./image/morpion/play.png", (600, 522.97), [220, 20], fenetre)
     pygame.display.flip()
-
-
-    bille = pygame.image.load("./image/morpion/play.png").convert_alpha()
-    bille = pygame.transform.scale(bille, (600, 522.97))
-    fenetre.blit(bille, (220,20))
-    pygame.display.flip()
-
+    
     fin = 0
     while fin == 0:
         for event in pygame.event.get():
@@ -86,12 +76,7 @@ def morpion():
     fin = 0
     while fin== 0:
         fenetre.fill("#FAF723")
-
-        bille = pygame.image.load("./image/morpion/grille.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (350, 350))
-        bille = pygame.transform.rotate(bille, 90)
-        position_bille = [320, 220] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/morpion/grille.png", (350, 350), [320, 220], fenetre, rotation=90)
         pygame.display.flip()
 
         grille = [['F', 'F', 'F', 'F', 'F'], ['F', 0, 0, 0, 'F'], ['F', 0, 0, 0, 'F'], 
@@ -107,26 +92,11 @@ def morpion():
             else: 
                 couleur = "X"
             
-            police = pygame.font.Font("./police/Lemon Tea.ttf", 64)
-            texte = police.render("Au tour de " + couleur,True, "black")
-            fenetre.blit(texte, (300, 10))
-
-            police = pygame.font.Font("./police/Lemon Tea.ttf", 64)
-            texte = police.render("Rond : ",True, "black")
-            fenetre.blit(texte, (10, 300))
-
-            police = pygame.font.Font("./police/Lemon Tea.ttf", 64)
-            texte = police.render(str(point_rouge) ,True, "black")
-            fenetre.blit(texte, (10, 370))
-
-
-            police = pygame.font.Font("./police/Lemon Tea.ttf", 64)
-            texte = police.render("Croix : ",True, "black")
-            fenetre.blit(texte, (805, 300))
-
-            police = pygame.font.Font("./police/Lemon Tea.ttf", 64)
-            texte = police.render(str(point_jaune) ,True, "black")
-            fenetre.blit(texte, (945, 370))
+            printText("Au tour de " + couleur, 64, "black", (300, 10), fenetre, police="./police/Lemon Tea.ttf")
+            printText("Rond : ", 64, "black", (10, 300), fenetre, police="./police/Lemon Tea.ttf")
+            printText(str(point_rouge), 64, "black", (10, 370), fenetre, police="./police/Lemon Tea.ttf")
+            printText("Croix : ", 64, "black", (805, 300), fenetre, police="./police/Lemon Tea.ttf")
+            printText(str(point_jaune), 64, "black", (945, 370), fenetre, police="./police/Lemon Tea.ttf")
             pygame.display.flip()
 
             choix = False
@@ -200,11 +170,7 @@ def morpion():
 
 
 
-            bille = pygame.image.load("./image/morpion/fond.png").convert_alpha()
-            bille = pygame.transform.scale(bille, (500, 100))
-            position_bille = [300, 0] 
-            fenetre.blit(bille, position_bille)
-            pygame.display.flip()
+            printImage("./image/morpion/fond.png", (500, 100), [300, 0], fenetre)
             
 
             if hautDroite + basGauche > 2 or hautGauche + basDroite > 2 or droite+gauche > 2 or haut+bas > 2:
@@ -213,11 +179,7 @@ def morpion():
                 else: 
                     point_jaune += 1
 
-                police = pygame.font.Font("./police/Lemon Tea.ttf", 78)
-                texte = police.render("Gagné " + couleur,True,pygame.Color("#288300"))
-                rectTexte = texte.get_rect()
-                fenetre.blit(texte, (390, 10))
-                pygame.display.flip()
+                printText("Gagné " + couleur, 78, "#288300", (390, 10), fenetre, police="./police/Lemon Tea.ttf")
                 
                 end = 1
                 
@@ -233,31 +195,25 @@ def morpion():
             
             if c==len(grille)*len(grille[1]) and (hautDroite + basGauche < 3 and hautGauche + basDroite < 3 and droite+gauche < 3 and haut+bas < 3):
                 end=1
-                police = pygame.font.Font("./police/Lemon Tea.ttf", 78)
-                texte = police.render("Egalité",True,pygame.Color("red"))
-                rectTexte = texte.get_rect()
-                fenetre.blit(texte, (390, 10))
-                pygame.display.flip()
+                printText("Egalité", 78, "red", (390, 10), fenetre, police="./police/Lemon Tea.ttf")
                 
 
             
             kijou += 1
 
-        bille = pygame.image.load("./image/morpion/rejouer.png").convert_alpha()
-        bille = pygame.transform.scale(bille, (300, 80.71))
-        position_bille = [10, 10] 
-        fenetre.blit(bille, position_bille)
+        printImage("./image/morpion/rejouer.png", (300, 80.71), [10, 10], fenetre)
         pygame.display.flip()
 
         end = 0
         while end==0:
             for event in pygame.event.get():
                 if (event.type == MOUSEBUTTONUP):
-                        x = event.pos[0]
-                        y = event.pos[1]
-                        if x>10 and x<309 and y>10 and y<89:
-                            end = 1
-                            
-                                
+                    x = event.pos[0]
+                    y = event.pos[1]
+                    if x>10 and x<309 and y>10 and y<89:
+                        end = 1
                 if(event.type == QUIT): 
                     return 0
+            
+if __name__ == "__main__":
+    morpion()
