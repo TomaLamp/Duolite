@@ -3,6 +3,7 @@ from pygame import *
 import pygame
 from module.pygameCore import *
 from threading import Timer
+import time
 
 def boogle():
 
@@ -322,7 +323,7 @@ def boogle():
             pygame.display.flip()
             self.fin_timer = True
 
-        def get_lettre(self):
+        def get_lettre(self, startTime):
             lettre = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "<", ">"]
             end = 0
             while end==0:
@@ -343,15 +344,21 @@ def boogle():
                         
                     if (event.type == QUIT): 
                         return 0
-                    
-        def get_mot(self):
+                
+                if not self.fin_timer:
+                    pygame.draw.rect(fenetre, "#A2B203", (850, 500, 200, 200))
+                    printText("Timer : ", 60, "black", (850, 500), fenetre)
+                    printText(str(round(time.time()-startTime)), 60, "black", (900, 550), fenetre)
+                    pygame.display.flip()        
+        
+        def get_mot(self, startTime):
             
             printImage("./image/boogle/vert.png", (1000, 80), (0,520), fenetre)
             pygame.display.flip()
 
             chaine = ""
             chainebis = ""
-            lettre = self.get_lettre()
+            lettre = self.get_lettre(startTime)
             while(lettre!=">"):
                 if(lettre==0):
                     return 0
@@ -368,7 +375,7 @@ def boogle():
                 printImage("./image/boogle/vert.png", (1000, 80), (0,520), fenetre)
                 printText(f"{chaine}", 60, pygame.Color("black"), (500, 540), fenetre, Alignement="Center")
                 pygame.display.flip()
-                lettre = self.get_lettre()
+                lettre = self.get_lettre(startTime)
             return chaine
 
         def Jouer(self):
@@ -395,13 +402,15 @@ def boogle():
                     self.fin_timer = False
 
                     # Définir un timer de 60 secondes
-                    timer = Timer(60.0, self.OnTimedEvent)
+                    timer = Timer(30.0, self.OnTimedEvent)
                     timer.start()
+                    start = time.time()
 
                     while not self.fin_timer:
                         mot = ""
                         while not mot or len(mot) <= 2 or not self.grille.Test_Plateau(mot) or joueur.Contain(mot):
-                            mot = self.get_mot()
+                            mot = self.get_mot(start)
+                            print(time.time()-start)
                             if(mot==0):
                                 timer.cancel()
                                 return 0

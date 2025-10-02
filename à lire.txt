@@ -1,7 +1,0 @@
-LAMPURE Thomas et DUCASSE Léo
-------------------------------------------------
-DUOLITE:
-
-- Pour jouer, il faut ouvrir le dossier duolité et lancé le fichier main.py
-- Pour acceder au code de chaque jeux, il faut regarder dans le sous dossier jeux
-
