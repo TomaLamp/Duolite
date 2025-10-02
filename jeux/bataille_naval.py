@@ -116,7 +116,6 @@ def bataille_naval():
     def get_case(kijou):
         end=0
         while end==0:
-            pygame.init()
             for event in pygame.event.get():
                 if (event.type == MOUSEBUTTONUP):
                     x = event.pos[0]
@@ -148,6 +147,8 @@ def bataille_naval():
                     return "NULL"
 
     def place_point(kijou, case, fenetre, image):
+        x=0
+        y=0
         if case[1] == "1":
             x = 70
 
@@ -851,13 +852,13 @@ def bataille_naval():
     while fin == 0:
         for event in pygame.event.get():
             if (event.type == MOUSEBUTTONUP):
-                    x = event.pos[0]
-                    y = event.pos[1]
-                    if x > 161 and x < 859 and y > 298 and y < 485:
-                        fin = 1 
+                x = event.pos[0]
+                y = event.pos[1]
+                if x > 161 and x < 859 and y > 298 and y < 485:
+                    fin = 1 
                 
             if (event.type == KEYDOWN) or (event.type == QUIT): 
-                    return 0
+                return 0
 
     start = 0
     while start==0:  
@@ -1755,6 +1756,8 @@ def bataille_naval():
             if kijou == 1:
                 printt("Au joueur 2 de tirer", fenetre, "gold")
                 tir = get_case(1)
+                if tir == "NULL":
+                    return 0
                 if tir in bateau:
                 
                     if tir in bateau5 and coule5 > 0:
@@ -1844,6 +1847,8 @@ def bataille_naval():
             else:
                 printt("Au joueur 1 de tirer", fenetre, "orange")
                 tir = get_case(2)
+                if tir == "NULL":
+                    return 0
                 if tir in b2teau:
                         
                     if tir in b2teau5 and cou2e5 > 0:

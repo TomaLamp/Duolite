@@ -1,4 +1,6 @@
 import pygame
+from pygame import *
+import sys
 
 def initScreen(size, title, color, iconPath):
     pygame.init()
@@ -16,7 +18,7 @@ def printImage(path, size, position, fenetre, rotation=0, Alignement="Left"):
     bille = pygame.transform.scale(bille, size)
     bille = pygame.transform.rotate(bille, rotation)
     rect = bille.get_rect()
-    pos = [0,0]
+    pos = [position[0], position[1]]
 
     if Alignement=="Left":
         pos = [position[0], position[1]]
@@ -25,28 +27,44 @@ def printImage(path, size, position, fenetre, rotation=0, Alignement="Left"):
     elif Alignement=="Right":
         pos = [position[0] - rect.width, position[1]]
 
-    position_bille = pos
-    fenetre.blit(bille, position_bille)
+    fenetre.blit(bille, pos)
 
     return rect
 
-def printText(text, fontSize, color, position, fenetre, Alignement="Left", police=None, underline=False):
-    if Alignement=="Left":
-        police = pygame.font.Font(police, fontSize)
-        police.underline = underline
-        texte = police.render(text,True,color)
-        fenetre.blit(texte, position)
+def printText(text, fontSize, color, position, fenetre, Alignement="Left", police=None, underline=False, Alignementy="Bottom"):
+    police = pygame.font.Font(police, fontSize)
+    police.underline = underline
+    texte = police.render(text,True,color)
+    rect = texte.get_rect()
+    rectwidth = rect.width
+    rectheight = rect.height
+    x = position[0]
+    y = position[1]
     
-    elif Alignement=="Center":
-        police = pygame.font.Font(police, fontSize)
-        police.underline = underline
-        texte = police.render(text,True,color)
-        rectTexte = texte.get_rect().width
-        fenetre.blit(texte, (position[0] - rectTexte/2, position[1]))
-    
+    if Alignement=="Center":
+        x = position[0] - rectwidth/2
     elif Alignement=="Right":
-        police = pygame.font.Font(police, fontSize)
-        police.underline = underline
-        texte = police.render(text,True,color)
-        rectTexte = texte.get_rect().width
-        fenetre.blit(texte, (position[0] - rectTexte, position[1]))
+        x = position[0] - rectwidth
+    
+    if Alignementy=="Center":
+        y = position[1] - rectheight/2
+    elif Alignementy=="Top":
+        y = position[1] - rectheight
+
+    fenetre.blit(texte, [x, y])
+
+    return rect
+
+
+def get_pos():
+    x=0
+    y=0
+    for event in pygame.event.get():
+        if (event.type == pygame.MOUSEBUTTONUP):
+                x = event.pos[0]
+                y = event.pos[1]
+
+        if (event.type == pygame.QUIT): 
+                return "NULL", 0
+    
+    return x,y

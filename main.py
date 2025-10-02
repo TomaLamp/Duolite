@@ -1,6 +1,7 @@
 from pygame import *
 import pygame
 from module.pygameCore import *
+from module.config import *
 
 
 def main():
@@ -19,12 +20,12 @@ def main():
     from jeux.boogle import boogle
     
 
-    def restart(page, jeux):
-        fenetre = initScreen((1000,600), "Main", "#001E6D", './image/icon main.jpg')
-
+    def restart(page, jeux, fenetre):
+        
+        fenetre.fill("#001E6D")
         printText("Choisissez un jeu", 62, "black", (320,10), fenetre, underline=True)
         printText('"Duolité, le n°1 des jeux seul ou a deux"', 28, "black", (318, 75), fenetre)
-
+        printImage("./image/reglage.png", (30, 30), (960, 50), fenetre)
 
         police = pygame.font.Font(None, 14)
         texte = police.render("LAMPURE Thomas",True,"black")
@@ -37,6 +38,7 @@ def main():
         fenetre.blit(texte, (900, 30))
 
         printImage("./image/logo.png", (172, 48), (10,10), fenetre)
+        
 
         if page==1:
 
@@ -77,9 +79,11 @@ def main():
 
     jeux1 = ["Bataille navale", "Pendu", "Chifoumi", "Puissance 4", "Juste prix", "Morpion"]
     jeux2 = ["421", "Motus", "Mémorie", "Mastermind", "Yams", "Boogle"]
+    jeux = list(jeux1)
     page = 1
 
-    restart(page, jeux1)
+    fenetre = initScreen((1000,600), "Main", "#001E6D", './image/icon main.jpg')
+    restart(page, jeux1, fenetre)
 
     fin = 0
     while fin == 0:
@@ -91,54 +95,59 @@ def main():
                         if x<298 and x>99:
                             if page==1:
                                 bataille_naval()
-                                restart(page, jeux1) 
+                                restart(page, jeux1, fenetre) 
                             if page==2:
                                 jeux421()
-                                restart(page, jeux2)  
+                                restart(page, jeux2, fenetre)  
                         elif x<598 and x>400:
                             if page==1:
                                 pendu()
-                                restart(page, jeux1)
+                                restart(page, jeux1, fenetre)
                             if page==2:
                                 motus()
-                                restart(page, jeux2) 
+                                restart(page, jeux2, fenetre) 
                         elif x<899 and x>700:
                             if page==1:
                                 chifoumi()
-                                restart(page, jeux1)
+                                restart(page, jeux1, fenetre)
                             if page==2:
                                 memory()
-                                restart(page, jeux2) 
+                                restart(page, jeux2, fenetre) 
                     if y > 400 and y < 543:
                         if x<298 and x>99:
                             if page==1:
                                 puissance4()
-                                restart(page, jeux1)
+                                restart(page, jeux1, fenetre)
                             if page==2:
                                 mastermind()
-                                restart(page, jeux2)
+                                restart(page, jeux2, fenetre)
                         elif x<598 and x>400:
                             if page==1:
                                 justePrix()
-                                restart(page, jeux1)
+                                restart(page, jeux1, fenetre)
                             if page==2:
                                 yams()
-                                restart(page, jeux2)
+                                restart(page, jeux2, fenetre)
                         elif x<899 and x>700:
                             if page==1:
                                 morpion()
-                                restart(page, jeux1)
+                                restart(page, jeux1, fenetre)
                             if page==2:
                                 boogle()
-                                restart(page, jeux2)
+                                restart(page, jeux2, fenetre)
                     if page==1:
                         if x>940 and x<990 and y>300 and y<350:
                             page=2
-                            restart(page, jeux2)
+                            jeux = list(jeux2)
+                            restart(page, jeux2, fenetre)
                     if page==2:
                         if x>10 and x<60 and y>300 and y<350:
                             page=1
-                            restart(page, jeux1)
+                            jeux = list(jeux2)
+                            restart(page, jeux1, fenetre)
+                    if x>960 and x<990 and y>50 and y<80:
+                        configScreen(fenetre)
+                        restart(page, jeux1, fenetre)
                     
             if (event.type == QUIT): 
                 return 0
