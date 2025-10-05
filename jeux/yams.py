@@ -95,7 +95,8 @@ def yams():
 
     printImage("./image/yams/play.png", (700, 356.84), (150,110), fenetre)
     pygame.display.flip()
-            
+    
+    nomj1, nomj2 = get_nom()
 
     fin = 0
     while fin == 0:
@@ -115,8 +116,8 @@ def yams():
         printImage("./image/yams/relancer.png", (350, 86.55), [100, 460], fenetre)
         printImage("./image/yams/suivant.png", (350, 86.55), [550, 460], fenetre)
         printImage("./image/yams/point.png", (950, 88.197), [50, 0], fenetre)
-        printText("Joueur 1", 18, "black", (1, 35), fenetre)
-        printText("Joueur 2", 18, "black", (1, 68), fenetre)
+        printText(nomj1, 14, "black", (25, 35), fenetre, Alignement="Center")
+        printText(nomj2, 14, "black", (25, 68), fenetre, Alignement="Center")
 
         kijou = 0
 
@@ -136,9 +137,9 @@ def yams():
         while end==0:
 
             if kijou%2==0:
-                joueur = "joueur 1"
+                joueur = nomj1
             else:
-                joueur = "joueur 2"
+                joueur = nomj2
 
             printImage("./image/421/blanc.png", (100, 100), [83, 250], fenetre)
             printImage("./image/421/blanc.png", (100, 100), [266, 250], fenetre)
@@ -704,11 +705,11 @@ def yams():
                             end=1
                             if totj1>totj2:   
                                 printImage("./image/yams/cache.png", (1000, 100), [0, 140], fenetre)
-                                printText("Victoire du joueur 1", 76, "green", (500, 150), fenetre, Alignement="Center")
+                                printText("Victoire de "+nomj1, 76, "green", (500, 150), fenetre, Alignement="Center")
                                 pygame.display.flip()
                             else:
                                 printImage("./image/yams/cache.png", (1000, 100), [0, 140], fenetre)
-                                printText("Victoire du joueur 2", 76, "green", (500, 150), fenetre, Alignement="Center")
+                                printText("Victoire de "+nomj2, 76, "green", (500, 150), fenetre, Alignement="Center")
                                 pygame.display.flip()
 
                         

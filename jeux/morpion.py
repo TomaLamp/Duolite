@@ -53,6 +53,8 @@ def morpion():
     fenetre = initScreen((1000,600), "Morpion", "#FAF723", "./image/morpion/icon.jpg")
     printImage("./image/morpion/play.png", (600, 522.97), [220, 20], fenetre)
     pygame.display.flip()
+
+    nomj1, nomj2 = get_nom()
     
     fin = 0
     while fin == 0:
@@ -88,14 +90,14 @@ def morpion():
         while end==0:
 
             if kijou%2 == 1:
-                couleur = "O"  
+                couleur = nomj1  
             else: 
-                couleur = "X"
+                couleur = nomj2
             
-            printText("Au tour de " + couleur, 64, "black", (300, 10), fenetre, police="./police/Lemon Tea.ttf")
-            printText("Rond : ", 64, "black", (10, 300), fenetre, police="./police/Lemon Tea.ttf")
+            printText("Au tour de " + couleur, 64, "black", (500, 10), fenetre, police="./police/Lemon Tea.ttf", Alignement="Center")
+            printText(nomj1 + " : ", 44, "black", (10, 300), fenetre, police="./police/Lemon Tea.ttf")
             printText(str(point_rouge), 64, "black", (10, 370), fenetre, police="./police/Lemon Tea.ttf")
-            printText("Croix : ", 64, "black", (805, 300), fenetre, police="./police/Lemon Tea.ttf")
+            printText(nomj2+" : ", 44, "black", (995, 300), fenetre, police="./police/Lemon Tea.ttf", Alignement="Right")
             printText(str(point_jaune), 64, "black", (945, 370), fenetre, police="./police/Lemon Tea.ttf")
             pygame.display.flip()
 
@@ -170,7 +172,7 @@ def morpion():
 
 
 
-            printImage("./image/morpion/fond.png", (500, 100), [300, 0], fenetre)
+            printImage("./image/morpion/fond.png", (1000, 100), [0, 0], fenetre)
             
 
             if hautDroite + basGauche > 2 or hautGauche + basDroite > 2 or droite+gauche > 2 or haut+bas > 2:
@@ -179,7 +181,7 @@ def morpion():
                 else: 
                     point_jaune += 1
 
-                printText("Gagné " + couleur, 78, "#288300", (390, 10), fenetre, police="./police/Lemon Tea.ttf")
+                printText(couleur + " a gagné ", 78, "#288300", (500, 10), fenetre, police="./police/Lemon Tea.ttf", Alignement="Center")
                 
                 end = 1
                 
@@ -201,7 +203,7 @@ def morpion():
             
             kijou += 1
 
-        printImage("./image/morpion/rejouer.png", (300, 80.71), [10, 10], fenetre)
+        printImage("./image/morpion/rejouer.png", (300, 80.71), [10, 500], fenetre)
         pygame.display.flip()
 
         end = 0
@@ -210,7 +212,7 @@ def morpion():
                 if (event.type == MOUSEBUTTONUP):
                     x = event.pos[0]
                     y = event.pos[1]
-                    if x>10 and x<309 and y>10 and y<89:
+                    if x>10 and x<309 and y>500 and y<589:
                         end = 1
                 if(event.type == QUIT): 
                     return 0

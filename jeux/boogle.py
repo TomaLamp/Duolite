@@ -290,14 +290,11 @@ def boogle():
             Constructeur de la classe Jeu.
             Initialise les joueurs et la grille du jeu.
             """
-            self.joueurs = []
+            self.joueurs = [Player(nomj1)]
             self.grille = Plateau("./annexes/Lettres.txt", taille, langue)
 
-            for i in range(nb_joueurs):
-                nom = ""
-                while not nom:
-                    nom = f"Joueur {i + 1}"
-                self.joueurs.append(Player(nom))
+            if nb_joueur==2:
+                self.joueurs.append(Player(nomj2))
 
         def Gagnant(self):
             """
@@ -388,9 +385,9 @@ def boogle():
                     self.grille.LancePlateau()
                     self.grille.AfficheGrille()
 
-                    printImage("./image/boogle/vert.png", (250, 100), (10,250), fenetre)
+                    printImage("./image/boogle/vert.png", (250, 250), (10,200), fenetre)
                     if(len(self.joueurs)==2):
-                        printText(f"Au tour du {joueur.name}", 60, pygame.Color("black"), (307, 10), fenetre)
+                        printText(f"Au tour de {joueur.name}", 60, pygame.Color("black"), (500, 10), fenetre, Alignement="Center")
                         printText(f"{self.joueurs[0].name} : {self.joueurs[0].score}", 50, pygame.Color("black"), (10, 270), fenetre)
                         printText(f"{self.joueurs[1].name} : {self.joueurs[1].score}", 50, pygame.Color("black"), (10, 330), fenetre)
                         pygame.display.flip()
@@ -410,7 +407,6 @@ def boogle():
                         mot = ""
                         while not mot or len(mot) <= 2 or not self.grille.Test_Plateau(mot) or joueur.Contain(mot):
                             mot = self.get_mot(start)
-                            print(time.time()-start)
                             if(mot==0):
                                 timer.cancel()
                                 return 0
@@ -424,7 +420,7 @@ def boogle():
                             joueur.score += score
                             joueur.Add_Mot(mot)
 
-                            printImage("./image/boogle/vert.png", (250, 100), (10,250), fenetre)
+                            printImage("./image/boogle/vert.png", (250, 200), (10,250), fenetre)
                             if(len(self.joueurs)==2):
                                 printText(f"{self.joueurs[0].name} : {self.joueurs[0].score}", 50, pygame.Color("black"), (10, 270), fenetre)
                                 printText(f"{self.joueurs[1].name} : {self.joueurs[1].score}", 50, pygame.Color("black"), (10, 330), fenetre)
@@ -441,7 +437,7 @@ def boogle():
             printImage("./image/boogle/vert.png", (900, 100), (5,5), fenetre)
             if(len(self.joueurs)==2):
                 gagnant = self.Gagnant()
-                printText(f"Victoire du {gagnant.name}", 60, pygame.Color("black"), (307, 10), fenetre)
+                printText(f"Victoire de {gagnant.name}", 60, pygame.Color("black"), (500, 10), fenetre, Alignement="Center")
                 pygame.display.flip()
             else:
                 printText(f"Bravo tu as {joueur.score} points", 60, pygame.Color("black"), (290, 10), fenetre)
@@ -453,6 +449,8 @@ def boogle():
 
     printImage("./image/boogle/play.png", (700, 428.75), (150,50), fenetre)
     pygame.display.flip()
+
+    nomj1, nomj2 = get_nom()
             
 
     fin = 0

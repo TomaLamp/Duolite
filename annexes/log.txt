@@ -1,1 +1,1 @@
-Thomas;Jean
+Joueur 1;Joueur 2

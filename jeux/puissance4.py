@@ -51,6 +51,8 @@ def puissance4():
     printImage("./image/puissance4/play.png", (600, 442.5), (200,80), fenetre)
     pygame.display.flip()
 
+    nomj1, nomj2 = get_nom()
+
     fin = 0
     while fin == 0:
         for event in pygame.event.get():
@@ -83,15 +85,15 @@ def puissance4():
 
             if kijou%2 == 1:
                 colors = "red"
-                couleur = "rouge"  
+                couleur = nomj1  
             else: 
                 colors = "yellow"
-                couleur = "jaune"
+                couleur = nomj2
             
-            printText("Au tour du " + couleur, 64, colors, (280, 10), fenetre, police="./police/adventure.otf")
-            printText("Rouge : ", 44, "red", (10, 300), fenetre, police="./police/adventure.otf")
+            printText("Au tour de " + couleur, 64, colors, (500, 10), fenetre, police="./police/adventure.otf", Alignement="Center")
+            printText(nomj1+" : ", 44, "red", (10, 300), fenetre, police="./police/adventure.otf")
             printText(str(point_rouge), 54, "black", (10, 350), fenetre, police="./police/adventure.otf")
-            printText("Jaune : ", 44, "yellow", (860, 300), fenetre, police="./police/adventure.otf")
+            printText(nomj2+" :", 44, "yellow", (990, 300), fenetre, police="./police/adventure.otf", Alignement="Right")
             printText(str(point_jaune), 54, "black", (955, 350), fenetre, police="./police/adventure.otf")
             pygame.display.flip()
 
@@ -105,12 +107,12 @@ def puissance4():
                 for i in range(1, len(grille[prop])):
                     if grille[prop][i] == 0:
                         if kijou%2 == 1:
-                            grille[prop][i] = "rouge"
+                            grille[prop][i] = nomj1
                             choix = True
                             j = i
                             break
                         else:
-                            grille[prop][i] = "jaune"
+                            grille[prop][i] = nomj2
                             choix = True
                             j = i
                             break
@@ -174,8 +176,7 @@ def puissance4():
                 basGauche += 1
                 nbr += 1
 
-            
-            printImage("./image/puissance4/fond.png", (500, 100), (300, 0), fenetre)
+            printImage("./image/puissance4/fond.png", (1000, 100), (0, 0), fenetre)
             pygame.display.flip()
 
             if hautDroite + basGauche > 3 or hautGauche + basDroite > 3 or droite+gauche > 3 or haut+bas > 3:
@@ -184,7 +185,7 @@ def puissance4():
                 else: 
                     point_jaune += 1
                 
-                printText("Gagné " + couleur , 64, colors, (500, 10), fenetre, police="./police/adventure.otf", Alignement="Center")
+                printText(couleur +" a gagné ", 64, colors, (500, 10), fenetre, police="./police/adventure.otf", Alignement="Center")
                 pygame.display.flip()
 
                 end = 1
@@ -250,7 +251,7 @@ def puissance4():
             
             kijou += 1    
 
-        printImage("./image/puissance4/rejouer.png", (300, 80.71), (10, 10), fenetre)
+        printImage("./image/puissance4/rejouer.png", (200, 53.8), (10, 500), fenetre)
         pygame.display.flip()
 
         end = 0
@@ -259,7 +260,7 @@ def puissance4():
                 if (event.type == MOUSEBUTTONUP):
                         x = event.pos[0]
                         y = event.pos[1]
-                        if x>10 and x<309 and y>10 and y<89:
+                        if x>10 and x<2001 and y>500 and y<554:
                             end = 1
 
                 if (event.type == KEYDOWN):

@@ -61,6 +61,12 @@ def configScreen(fenetre):
                     letter = chr(event.key)
                 elif event.key==K_BACKSPACE:
                     letter = "<"
+                elif event.key==K_SPACE:
+                    letter=" "
+                elif event.key>1073741912 and event.key<1073741922:
+                    letter = str(event.key-1073741912)
+                elif event.key == 1073741922:
+                    letter = "0"
                 elif event.key==13:
                     if choose==0:
                         nom = nomj1+";"+nomj2
@@ -74,12 +80,12 @@ def configScreen(fenetre):
                 if choose==1:
                     if letter == "<":
                         nomj1 = nomj1[:len(nomj1)-1]
-                    else:
+                    elif len(nomj1)<9:
                         nomj1 += letter
                 if choose==2:
                     if letter == "<":
                         nomj2 = nomj2[:len(nomj2)-1]
-                    else:
+                    elif len(nomj2)<9:
                         nomj2 += letter
 
             if (event.type == pygame.QUIT): 

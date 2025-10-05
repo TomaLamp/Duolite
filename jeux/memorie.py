@@ -11,6 +11,8 @@ def memory():
 
     printImage("./image/memorie/play.png", (700, 350.315), (150,110), fenetre)
     pygame.display.flip()
+
+    nomj1, nomj2 = get_nom()
                 
 
     fin = 0
@@ -41,7 +43,6 @@ def memory():
                 placement[j][i] = carte[r]
                 del(carte[r])
 
-        print(placement)
 
         c=0
         for j in range(6):
@@ -61,17 +62,17 @@ def memory():
         while fin == 0:
 
             if kijou%2==0:
-                joueur = "joueur 1"
+                joueur = nomj1
                 couleur = "green"
             else:
-                joueur = "joueur 2"
+                joueur = nomj2
                 couleur = "yellow"
 
             printImage("./image/memorie/suivant.png", (200, 53.678), [790,530], fenetre)
             printImage("./image/memorie/rouge.png", (500, 50), [300,20], fenetre)
-            printText("Au tour du "+joueur, 62, couleur, (300, 20), fenetre)
-            printText("joueur 1 :", 40, "black", (10, 200), fenetre, underline=True)
-            printText("joueur 2 :", 40, "black", (860, 200), fenetre, underline=True)
+            printText("Au tour de "+joueur, 62, couleur, (500, 20), fenetre, Alignement="Center")
+            printText(nomj1+" :", 40, "black", (10, 200), fenetre, underline=True)
+            printText(nomj2+" :", 40, "black", (990, 200), fenetre, underline=True, Alignement="Right")
             printImage("./image/memorie/rouge.png", (50, 50), [20,250], fenetre)
             printImage("./image/memorie/rouge.png", (50, 50), [960,250], fenetre)
             printText(str(point1), 40, "black", (20, 250), fenetre)
@@ -138,9 +139,9 @@ def memory():
                                     if placement ==  [[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0]]:
                                         
                                         if point1>point2:
-                                            vic = "joueur 1"
+                                            vic = nomj1
                                         elif point1<point2:
-                                            vic = "joueur 2"
+                                            vic = nomj2
 
                                         printImage("./image/memorie/rouge.png", (50, 50), [20,250], fenetre)
                                         printImage("./image/memorie/rouge.png", (50, 50), [960,250], fenetre)
@@ -151,7 +152,7 @@ def memory():
                                         printImage("./image/memorie/rouge.png", (500, 50), [300,20], fenetre)
 
                                         if point1!=point2:
-                                            printText("Victoire du "+vic, 62, "#4E8102", (300, 20), fenetre)
+                                            printText("Victoire de "+vic, 62, "#4E8102", (500, 20), fenetre, Alignement="Center")
                                         else:
                                             printText("Egalité", 62, "#4E8102", (430, 20), fenetre)
 

@@ -102,6 +102,8 @@ def justePrix():
         printImage("./image/juste prix/joueur2.png", (700, 173.1), (160, 370), fenetre)
         pygame.display.flip()
 
+        nomj1, nomj2 = get_nom()
+
         fin = 0
         while fin == 0:
             for event in pygame.event.get():
@@ -301,9 +303,9 @@ def justePrix():
                     
 
                     if kijou%2 == 0:
-                        joueur = "Joueur 1"
+                        joueur = nomj1
                     else:
-                        joueur = "Joueur 2"
+                        joueur = nomj2
 
                     
                     printImage("./image/juste prix/fond.jpg", (30, 30), [270, 10], fenetre)
@@ -312,13 +314,13 @@ def justePrix():
 
                     printImage("./image/juste prix/fond.jpg", (60, 60), [5, 40], fenetre)
 
-                    printText("Points joueur 1 :  " + str(pointj1), 36, "black", (10, 500), fenetre)
+                    printText("Points de "+nomj1+" :  " + str(pointj1), 36, "black", (10, 500), fenetre)
 
-                    printText("Points joueur 2 :  " + str(pointj2), 36, "black", (10, 550), fenetre)
+                    printText("Points de "+nomj2+" :  " + str(pointj2), 36, "black", (10, 550), fenetre)
 
                     printText(str(nbr_essais_max), 36, "black", (270, 10), fenetre)
 
-                    printText(joueur +" Choisissez un nombre : ", 66, "Yellow", (10, 70), fenetre, police="./police/Sketchzone.otf")
+                    printText(joueur +" Choisissez un nombre : ", 60, "Yellow", (500, 70), fenetre, police="./police/Sketchzone.otf", Alignement="Center")
                     pygame.display.flip()
 
 
@@ -401,9 +403,9 @@ def justePrix():
                             
                             printImage("./image/juste prix/fond.jpg", (300, 100), [10, 500], fenetre)
 
-                            printText("Points joueur 1 :  " + str(pointj1), 36, "black", (10, 500), fenetre)
+                            printText("Points de "+nomj1+" :  " + str(pointj1), 36, "black", (10, 500), fenetre)
 
-                            printText("Points joueur 2 :  " + str(pointj2), 36, "black", (10, 550), fenetre)
+                            printText("Points de "+nomj2+" :  " + str(pointj2), 36, "black", (10, 550), fenetre)
 
                             printImage("./image/juste prix/fond.jpg", (1000, 200), [10, 70], fenetre)
 

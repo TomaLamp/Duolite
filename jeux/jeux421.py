@@ -90,6 +90,8 @@ def jeux421():
 
     printImage("./image/421/play.png", (700, 472.73), [160,36], fenetre)
     pygame.display.flip()
+
+    nomj1, nomj2 = get_nom()
         
 
     fin = 0
@@ -110,11 +112,11 @@ def jeux421():
 
     printImage("./image/421/continuer.jpg", (350, 86.55), [550, 420], fenetre)
 
-    printText("Joueur 1 :", 33, "black", (840, 55), fenetre)
+    printText(nomj1+" :", 33, "black", (950, 55), fenetre, Alignement="Right")
 
-    printText("Joueur 2 :", 33, "black", (840, 85), fenetre)
+    printText(nomj2+" :", 33, "black", (950, 85), fenetre, Alignement="Right")
 
-    printText("score :", 33, "black", (870, 20), fenetre, underline=True)
+    printText("score :", 33, "black", (950, 20), fenetre, underline=True, Alignement="Right")
 
     pygame.display.flip()
 
@@ -134,13 +136,9 @@ def jeux421():
 
         printText("Point :", 33, "black", (10, 60), fenetre, underline=True)
 
-        printText("Joueur 1:", 33, "black", (10, 90), fenetre)
+        printText(nomj1+" : "+str(point1), 33, "black", (10, 90), fenetre)
 
-        printText("Joueur 2:", 33, "black", (10, 120), fenetre)
-
-        printText(str(point1), 33, "black", (115, 90), fenetre)
-
-        printText(str(point2), 33, "black", (115, 120), fenetre)
+        printText(nomj2+" : "+str(point2), 33, "black", (10, 120), fenetre)
 
         printText(str(pot), 33, "black", (65, 10), fenetre)
 
@@ -154,7 +152,7 @@ def jeux421():
 
         printImage("./image/421/jaune.png", (520, 70), [250, 70], fenetre)
 
-        printText("Au tour du joueur " + str(kijou%2+1), 76, "red", (270, 70), fenetre)
+        printText("Au tour de " + (nomj1 if kijou%2==0 else nomj2), 76, "red", (500, 70), fenetre, Alignement="Center")
 
         pygame.display.flip()
 
@@ -251,9 +249,9 @@ def jeux421():
                     
         kijou+=1
 
-        printImage("./image/421/jaune.png", (500, 70), [270, 70], fenetre)
+        printImage("./image/421/jaune.png", (600, 70), [500, 70], fenetre, Alignement="Center")
 
-        printText("Au tour du joueur " + str(kijou%2+1), 76, "red", (270, 70), fenetre)
+        printText("Au tour de " + (nomj1 if kijou%2==0 else nomj2), 76, "red", (500, 70), fenetre, Alignement="Center")
         pygame.display.flip()
 
         coup = 0
@@ -553,11 +551,11 @@ def jeux421():
 
 
 
-        printImage("./image/421/jaune.png", (30, 60), [110, 90], fenetre)
+        printImage("./image/421/jaune.png", (150, 60), [10, 90], fenetre)
 
-        printText(str(point1), 33, "black", (115, 90), fenetre)
+        printText(nomj1+" : "+str(point1), 33, "black", (10, 90), fenetre)
 
-        printText(str(point2), 33, "black", (115, 120), fenetre)
+        printText(nomj2+" : "+str(point2), 33, "black", (10, 120), fenetre)
 
         printImage("./image/421/jaune.png", (25, 25), [65, 10], fenetre)
 
@@ -569,21 +567,21 @@ def jeux421():
         if pot==0 and(point1==0 or point2==0):
             if point1==0:
                 if kijou%2==1:
-                    j='1'
+                    j=nomj1
                 else:
-                    j='2'
+                    j=nomj2
             else:
                 if kijou%2==1:
-                    j='2'
+                    j=nomj2
                 else:
-                    j='1'
+                    j=nomj1
             point1 = 0
             point2 = 0
             pot = 21
 
             printImage("./image/421/jaune.png", (500, 70), [270, 70], fenetre)
 
-            printText("Victoire du joueur " + j, 76, "#556B2F", (250, 70), fenetre)
+            printText("Victoire de " + j, 76, "#556B2F", (250, 70), fenetre)
 
             pygame.display.flip()
 

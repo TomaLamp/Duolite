@@ -35,7 +35,8 @@ def motus():
 
     printImage("./image/motus/play.png", (700, 350.315), [150,110], fenetre)
     pygame.display.flip()
-            
+    
+    nomj1, nomj2 = get_nom()
 
     fin = 0
     while fin == 0:
@@ -322,13 +323,13 @@ def motus():
                 end=0
                 while end==0:
                     if kijou%2 == 0:
-                        joueur = "1"
-                        j2 = "2"
+                        joueur = nomj1
+                        j2 = nomj2
                     else:
-                        joueur = "2"
-                        j2 = "1"
-                    printText("Joueur "+ joueur +" ne regardez pas", 55, "black", (500, 200), fenetre, Alignement="Center")
-                    printText("Joueur "+ j2 +" vous allez choisir un mot pour l'adversaire", 32, "black", (500, 150), fenetre, Alignement="Center")
+                        joueur = nomj2
+                        j2 = nomj1
+                    printText(joueur +" ne regardez pas", 55, "black", (500, 200), fenetre, Alignement="Center")
+                    printText(j2 +" vous allez choisir un mot pour l'adversaire", 32, "black", (500, 150), fenetre, Alignement="Center")
                     printImage("./image/motus/suivant.png", (600, 143.04), (500, 350), fenetre, Alignement="Center")
                     pygame.display.flip()
 
@@ -367,7 +368,7 @@ def motus():
                 c = 0
                 for i in range(3):
                     for j in range(5):
-                        rect = printImage("./image/motus/mots.png", (250, 42.85), (i*250 + 60*(i+1), j*100 + 105), fenetre).width
+                        rect = printImage("./image/motus/mots.jpg", (250, 42.85), (i*250 + 60*(i+1), j*100 + 105), fenetre).width
 
                         printText(choix_mot[c], 32, "black", ((i*250 + 60*(i+1))+rect/2, (j*100 + 105)+10), fenetre, Alignement="Center")
                         pygame.display.flip()
@@ -435,9 +436,9 @@ def motus():
                 lettre = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "<", ">"]
                 fond = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]
 
-                printText("Joueur 1 :", 32, "black", (10, 200), fenetre, underline=True)
+                printText(nomj1+" :", 32, "black", (10, 200), fenetre, underline=True)
 
-                printText("Joueur 2 :", 32, "black", (880, 200), fenetre, underline=True)
+                printText(nomj2+" :", 32, "black", (990, 200), fenetre, underline=True, Alignement="Right")
 
 
                 end=0

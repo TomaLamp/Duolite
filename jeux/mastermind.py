@@ -22,6 +22,8 @@ def mastermind():
 
     printImage("./image/mastermind/play.png", (700, 426.84), (150,60), fenetre)
     pygame.display.flip()
+
+    nomj1, nomj2 = get_nom()
                 
 
     fin = 0
@@ -104,8 +106,8 @@ def mastermind():
                 printText(str(partie), 30, "black", (970,220), fenetre)
             else:
 
-                printText("Joueur 1 :", 30, "black", (10,180), fenetre, underline=True)
-                printText("Joueur 2 :", 30, "black", (890,180), fenetre, underline=True)
+                printText(nomj1+" :", 30, "black", (10,180), fenetre, underline=True)
+                printText(nomj2+" :", 30, "black", (990,180), fenetre, underline=True, Alignement="Right")
                 printText(str(point1), 30, "black", (10,220), fenetre)
                 printText(str(point2), 30, "black", (970,220), fenetre)
 
@@ -125,9 +127,9 @@ def mastermind():
                 if nbjoueur==2:
                     printImage("./image/mastermind/cache.png", (800, 55), [140,10], fenetre)
                     if kijou%2==0:
-                        printText("Joueur 1 Choisissez une combinaison", 60, "black", (150,20), fenetre)
+                        printText(nomj1+" choisissez une combinaison", 60, "black", (500,20), fenetre, Alignement="Center")
                     else:
-                        printText("Joueur 2 Choisissez une combinaison", 60, "black", (150,20), fenetre)
+                        printText(nomj2+" choisissez une combinaison", 60, "black", (500,20), fenetre, Alignement="Center")
                     pygame.display.flip()
 
                 choix=[]
@@ -228,10 +230,10 @@ def mastermind():
                 printImage("./image/mastermind/cache.png", (800, 55), [140,10], fenetre)
                 if kijou%2==0:
                     point1+=17-tour
-                    printText("Victoire joueur 1", 60, "green", (350,20), fenetre)
+                    printText("Victoire de "+nomj1, 60, "green", (500,20), fenetre, Alignement="Center")
                 else:
                     point2+=17-tour
-                    printText("Victoire joueur 2", 60, "green", (350,20), fenetre)
+                    printText("Victoire de "+nomj2, 60, "green", (500,20), fenetre, Alignement="Center")
                 
                 printImage("./image/mastermind/cache.png", (30, 30), [10,220], fenetre)
                 printImage("./image/mastermind/cache.png", (30, 30), [970,220], fenetre)

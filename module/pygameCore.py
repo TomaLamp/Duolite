@@ -2,6 +2,7 @@ import pygame
 from pygame import *
 import sys
 
+
 def initScreen(size, title, color, iconPath):
     pygame.init()
     pygame.font.init()
@@ -68,3 +69,12 @@ def get_pos():
                 return "NULL", 0
     
     return x,y
+
+
+def get_nom():
+    fichier = open("./annexes/log.txt", "r")
+    log = fichier.read()   
+    fichier.close()
+    nom = log.split(';')
+
+    return nom[0], nom[1]

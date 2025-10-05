@@ -847,6 +847,7 @@ def bataille_naval():
     printImage("./image/bataille_naval/play.png", (700, 420), (160,66), fenetre)
     pygame.display.flip()
     
+    nomj1, nomj2 = get_nom()
 
     fin = 0
     while fin == 0:
@@ -892,7 +893,7 @@ def bataille_naval():
         
 
         printImage("./image/bataille_naval/grille4.png", (1000, 600), (0,0), fenetre)
-        printText("Joueur 1 ", 44, "yellow", (10, 100), fenetre)
+        printText(nomj1, 44, "yellow", (10, 100), fenetre)
         pygame.display.flip()
 
         printt("BATEAU DE 1", fenetre, "black")
@@ -1317,10 +1318,10 @@ def bataille_naval():
 
 
         printImage("./image/bataille_naval/grille4.png", (1000, 600), (0,0), fenetre)
-        printText("Jooeur 2", 44, "orange", (870, 100), fenetre)
+        printText(nomj2, 44, "orange", (980, 100), fenetre, Alignement="Right")
         pygame.display.flip()
 
-        printt("joueur 2", fenetre, "orange")
+        printt(nomj2, fenetre, "orange")
 
         printt("BATEAU DE 1", fenetre, "black")
         cc1=get_case(2)
@@ -1744,8 +1745,8 @@ def bataille_naval():
 
 
         printImage("./image/bataille_naval/grille4.png", (1000, 600), (0,0), fenetre)
-        printText("Joueur 1", 44, "yellow", (10, 100), fenetre)
-        printText("Joueur 2", 44, "orange", (870, 100), fenetre)
+        printText(nomj1, 44, "yellow", (10, 100), fenetre)
+        printText(nomj2, 44, "orange", (980, 100), fenetre, Alignement="Right")
 
         pygame.display.flip()
 
@@ -1754,7 +1755,7 @@ def bataille_naval():
         kijou = 1
         while(end==0):
             if kijou == 1:
-                printt("Au joueur 2 de tirer", fenetre, "gold")
+                printt("A "+nomj2+" de tirer", fenetre, "gold")
                 tir = get_case(1)
                 if tir == "NULL":
                     return 0
@@ -1817,7 +1818,7 @@ def bataille_naval():
                         #end += 1
 
                     if len(bateau1) == 0 and len(bateau2) == 0 and len(bateau3) == 0 and len(bateau33) == 0 and len(bateau4) == 0 and len(bateau5) == 0:
-                        printt("Victoire du joueur 2", fenetre, "green")
+                        printt("Victoire de "+nomj2, fenetre, "green")
                         end += 1
                         if len(b2teau1) !=0:
                             place_Rship(2, b2teauc1, fenetre)
@@ -1845,7 +1846,7 @@ def bataille_naval():
 
 
             else:
-                printt("Au joueur 1 de tirer", fenetre, "orange")
+                printt("A "+nomj1+" de tirer", fenetre, "orange")
                 tir = get_case(2)
                 if tir == "NULL":
                     return 0
@@ -1908,7 +1909,7 @@ def bataille_naval():
                         
 
                     if len(b2teau1) == 0 and len(b2teau2) == 0 and len(b2teau3) == 0 and len(b2teau33) == 0 and len(b2teau4) == 0 and len(b2teau5) == 0:
-                        printt("Victoire du joueur 1", fenetre, "green")
+                        printt("Victoire de "+nomj1, fenetre, "green")
                         end += 1
                         if len(bateau1) !=0:
                             place_Rship(1, bateauc1, fenetre)
@@ -1931,7 +1932,7 @@ def bataille_naval():
                     place_point(kijou, tir, fenetre, "./image/bataille_naval/cross.png")
                     kijou = 1
                 
-
+        
         end = 0
         while end==0:
             for event in pygame.event.get():

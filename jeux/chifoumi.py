@@ -73,6 +73,8 @@ def chifoumi():
     printImage("./image/chifoumi/jouer.png", (600*scale_x, 420*scale_y), (50*scale_x,-55*scale_y), fenetre)
     pygame.display.flip()
 
+    nomj1, nomj2 = get_nom()
+
     fin = 0
     while fin == 0:
         for event in pygame.event.get():
@@ -130,9 +132,9 @@ def chifoumi():
                 while mon_score < 10 and ton_score < 10:
 
                     printImage("./image/chifoumi/fond.png", (1000, 600), (0, 0), fenetre)
-                    printText("Joueur 1 : " + str(ton_score), int(42*scale_y), "black", (5*scale_x, 5*scale_y), fenetre)
+                    printText(nomj1+" : " + str(ton_score), int(42*scale_y), "black", (5*scale_x, 5*scale_y), fenetre)
                     if a==2:
-                        printText("Joueur 2 : " + str(mon_score), int(42*scale_y), "black", (5*scale_x, 40*scale_y), fenetre)
+                        printText(nomj2+" : " + str(mon_score), int(42*scale_y), "black", (5*scale_x, 40*scale_y), fenetre)
                     elif a==1:
                         printText("Ordinateur : " + str(mon_score), int(42*scale_y), "black", (5*scale_x, 40*scale_y), fenetre)
 

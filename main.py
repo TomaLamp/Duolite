@@ -23,6 +23,9 @@ def main():
     def restart(page, jeux, fenetre):
         
         fenetre.fill("#001E6D")
+        pygame.display.set_caption("Main")
+        pygame_icon = pygame.image.load('./image/icon main.jpg')
+        pygame.display.set_icon(pygame_icon)
         printText("Choisissez un jeu", 62, "black", (320,10), fenetre, underline=True)
         printText('"Duolité, le n°1 des jeux seul ou a deux"', 28, "black", (318, 75), fenetre)
         printImage("./image/reglage.png", (30, 30), (960, 50), fenetre)
@@ -143,11 +146,11 @@ def main():
                     if page==2:
                         if x>10 and x<60 and y>300 and y<350:
                             page=1
-                            jeux = list(jeux2)
+                            jeux = list(jeux1)
                             restart(page, jeux1, fenetre)
                     if x>960 and x<990 and y>50 and y<80:
                         configScreen(fenetre)
-                        restart(page, jeux1, fenetre)
+                        restart(page, jeux, fenetre)
                     
             if (event.type == QUIT): 
                 return 0

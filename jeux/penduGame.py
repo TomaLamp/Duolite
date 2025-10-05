@@ -74,6 +74,8 @@ def pendu():
 
     fenetre = initScreen((NEW_WIDTH,NEW_HEIGHT), "Pendu", 'red', './image/pendu/icon.jpg')
 
+    nomj1, nomj2 = get_nom()
+
     end = 0
     while end==0:
         printImage("./image/pendu/play-chifoumi.png", (500*scale_x, 337.5*scale_y), (150*scale_x, 30*scale_y), fenetre)
@@ -132,15 +134,15 @@ def pendu():
                 end=0
                 while end==0:
                     if kijou%2 == 1:
-                        joueur = "1"
-                        j2 = "2"
+                        joueur = nomj1
+                        j2 = nomj2
                     else:
-                        joueur = "2"
-                        j2 = "1"
+                        joueur = nomj1
+                        j2 = nomj2
                     fenetre.fill('red')
 
-                    printText("Joueur "+ joueur +" ne regardez pas", int(42*scale_y), "black", (500, 70*scale_y), fenetre, Alignement="Center")
-                    printText("Joueur "+ j2 +" vous allez choisir un mot pour l'adversaire", int(55), "black", (500, 150*scale_y), fenetre, Alignement="Center")
+                    printText(joueur +" ne regardez pas", int(42*scale_y), "black", (500, 70*scale_y), fenetre, Alignement="Center")
+                    printText(j2 +" vous allez choisir un mot pour l'adversaire", int(55), "black", (500, 150*scale_y), fenetre, Alignement="Center")
                     
                     printImage("./image/pendu/suivant.png", (200*scale_x, 47.68*scale_y), (280*scale_x, 250*scale_y), fenetre)
                     pygame.display.flip()
@@ -233,8 +235,8 @@ def pendu():
 
 
             if nb_joueur == 2:
-                printText("Joueur 2 :  " + str(pointj2), int(28*scale_y), "black", (760*scale_x, 375*scale_y), fenetre, Alignement="Right")
-                txt_point = "Joueur 1 :  "
+                printText(nomj2+" :  " + str(pointj2), int(28*scale_y), "black", (760*scale_x, 375*scale_y), fenetre, Alignement="Right")
+                txt_point = nomj1+" :  "
             else:
                 printText("Partie jouée :  " + str(partie), int(28*scale_y), "black", (760*scale_x, 375*scale_y), fenetre, Alignement="Right")
                 txt_point = "Mes points :  "
@@ -360,14 +362,14 @@ def pendu():
                         end=0
                         while end==0:
                             if point>pointj2:
-                                printText("Victoire du joueur 1", int(42*scale_y), "green", (500, 200*scale_y), fenetre, Alignement="Center")
+                                printText("Victoire de "+nomj1, int(42*scale_y), "green", (500, 200*scale_y), fenetre, Alignement="Center")
                             elif point<pointj2:
-                                printText("Victoire du joueur 2", int(42*scale_y), "green", (500, 200*scale_y), fenetre, Alignement="Center")
+                                printText("Victoire de "+nomj2, int(42*scale_y), "green", (500, 200*scale_y), fenetre, Alignement="Center")
                             else:
                                 printText("Egalité", int(62*scale_y), "#9C0000", (500, 195*scale_y), fenetre, Alignement="Center")
                                 
                             
-                            printText("joueur 1 : " +str(point)+" points / Joueur 2 : "+str(pointj2)+ " points", int(42*scale_y), "black", (500, 150*scale_y), fenetre, Alignement="Center")
+                            printText(nomj1+" : " +str(point)+" points / "+nomj2+" : "+str(pointj2)+ " points", int(42*scale_y), "black", (500, 150*scale_y), fenetre, Alignement="Center")
                             printImage("./image/pendu/suivant.png", (200*scale_x, 47.68*scale_y), (500, 250*scale_y), fenetre, Alignement="Center")
                             pygame.display.flip()
 
