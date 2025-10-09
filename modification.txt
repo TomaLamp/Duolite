@@ -1,6 +1,0 @@
-Modification :
-
-changer le nom des joueurs dans les jeux
-retravailler selection cases bataille naval
-
-
