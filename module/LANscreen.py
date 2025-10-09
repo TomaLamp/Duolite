@@ -117,8 +117,8 @@ def LANscreen(fenetre, connexion=[None, None, None]):
                     pygame.time.wait(2000)
 
                     nomj1 = get_nom()[0]
-                    conn.send(nomj1)
-                    data = str(conn.recv(1024), "utf-8", errors='ignore')
+                    conn.send(bytes(nomj1, "utf-8"))
+                    data = str(conn.recv(1024))
                     connexion[0]=conn
                     connexion[1]=data
                     connexion[2]=False
