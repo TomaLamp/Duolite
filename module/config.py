@@ -11,7 +11,7 @@ def configScreen(fenetre):
     pygame.draw.rect(fenetre, "#334676", (250,335,500,50), border_radius=50)
     pygame.draw.rect(fenetre, "#000000", (400,425,200,50))
 
-    printImage("./image/close.png", (30, 30), (750, 120), fenetre)
+    printImage("./image/close.png", (30, 30), (750, 115), fenetre)
     printText("Nom joueur 1 :", 32, "black", (265, 190), fenetre)
     printText("Nom joueur 2 :", 32, "black", (265, 310), fenetre)
     printText("Sauvegarder", 32, "white", (500, 450), fenetre, Alignement="Center", Alignementy="Center")
@@ -39,7 +39,7 @@ def configScreen(fenetre):
                 x = event.pos[0]
                 y = event.pos[1]
 
-                if x>750 and x<780 and y>120 and y<150:
+                if x>750 and x<780 and y>115 and y<150:
                     return 0
                 elif x>250 and x<750 and y>215 and y<275:
                     choose=1

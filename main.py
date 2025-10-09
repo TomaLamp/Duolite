@@ -1,7 +1,7 @@
-from pygame import *
 import pygame
 from module.pygameCore import *
 from module.config import *
+from module.LANscreen import *
 
 
 def main():
@@ -29,6 +29,9 @@ def main():
         printText("Choisissez un jeu", 62, "black", (320,10), fenetre, underline=True)
         printText('"Duolité, le n°1 des jeux seul ou a deux"', 28, "black", (318, 75), fenetre)
         printImage("./image/reglage.png", (30, 30), (960, 50), fenetre)
+        pygame.draw.rect(fenetre, "black", (735, 10, 130, 40), 2)
+        printImage("./image/connLAN.png", (30, 30), (740, 15), fenetre)
+        printText("Connexion LAN", 17, "black", (775, 30),fenetre, Alignementy="Center")
 
         police = pygame.font.Font(None, 14)
         texte = police.render("LAMPURE Thomas",True,"black")
@@ -75,7 +78,6 @@ def main():
                 printText(jeux[c], 33, "white", (100+300*j + rectWidth/2, 269+250*i), fenetre, Alignement="Center")
 
                 c += 1
-
 
         pygame.display.flip()
 
@@ -150,6 +152,9 @@ def main():
                             restart(page, jeux1, fenetre)
                     if x>960 and x<990 and y>50 and y<80:
                         configScreen(fenetre)
+                        restart(page, jeux, fenetre)
+                    if x>735 and x<865 and y>10 and y<50:
+                        LANscreen(fenetre)
                         restart(page, jeux, fenetre)
                     
             if (event.type == QUIT): 
