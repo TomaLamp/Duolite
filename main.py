@@ -87,11 +87,19 @@ def main():
     jeux = list(jeux1)
     page = 1
 
+    connexion = [None, None, None]
     fenetre = initScreen((1000,600), "Main", "#001E6D", './image/icon main.jpg')
     restart(page, jeux1, fenetre)
 
     fin = 0
     while fin == 0:
+        if connexion[0]!=None:
+            if isConnClose(connexion[0]):
+                connexion[0].close()
+                connexion[0]=None
+                decoScreen(fenetre, connexion)
+                restart(page, jeux, fenetre)
+
         for event in pygame.event.get():
             if (event.type == MOUSEBUTTONUP):
                     x = event.pos[0]
@@ -121,7 +129,7 @@ def main():
                     if y > 400 and y < 543:
                         if x<298 and x>99:
                             if page==1:
-                                puissance4()
+                                puissance4(connexion)
                                 restart(page, jeux1, fenetre)
                             if page==2:
                                 mastermind()
@@ -154,7 +162,7 @@ def main():
                         configScreen(fenetre)
                         restart(page, jeux, fenetre)
                     if x>735 and x<865 and y>10 and y<50:
-                        LANscreen(fenetre)
+                        LANscreen(fenetre, connexion)
                         restart(page, jeux, fenetre)
                     
             if (event.type == QUIT): 

@@ -3,6 +3,7 @@ import scapy.all as sc
 import psutil
 import pygame
 from pygame import *
+import select
 
 def get_ip():
 
@@ -103,4 +104,15 @@ def joinRoom(code):
                     return s
                 elif str(data, "utf-8", errors='ignore')=="KO":
                     s.close()
+
+
+def isConnClose(conn):
+    isclose = False
+    readable, _, _ = select.select([conn], [], [], 1)
+    if conn in readable:
+        data = conn.recv(1024)
+        if not data:
+            isclose = True
+    
+    return isclose
 

@@ -1,8 +1,9 @@
 from pygame import *
 from module.pygameCore import *
 import pygame
+from module.LANscreen import *
 
-def puissance4():
+def puissance4(connexion=[None, None, None]):
     def get_ligne():
         pygame.init()
         end = 0
@@ -53,6 +54,12 @@ def puissance4():
 
     nomj1, nomj2 = get_nom()
 
+    conn = None
+    if connexion[0]!=None and connexion[2]==True:
+        nomj2=connexion[1]
+    elif connexion[0]!=None and connexion[2]==False:
+        nomj1=connexion[1]
+
     fin = 0
     while fin == 0:
         for event in pygame.event.get():
@@ -60,7 +67,16 @@ def puissance4():
                     x = event.pos[0]
                     y = event.pos[1]
                     if x > 200 and x < 789 and y > 337 and y < 521:
-                        fin = 1 
+                        if connexion[0]!=None:
+                            quit = waitScreen(fenetre, connexion, "#7E8A00", "#272B00", "connect4")
+                            fenetre.fill("#A2B203")
+                            printImage("./image/puissance4/play.png", (600, 442.5), (200,80), fenetre)
+                            pygame.display.flip()
+                            if quit==1:
+                                fin = 1 
+                                conn = connexion[0]
+                        else:
+                            fin=1
             
             if (event.type == KEYDOWN) or (event.type == QUIT): 
                     return 0
@@ -100,7 +116,23 @@ def puissance4():
             choix = False
             while not choix:
 
-                prop = get_ligne()
+                if conn==None:
+                    prop = get_ligne()
+                elif connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
+                    prop = get_ligne()
+                    conn.send(prop)
+                elif connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
+                    while True:
+                        try:
+                            prop = connexion[0].recv(1024)
+                        except BlockingIOError:
+                            pass
+                        
+                        for event in pygame.event.get():
+                            if (event.type == pygame.QUIT): 
+                                    return 0
+
+
                 if prop=="NULL":
                     return 0
 
