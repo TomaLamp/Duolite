@@ -164,7 +164,7 @@ def quitScreen(screen, connexion, color, subcolor):
     while True:
         x,y = get_pos()
         if x=="NULL":
-            exit()
+            return "NULL"
         if x>650 and x<680 and y>215 and y<245:
             return 0
         
@@ -176,6 +176,7 @@ def waitScreen(screen, connexion, color, subcolor, text):
     printText("En attente de", 50, "red", (500, 235), screen, Alignement="Center")
     pygame.display.flip()
 
+    connexion[0].send(bytes(text, "utf-8"))
     connexion[0].setblocking(False)
     data=b""
 

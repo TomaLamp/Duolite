@@ -1,8 +1,9 @@
 from pygame import *
 import pygame
 from module.pygameCore import *
+from module.LANscreen import *
 
-def morpion():
+def morpion(connexion=[None,None,None]):
 
     # %% fonctions
 
@@ -55,6 +56,13 @@ def morpion():
     pygame.display.flip()
 
     nomj1, nomj2 = get_nom()
+
+    conn = None
+    if connexion[0]!=None and connexion[2]==True:
+        nomj2=connexion[1]
+    elif connexion[0]!=None and connexion[2]==False:
+        nomj2=nomj1
+        nomj1=connexion[1]
     
     fin = 0
     while fin == 0:
@@ -63,7 +71,16 @@ def morpion():
                     x = event.pos[0]
                     y = event.pos[1]
                     if x > 220 and x < 809 and y > 337 and y < 521:
-                        fin = 1 
+                        if connexion[0]!=None:
+                            quit = waitScreen(fenetre, connexion, "#AFAC00", "#474600", "morpion")
+                            fenetre.fill("#FAF723")
+                            printImage("./image/morpion/play.png", (600, 522.97), [220, 20], fenetre)
+                            pygame.display.flip()
+                            if quit==1:
+                                fin = 1 
+                                conn = connexion[0]
+                        else:
+                            fin=1 
             
             if (event.type == KEYDOWN) or (event.type == QUIT): 
                     return 0
@@ -103,8 +120,30 @@ def morpion():
 
             choix = False
             while not choix:
-                prop = get_case()
+                if conn==None or connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
+                    prop = get_case()
+                elif connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
+                    while True:
+                        try:
+                            data = conn.recv(1024)
+                            prop = int.from_bytes(data, "big")
+                            if prop==404:
+                                result = quitScreen(fenetre, connexion, "#AFAC00", "#474600")
+                                if result=="NULL":
+                                    return 0
+                            if prop!= 404 and str(data, "utf-8")!="morpion":
+                                break
+                        except BlockingIOError:
+                            pass
+                        
+                        for event in pygame.event.get():
+                            if (event.type == pygame.QUIT): 
+                                    conn.send((404).to_bytes(2))
+                                    return 0
+
                 if prop=="NULL":
+                    if conn!=None:
+                        conn.send((404).to_bytes(2))
                     return 0
 
                 if grille[prop//3+1][prop%3+1] == 0:
@@ -215,6 +254,8 @@ def morpion():
                     if x>10 and x<309 and y>500 and y<589:
                         end = 1
                 if(event.type == QUIT): 
+                    if conn!=None:
+                        conn.send((404).to_bytes(2))
                     return 0
             
 if __name__ == "__main__":

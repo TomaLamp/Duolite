@@ -118,9 +118,7 @@ def puissance4(connexion=[None, None, None]):
             choix = False
             while not choix:
 
-                if conn==None:
-                    prop = get_ligne()
-                elif connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
+                if conn==None or connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
                     prop = get_ligne()
                 elif connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
                     while True:
@@ -128,8 +126,11 @@ def puissance4(connexion=[None, None, None]):
                             data = conn.recv(1024)
                             prop = int.from_bytes(data, "big")
                             if prop==404:
-                                quitScreen(fenetre, connexion, "#7E8A00", "#272B00")
-                            break
+                                result = quitScreen(fenetre, connexion, "#7E8A00", "#272B00")
+                                if result=="NULL":
+                                    return 0
+                            if prop!= 404 and str(data, "utf-8")!="connect4":
+                                break
                         except BlockingIOError:
                             pass
                         
@@ -308,8 +309,10 @@ def puissance4(connexion=[None, None, None]):
                     if event.key == K_RETURN:
                         end = 1
                                 
-                if(event.type == QUIT): 
-                        return 0
+                if(event.type == QUIT):
+                    if conn!=None:
+                        conn.send((404).to_bytes(2))
+                    return 0
                 
 if __name__ == "__main__":
     puissance4()
