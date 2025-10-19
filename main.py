@@ -166,6 +166,8 @@ def main():
                         restart(page, jeux, fenetre)
                     
             if (event.type == QUIT): 
+                if connexion[0]!=None:
+                    connexion[0].close()
                 return 0
 
 if __name__ == '__main__':

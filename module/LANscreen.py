@@ -30,7 +30,9 @@ def LANscreen(fenetre, connexion=[None, None, None]):
 
         x,y=get_pos()
         if x=="NULL":
-            return sys.exit()
+            if connexion[0]!=None:
+                connexion[0].close()
+            exit()
 
         if x>750 and x<780 and y>115 and y<145:
             return None
@@ -101,7 +103,9 @@ def LANscreen(fenetre, connexion=[None, None, None]):
 
 
                     if (event.type == pygame.QUIT): 
-                            sys.exit()
+                        if connexion[0]!=None:
+                            connexion[0].close()    
+                        exit()
 
                 pygame.draw.rect(fenetre, "#334676", (250,250,500,100), border_radius=50)
                 rectText = printText(code, 100, "white", (500, 300), fenetre, Alignement="Center", Alignementy="Center").width
@@ -172,7 +176,6 @@ def waitScreen(screen, connexion, color, subcolor, text):
     printText("En attente de", 50, "red", (500, 235), screen, Alignement="Center")
     pygame.display.flip()
 
-    connexion[0].send(bytes(text, "utf-8"))
     connexion[0].setblocking(False)
     data=b""
 
@@ -187,7 +190,7 @@ def waitScreen(screen, connexion, color, subcolor, text):
         if x=="NULL":
             exit()
         if x>650 and x<680 and y>215 and y<245:
-            print("e")
             return 0
         if str(data, "utf-8")==text:
+            connexion[0].send(bytes(text, "utf-8"))
             return 1

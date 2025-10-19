@@ -58,7 +58,9 @@ def puissance4(connexion=[None, None, None]):
     if connexion[0]!=None and connexion[2]==True:
         nomj2=connexion[1]
     elif connexion[0]!=None and connexion[2]==False:
+        nomj2=nomj1
         nomj1=connexion[1]
+
 
     fin = 0
     while fin == 0:
@@ -120,20 +122,26 @@ def puissance4(connexion=[None, None, None]):
                     prop = get_ligne()
                 elif connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
                     prop = get_ligne()
-                    conn.send(prop)
                 elif connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
                     while True:
                         try:
-                            prop = connexion[0].recv(1024)
+                            data = conn.recv(1024)
+                            prop = int.from_bytes(data, "big")
+                            if prop==404:
+                                quitScreen(fenetre, connexion, "#7E8A00", "#272B00")
+                            break
                         except BlockingIOError:
                             pass
                         
                         for event in pygame.event.get():
                             if (event.type == pygame.QUIT): 
+                                    conn.send((404).to_bytes(2))
                                     return 0
 
 
                 if prop=="NULL":
+                    if conn!=None:
+                        conn.send((404).to_bytes(2))
                     return 0
 
                 for i in range(1, len(grille[prop])):
@@ -150,7 +158,8 @@ def puissance4(connexion=[None, None, None]):
                             break
 
             
-                
+            if connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
+                conn.send(prop.to_bytes(1))  
             place_point(kijou, prop, i)
 
             nbr = 0
