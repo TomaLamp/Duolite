@@ -34,7 +34,7 @@ def morpion(connexion=[None,None,None]):
                             return 8
                             
                         
-                if (event.type == KEYDOWN) or (event.type == QUIT): 
+                if (event.type == QUIT): 
                     return "NULL"
 
     def place_point(kijou, ligne, case):
@@ -72,7 +72,7 @@ def morpion(connexion=[None,None,None]):
                     y = event.pos[1]
                     if x > 220 and x < 809 and y > 337 and y < 521:
                         if connexion[0]!=None:
-                            quit = waitScreen(fenetre, connexion, "#AFAC00", "#474600", "morpion")
+                            quit = waitScreen(fenetre, connexion, "#C5C200", "#474600", "morpion")
                             fenetre.fill("#FAF723")
                             printImage("./image/morpion/play.png", (600, 522.97), [220, 20], fenetre)
                             pygame.display.flip()
@@ -128,7 +128,7 @@ def morpion(connexion=[None,None,None]):
                             data = conn.recv(1024)
                             prop = int.from_bytes(data, "big")
                             if prop==404:
-                                result = quitScreen(fenetre, connexion, "#AFAC00", "#474600")
+                                result = quitScreen(fenetre, connexion, "#C5C200", "#474600")
                                 if result=="NULL":
                                     return 0
                             if prop!= 404 and str(data, "utf-8")!="morpion":
@@ -150,7 +150,8 @@ def morpion(connexion=[None,None,None]):
                     grille[prop//3+1][prop%3+1] = couleur
                     choix = True
 
-            
+            if connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
+                conn.send(prop.to_bytes(1)) 
             place_point(kijou, prop//3+1, prop%3+1)    
 
             j=prop%3+1

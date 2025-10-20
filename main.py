@@ -136,14 +136,14 @@ def main():
                                 restart(page, jeux2, fenetre)
                         elif x<598 and x>400:
                             if page==1:
-                                justePrix()
+                                justePrix(connexion)
                                 restart(page, jeux1, fenetre)
                             if page==2:
                                 yams()
                                 restart(page, jeux2, fenetre)
                         elif x<899 and x>700:
                             if page==1:
-                                morpion()
+                                morpion(connexion)
                                 restart(page, jeux1, fenetre)
                             if page==2:
                                 boogle()

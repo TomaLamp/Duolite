@@ -1,9 +1,10 @@
 from pygame import *
 import pygame
 from module.pygameCore import *
+from module.LANscreen import *
 from random import randint
 
-def justePrix():
+def justePrix(connexion=[None,None,None]):
     
     def choix_nombre():
         nombre = ""
@@ -104,6 +105,13 @@ def justePrix():
 
         nomj1, nomj2 = get_nom()
 
+        conn = None
+        if connexion[0]!=None and connexion[2]==True:
+            nomj2=connexion[1]
+        elif connexion[0]!=None and connexion[2]==False:
+            nomj2=nomj1
+            nomj1=connexion[1]
+
         fin = 0
         while fin == 0:
             for event in pygame.event.get():
@@ -114,8 +122,19 @@ def justePrix():
                             nbrj = 1 
                             fin=1
                         if x > 159 and x < 858 and y > 369 and y < 536:
-                            nbrj = 2 
-                            fin=1
+                            if connexion[0]!=None:
+                                quit = waitScreen(fenetre, connexion, "#5E0066", "#0F0011", "justePrix")
+                                fenetre.fill("#B707C6")
+                                printImage("./image/juste prix/joueur1.png", (700, 173.1), (160, 70), fenetre)
+                                printImage("./image/juste prix/joueur2.png", (700, 173.1), (160, 370), fenetre)
+                                pygame.display.flip()
+                                if quit==1:
+                                    fin = 1 
+                                    nbrj = 2
+                                    conn = connexion[0]
+                            else:
+                                nbrj = 2
+                                fin=1 
                 
                 if (event.type == QUIT): 
                     return 0
@@ -337,8 +356,30 @@ def justePrix():
                         printText("<" + str(borne_sup), 72, "black", (550, 270), fenetre)
                         pygame.display.flip()
 
-                        ton_nombre = choix_nombre()
+                        if conn==None or connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
+                            ton_nombre = choix_nombre()
+                        elif connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
+                            while True:
+                                try:
+                                    data = conn.recv(1024)
+                                    ton_nombre = int.from_bytes(data, "big")
+                                    if ton_nombre==404:
+                                        result = quitScreen(fenetre, connexion, "#5E0066", "#0F0011")
+                                        if result=="NULL":
+                                            return 0
+                                    if ton_nombre!= 404 and str(data, "utf-8")!="justePrix":
+                                        break
+                                except BlockingIOError:
+                                    pass
+                                
+                                for event in pygame.event.get():
+                                    if (event.type == pygame.QUIT): 
+                                            conn.send((404).to_bytes(2))
+                                            return 0
+                        
                         if ton_nombre=="NULL":
+                            if conn!=None:
+                                conn.send((404).to_bytes(2))
                             return 0
 
                         printImage("./image/juste prix/fond.jpg", (450, 90), [400, 170], fenetre)
@@ -390,7 +431,9 @@ def justePrix():
                                                 end=1
 
                     
-                                    if (event.type == QUIT): 
+                                    if (event.type == QUIT):
+                                        if conn!=None:
+                                            conn.send((404).to_bytes(2)) 
                                         return 0
                             
                         
@@ -437,7 +480,9 @@ def justePrix():
                                             end=1
 
 
-                                    if (event.type == QUIT): 
+                                    if (event.type == QUIT):
+                                        if conn!=None:
+                                            conn.send((404).to_bytes(2)) 
                                         return 0
                                     
 if __name__ == "__main__":
