@@ -193,5 +193,7 @@ def waitScreen(screen, connexion, color, subcolor, text):
         if x>650 and x<680 and y>215 and y<245:
             return 0
         if str(data, "utf-8")==text:
-            connexion[0].send(bytes(text, "utf-8"))
+            connexion[0].send(bytes(text+"2", "utf-8"))
+            return 1
+        if str(data, "utf-8")==text+"2":
             return 1

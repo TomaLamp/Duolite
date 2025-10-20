@@ -110,9 +110,12 @@ def isConnClose(conn):
     isclose = False
     readable, _, _ = select.select([conn], [], [], 1)
     if conn in readable:
-        data = conn.recv(1024)
-        if not data:
-            isclose = True
+        try:
+            data = conn.recv(1024)
+            if not data:
+                isclose = True
+        except ConnectionAbortedError:
+            isclose=True
     
     return isclose
 
