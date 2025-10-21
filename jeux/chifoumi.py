@@ -2,8 +2,9 @@ from pygame import *
 from random import randint
 from module.pygameCore import *
 import pygame
+from module.LANscreen import *
 
-def chifoumi():
+def chifoumi(connexion=[None,None,None]):
 
     # --- Nouvelle taille ---
     NEW_WIDTH = 1000
@@ -75,6 +76,13 @@ def chifoumi():
 
     nomj1, nomj2 = get_nom()
 
+    conn = None
+    if connexion[0]!=None and connexion[2]==True:
+        nomj2=connexion[1]
+    elif connexion[0]!=None and connexion[2]==False:
+        nomj2=nomj1
+        nomj1=connexion[1]
+
     fin = 0
     while fin == 0:
         for event in pygame.event.get():
@@ -108,8 +116,19 @@ def chifoumi():
                         a = 2
                         end = 1
                     elif x>170*scale_x and x<537*scale_x and y>250*scale_y and y<347*scale_y:
-                        a = 1
-                        end = 1
+                        if connexion[0]!=None:
+                            quit = waitScreen(fenetre, connexion, "#8A1900", "#000000", "justePrix")
+                            fenetre.fill("#F5411A")
+                            printImage("./image/chifoumi/joueur1.png", (371*scale_x, 99*scale_y), (170*scale_x, 250*scale_y), fenetre)
+                            printImage("./image/chifoumi/joueur2.png", (371*scale_x, 99*scale_y), (170*scale_x, 50*scale_y), fenetre)
+                            pygame.display.flip()
+                            if quit==1:
+                                end=1
+                                a=1
+                                conn = connexion[0]
+                        else:
+                            end=1
+                            a=2 
         
             printImage("./image/chifoumi/joueur1.png", (371*scale_x, 99*scale_y), (170*scale_x, 250*scale_y), fenetre)
             printImage("./image/chifoumi/joueur2.png", (371*scale_x, 99*scale_y), (170*scale_x, 50*scale_y), fenetre)
@@ -140,13 +159,27 @@ def chifoumi():
 
                     pygame.display.flip()
 
-                    ton_coup = position()
+                    if conn == None:
+                        ton_coup = position()
+                    elif connexion[1]==True:
+                        ton_coup = position()
+                        conn.send(ton_coup.to_bytes(1))
+                    elif connexion[1]==False:
+                        ton_coup = recv_int_data(connexion, fenetre, "#8A1900", "#000000")
+                    
                     if ton_coup=="NULL":
                         return 0
 
                     if a==2:
                         affiche_image(0, 1)
-                        mon_coup = position()
+                        if conn == None:
+                            ton_coup = position()
+                        elif connexion[1]==True:
+                            ton_coup = position()
+                            conn.send(ton_coup.to_bytes(1))
+                        elif connexion[1]==True:
+                            mon_coup = recv_int_data(connexion, fenetre, "#8A1900", "#000000")
+                        
                         if mon_coup=="NULL":
                             return 0
                     elif a==1:
@@ -179,6 +212,8 @@ def chifoumi():
                     while end==0:
                         for event in pygame.event.get():   
                             if(event.type == QUIT): 
+                                if conn!=None:
+                                    conn.send((404).to_bytes)
                                 return 0
 
                             if (event.type == MOUSEBUTTONDOWN):

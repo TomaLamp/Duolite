@@ -123,23 +123,7 @@ def morpion(connexion=[None,None,None]):
                 if conn==None or connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
                     prop = get_case()
                 elif connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
-                    while True:
-                        try:
-                            data = conn.recv(1024)
-                            prop = int.from_bytes(data, "big")
-                            if prop==404:
-                                result = quitScreen(fenetre, connexion, "#C5C200", "#474600")
-                                if result=="NULL":
-                                    return 0
-                            if prop!= 404 and str(data, "utf-8")!="morpion":
-                                break
-                        except BlockingIOError:
-                            pass
-                        
-                        for event in pygame.event.get():
-                            if (event.type == pygame.QUIT): 
-                                    conn.send((404).to_bytes(2))
-                                    return 0
+                    prop = recv_int_data(connexion, fenetre, "#C5C200", "#474600")
 
                 if prop=="NULL":
                     if conn!=None:

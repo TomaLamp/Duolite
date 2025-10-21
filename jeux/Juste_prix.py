@@ -48,6 +48,8 @@ def justePrix(connexion=[None,None,None]):
                                 nombre += "0"
                         if x > 540 and x < 590 and y > 520 and y < 570:
                             if len(nombre) != 0:
+                                if conn != None:
+                                    conn.send((0).to_bytes(2))
                                 return int(nombre)
                         
 
@@ -62,11 +64,13 @@ def justePrix(connexion=[None,None,None]):
                         nombre = nombre[0:len(nombre)-1]
                     elif event.key == 13:
                         if len(nombre) != 0:
+                            if conn != None:
+                                conn.send((0).to_bytes(2))
                             return int(nombre)
 
                 if event.type == KEYDOWN or event.type == MOUSEBUTTONUP:
                     if conn != None:
-                        conn.send(nombre.to_bytes(2))
+                        conn.send(int(nombre).to_bytes(2))
                     rectwidth = printImage("./image/juste prix/fond.jpg", (90, 50), (445, 270), fenetre).width
                     printText(nombre, 72, "black", (rectwidth/2 + 445, 270), fenetre, Alignement="Center")
                     pygame.display.flip()  
@@ -78,6 +82,8 @@ def justePrix(connexion=[None,None,None]):
 
     def recv_number(connexion):
         conn=connexion[0] 
+        ton_nombre=0
+        printImage("./image/juste prix/fond.jpg", (90, 50), (445, 270), fenetre)
         while True:
             try:
                 data = conn.recv(1024)
@@ -86,12 +92,13 @@ def justePrix(connexion=[None,None,None]):
                     result = quitScreen(fenetre, connexion, "#5E0066", "#0F0011")
                     if result=="NULL":
                         return "NULL"
-                elif nombre=="END":
+                elif nombre==0:
                     break
                 else:
                     rectwidth = printImage("./image/juste prix/fond.jpg", (90, 50), (445, 270), fenetre).width
-                    printText(nombre, 72, "black", (rectwidth/2 + 445, 270), fenetre, Alignement="Center")
+                    printText(str(nombre), 72, "black", (rectwidth/2 + 445, 270), fenetre, Alignement="Center")
                     pygame.display.flip()
+                    ton_nombre=nombre
             except BlockingIOError:
                 pass
                                 
@@ -100,7 +107,7 @@ def justePrix(connexion=[None,None,None]):
                         conn.send((4004).to_bytes(2))
                         return 0
                 
-        return nombre
+        return ton_nombre
                 
 
     fenetre = initScreen((1000,600), "Juste prix", "#B707C6", './image/juste prix/icon.png')
@@ -403,7 +410,7 @@ def justePrix(connexion=[None,None,None]):
                         pygame.display.flip()
 
                         if conn==None or connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
-                            ton_nombre = choix_nombre()
+                            ton_nombre = choix_nombre(conn)
                         elif connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
                             ton_nombre = recv_number(connexion)
                         

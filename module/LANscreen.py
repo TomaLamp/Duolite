@@ -165,8 +165,6 @@ def quitScreen(screen, connexion, color, subcolor):
         x,y = get_pos()
         if x=="NULL":
             return "NULL"
-        if x>650 and x<680 and y>215 and y<245:
-            return 0
         
 def waitScreen(screen, connexion, color, subcolor, text):
     pygame.draw.rect(screen, subcolor, (305,205,400,200), border_radius=50)
@@ -197,3 +195,24 @@ def waitScreen(screen, connexion, color, subcolor, text):
             return 1
         if str(data, "utf-8")==text+"2":
             return 1
+        
+
+def recv_int_data(connexion, fenetre, color, subcolor, nbError=404):
+    conn = connexion[0]
+    while True:
+        try:
+            data = conn.recv(1024)
+            prop = int.from_bytes(data, "big")
+            if prop==nbError:
+                result = quitScreen(fenetre, connexion, color, subcolor)
+                if result=="NULL":
+                    return "NULL"
+            else:
+                return prop
+        except BlockingIOError:
+            pass
+                        
+        for event in pygame.event.get():
+            if (event.type == pygame.QUIT): 
+                conn.send(nbError.to_bytes(2))
+                return "NULL"
