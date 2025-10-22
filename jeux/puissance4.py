@@ -29,7 +29,7 @@ def puissance4(connexion=[None, None, None]):
                                 return 7
                             
                         
-                if (event.type == KEYDOWN) or (event.type == QUIT): 
+                if event.type == QUIT: 
                     return "NULL"
                     
                         
@@ -74,7 +74,9 @@ def puissance4(connexion=[None, None, None]):
                             fenetre.fill("#A2B203")
                             printImage("./image/puissance4/play.png", (600, 442.5), (200,80), fenetre)
                             pygame.display.flip()
-                            if quit==1:
+                            if quit=="NULL":
+                                return 0
+                            elif quit==1:
                                 fin = 1 
                                 conn = connexion[0]
                         else:
@@ -122,7 +124,6 @@ def puissance4(connexion=[None, None, None]):
                     prop = get_ligne()
                 elif connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
                     prop = recv_int_data(connexion, fenetre, "#7E8A00", "#272B00")
-
 
                 if prop=="NULL":
                     if conn!=None:

@@ -187,13 +187,13 @@ def waitScreen(screen, connexion, color, subcolor, text):
             pass
 
         if x=="NULL":
-            exit()
+            return "NULL"
         if x>650 and x<680 and y>215 and y<245:
             return 0
-        if str(data, "utf-8")==text:
+        if data==bytes(text, "utf-8"):
             connexion[0].send(bytes(text+"2", "utf-8"))
             return 1
-        if str(data, "utf-8")==text+"2":
+        if data==bytes(text+"2", "utf-8"):
             return 1
         
 
@@ -203,6 +203,27 @@ def recv_int_data(connexion, fenetre, color, subcolor, nbError=404):
         try:
             data = conn.recv(1024)
             prop = int.from_bytes(data, "big")
+            if prop==nbError:
+                result = quitScreen(fenetre, connexion, color, subcolor)
+                if result=="NULL":
+                    return "NULL"
+            else:
+                return prop
+        except BlockingIOError:
+            pass
+                        
+        for event in pygame.event.get():
+            if (event.type == pygame.QUIT): 
+                conn.send(nbError.to_bytes(2))
+                return "NULL"
+            
+
+def recv_str_data(connexion, fenetre, color, subcolor, nbError="404"):
+    conn = connexion[0]
+    while True:
+        try:
+            data = conn.recv(1024)
+            prop = str(data, "utf-8")
             if prop==nbError:
                 result = quitScreen(fenetre, connexion, color, subcolor)
                 if result=="NULL":

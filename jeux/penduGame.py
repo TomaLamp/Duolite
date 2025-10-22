@@ -1,11 +1,12 @@
 from pygame import *
 import pygame
 from module.pygameCore import *
+from module.LANscreen import *
+from random import choice
 
 
-def pendu():
-    from random import choice
-
+def pendu(connexion=[None,None,None]):
+    
     # --- Nouvelle taille ---
     NEW_WIDTH = 1000
     NEW_HEIGHT = 600
@@ -76,6 +77,13 @@ def pendu():
 
     nomj1, nomj2 = get_nom()
 
+    conn = None
+    if connexion[0]!=None and connexion[2]==True:
+        nomj2=connexion[1]
+    elif connexion[0]!=None and connexion[2]==False:
+        nomj2=nomj1
+        nomj1=connexion[1]
+
     end = 0
     while end==0:
         printImage("./image/pendu/play-chifoumi.png", (500*scale_x, 337.5*scale_y), (150*scale_x, 30*scale_y), fenetre)
@@ -92,7 +100,6 @@ def pendu():
                     return 0
 
 
-
     startj2=0
     while startj2==0:
         fenetre.fill('red')
@@ -105,12 +112,25 @@ def pendu():
             for event in pygame.event.get():
 
                 if (event.type == MOUSEBUTTONUP):
-                        x = event.pos[0]
-                        y = event.pos[1]
-                        if x>150*scale_x and x<649*scale_x and y>30*scale_y and y<147*scale_y:
-                            end=1
-                            nb_joueur = 1
-                        elif x>150*scale_x and x<649*scale_x and y>249*scale_y and y<367*scale_y:
+                    x = event.pos[0]
+                    y = event.pos[1]
+                    if x>150*scale_x and x<649*scale_x and y>30*scale_y and y<147*scale_y:
+                        end=1
+                        nb_joueur = 1
+                    elif x>150*scale_x and x<649*scale_x and y>249*scale_y and y<367*scale_y:
+                        if connexion[0]!=None:
+                            quit = waitScreen(fenetre, connexion, "#B20000FF", "#000000", "pendu")
+                            fenetre.fill(fenetre.fill('red'))
+                            printImage("./image/pendu/joueur.png", (500*scale_x, 123.8*scale_y), (150*scale_x, 30*scale_y), fenetre)
+                            printImage("./image/pendu/joueur2.png", (500*scale_x, 123.8*scale_y), (150*scale_x, 250*scale_y), fenetre)
+                            pygame.display.flip()
+                            if quit=="NULL":
+                                return 0
+                            elif quit==1:
+                                end=1
+                                nb_joueur = 2
+                                conn = connexion[0]
+                        else:
                             end=1
                             nb_joueur = 2
 
@@ -137,89 +157,103 @@ def pendu():
                         joueur = nomj1
                         j2 = nomj2
                     else:
-                        joueur = nomj1
-                        j2 = nomj2
+                        joueur = nomj2
+                        j2 = nomj1
                     fenetre.fill('red')
 
-                    printText(joueur +" ne regardez pas", int(42*scale_y), "black", (500, 70*scale_y), fenetre, Alignement="Center")
-                    printText(j2 +" vous allez choisir un mot pour l'adversaire", int(55), "black", (500, 150*scale_y), fenetre, Alignement="Center")
-                    
-                    printImage("./image/pendu/suivant.png", (200*scale_x, 47.68*scale_y), (280*scale_x, 250*scale_y), fenetre)
-                    pygame.display.flip()
+                    if conn==None:
+                        printText(joueur +" ne regardez pas", int(42*scale_y), "black", (500, 70*scale_y), fenetre, Alignement="Center")
+                        printText(j2 +" vous allez choisir un mot pour l'adversaire", int(55), "black", (500, 150*scale_y), fenetre, Alignement="Center")
+                        
+                        printImage("./image/pendu/suivant.png", (200*scale_x, 47.68*scale_y), (280*scale_x, 250*scale_y), fenetre)
+                        pygame.display.flip()
 
-                    for event in pygame.event.get():
+                        for event in pygame.event.get():
 
-                        if (event.type == MOUSEBUTTONUP):
-                                x = event.pos[0]
-                                y = event.pos[1]
-                                if x>280*scale_x and x<476*scale_x and y>250*scale_y and y<296*scale_y:
+                            if (event.type == MOUSEBUTTONUP):
+                                    x = event.pos[0]
+                                    y = event.pos[1]
+                                    if x>280*scale_x and x<476*scale_x and y>250*scale_y and y<296*scale_y:
+                                        end = 1
+
+                            if (event.type == KEYDOWN):
+                                if event.key==K_RETURN:
                                     end = 1
 
-                        if (event.type == KEYDOWN):
-                            if event.key==K_RETURN:
-                                end = 1
-
-                        if (event.type == QUIT): 
-                            return 0
-
-                fenetre.fill('red')
-                choix_mot = []
-                for i in range(9):
-                    mot = choice(liste_mots).rstrip()
-                    choix_mot.append(mot)
-                    if liste_mots[len(liste_mots)-1] != mot:
-                        liste_mots.remove(mot + "\n")
-                    else:
-                        liste_mots.remove(mot)
-                
-                printText("Choisissez un mot pour l'adversaire", int(42*scale_y), "black", (500, 10*scale_y), fenetre, Alignement="Center")
-
-                c = 0
-                for i in range(3):
-                    for j in range(3):
-                        rectImage = printImage("./image/pendu/mots.png", (180*scale_x, 42.85*scale_y), ((i*180 + 60*(i+1))*scale_x, (j*100 + 105)*scale_y), fenetre).width
-                        printText(choix_mot[c], int(32*scale_y), "black", ((i*180 + 60*(i+1))*scale_x + rectImage/2, ((j*100 + 105)+10)*scale_y), fenetre, Alignement="Center")
-                        c += 1
-                pygame.display.flip()
-
-                end=0
-                while end==0:
-                    for event in pygame.event.get():
-
-                        if (event.type == MOUSEBUTTONUP):
-                            x = event.pos[0]
-                            y = event.pos[1]
-                            if x>63*scale_x and x<236*scale_x and y>105*scale_y and y<144*scale_y:
-                                end=1
-                                mot_choisi = choix_mot[0]
-                            elif x>303*scale_x and x<477*scale_x and y>105*scale_y and y<144*scale_y:
-                                end=1
-                                mot_choisi = choix_mot[3]
-                            elif x>543*scale_x and x<717*scale_x and y>105*scale_y and y<144*scale_y:
-                                end=1
-                                mot_choisi = choix_mot[6]
-                            elif x>63*scale_x and x<236*scale_x and y>204*scale_y and y<242*scale_y:
-                                end=1
-                                mot_choisi = choix_mot[1]
-                            elif x>303*scale_x and x<477*scale_x and y>204*scale_y and y<242*scale_y:
-                                end=1
-                                mot_choisi = choix_mot[4]
-                            elif x>543*scale_x and x<717*scale_x and y>204*scale_y and y<242*scale_y:
-                                end=1
-                                mot_choisi = choix_mot[7]
-                            elif x>63*scale_x and x<236*scale_x and y>304*scale_y and y<341*scale_y:
-                                end=1
-                                mot_choisi = choix_mot[2]
-                            elif x>303*scale_x and x<477*scale_x and y>304*scale_y and y<341*scale_y:
-                                end=1
-                                mot_choisi = choix_mot[5]
-                            elif x>543*scale_x and x<717*scale_x and y>304*scale_y and y<341*scale_y:
-                                end=1
-                                mot_choisi = choix_mot[8]
+                            if (event.type == QUIT): 
+                                return 0
                             
+                    elif connexion[2]==True and kijou%2 == 1 or connexion[2]==False and kijou%2 == 0:
+                        printText("Attendez", int(42*scale_y), "black", (500, 70*scale_y), fenetre, Alignement="Center")
+                        printText(j2 +" est en train de vous choisir un mot", int(55), "black", (500, 150*scale_y), fenetre, Alignement="Center")
+                        mot_choisi = recv_str_data(connexion, fenetre,"#B20000FF", "#000000")                    
 
-                        if (event.type == QUIT): 
-                            return 0
+
+                if conn==None or connexion[2]==True and kijou%2 == 0 or connexion[2]==False and kijou%2 == 1:
+                    fenetre.fill('red')
+                    choix_mot = []
+                    for i in range(9):
+                        mot = choice(liste_mots).rstrip()
+                        choix_mot.append(mot)
+                        if liste_mots[len(liste_mots)-1] != mot:
+                            liste_mots.remove(mot + "\n")
+                        else:
+                            liste_mots.remove(mot)
+                    
+                    printText("Choisissez un mot pour l'adversaire", int(42*scale_y), "black", (500, 10*scale_y), fenetre, Alignement="Center")
+
+                    c = 0
+                    for i in range(3):
+                        for j in range(3):
+                            rectImage = printImage("./image/pendu/mots.png", (180*scale_x, 42.85*scale_y), ((i*180 + 60*(i+1))*scale_x, (j*100 + 105)*scale_y), fenetre).width
+                            printText(choix_mot[c], int(32*scale_y), "black", ((i*180 + 60*(i+1))*scale_x + rectImage/2, ((j*100 + 105)+10)*scale_y), fenetre, Alignement="Center")
+                            c += 1
+                    pygame.display.flip()
+
+                    end=0
+                    while end==0:
+                        for event in pygame.event.get():
+
+                            if (event.type == MOUSEBUTTONUP):
+                                x = event.pos[0]
+                                y = event.pos[1]
+                                if x>63*scale_x and x<236*scale_x and y>105*scale_y and y<144*scale_y:
+                                    end=1
+                                    mot_choisi = choix_mot[0]
+                                elif x>303*scale_x and x<477*scale_x and y>105*scale_y and y<144*scale_y:
+                                    end=1
+                                    mot_choisi = choix_mot[3]
+                                elif x>543*scale_x and x<717*scale_x and y>105*scale_y and y<144*scale_y:
+                                    end=1
+                                    mot_choisi = choix_mot[6]
+                                elif x>63*scale_x and x<236*scale_x and y>204*scale_y and y<242*scale_y:
+                                    end=1
+                                    mot_choisi = choix_mot[1]
+                                elif x>303*scale_x and x<477*scale_x and y>204*scale_y and y<242*scale_y:
+                                    end=1
+                                    mot_choisi = choix_mot[4]
+                                elif x>543*scale_x and x<717*scale_x and y>204*scale_y and y<242*scale_y:
+                                    end=1
+                                    mot_choisi = choix_mot[7]
+                                elif x>63*scale_x and x<236*scale_x and y>304*scale_y and y<341*scale_y:
+                                    end=1
+                                    mot_choisi = choix_mot[2]
+                                elif x>303*scale_x and x<477*scale_x and y>304*scale_y and y<341*scale_y:
+                                    end=1
+                                    mot_choisi = choix_mot[5]
+                                elif x>543*scale_x and x<717*scale_x and y>304*scale_y and y<341*scale_y:
+                                    end=1
+                                    mot_choisi = choix_mot[8]
+                                
+
+                            if (event.type == QUIT): 
+                                if conn!=None:
+                                    conn.send(b"404")
+                                return 0
+                            
+                    if conn!=None:
+                        conn.send(bytes(mot_choisi, "utf-8"))
+
 
             fenetre.fill('red')            
             for i in range(26):
@@ -245,7 +279,6 @@ def pendu():
             pygame.display.flip()
             
             nb_echecs = 0
-            partie_en_cours = True
             mot_choisi = mot_choisi.upper()
             mot_partiel = "-" * len(mot_choisi)
             lettre_deja_choisie = []
@@ -257,12 +290,21 @@ def pendu():
             while nb_echecs < 10:
                 nouveau_mot_partiel = ""
                 fin = 0
-                while fin==0:
-                    lettre_choisi = get_lettre()
-                    if lettre_choisi == "NULL":
-                        return 0
-                    if lettre_choisi not in lettre_deja_choisie:
-                        fin = 1
+                if conn==None or connexion[2]==True and kijou%2 == 1 or connexion[2]==False and kijou%2 == 0: 
+                    while fin==0:
+                        lettre_choisi = get_lettre()
+                        if lettre_choisi == "NULL":
+                            return 0
+                        if lettre_choisi not in lettre_deja_choisie:
+                            fin = 1
+                    if conn!=None:
+                        conn.send(bytes(lettre_choisi, "utf-8"))
+                else:
+                    lettre_choisi = recv_str_data(connexion, fenetre,"#B20000FF", "#000000")
+                    printImage("./image/pendu/dejavue.png", (30*scale_x, 30*scale_y), ((lettre.index(lettre_choisi))*30*scale_x, 0), fenetre)
+                    printText(lettre_choisi, int(20*scale_y), "black", ((lettre.index(lettre_choisi))*30*scale_x+10*scale_x, 10*scale_y), fenetre)
+                    pygame.display.flip()
+
                 for i in range(len(mot_choisi)):
                     if lettre_choisi == mot_choisi[i]:
                         nouveau_mot_partiel = nouveau_mot_partiel + lettre_choisi
@@ -386,6 +428,8 @@ def pendu():
                                         end = 1
 
                                 if (event.type == QUIT): 
+                                    if conn!=None:
+                                        conn.send(b"404")
                                     return 0
                         restart=0
 
@@ -405,6 +449,8 @@ def pendu():
                                 end = 1      
 
                     if (event.type == QUIT): 
+                        if conn!=None:
+                            conn.send(b"404")
                         return 0 
 
     
@@ -415,6 +461,8 @@ def pendu():
             
         for event in pygame.event.get():
             if (event.type == QUIT): 
+                if conn!=None:
+                    conn.send(b"404")
                 return 0
 
 if __name__ == "__main__":

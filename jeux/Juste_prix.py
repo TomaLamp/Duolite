@@ -68,7 +68,7 @@ def justePrix(connexion=[None,None,None]):
                                 conn.send((0).to_bytes(2))
                             return int(nombre)
 
-                if event.type == KEYDOWN or event.type == MOUSEBUTTONUP:
+                if (event.type == KEYDOWN or event.type == MOUSEBUTTONUP) and len(nombre)>0:
                     if conn != None:
                         conn.send(int(nombre).to_bytes(2))
                     rectwidth = printImage("./image/juste prix/fond.jpg", (90, 50), (445, 270), fenetre).width
@@ -163,7 +163,9 @@ def justePrix(connexion=[None,None,None]):
                                 printImage("./image/juste prix/joueur1.png", (700, 173.1), (160, 70), fenetre)
                                 printImage("./image/juste prix/joueur2.png", (700, 173.1), (160, 370), fenetre)
                                 pygame.display.flip()
-                                if quit==1:
+                                if quit=="NULL":
+                                    return 0
+                                elif quit==1:
                                     fin = 1 
                                     nbrj = 2
                                     conn = connexion[0]

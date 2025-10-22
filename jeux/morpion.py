@@ -72,11 +72,13 @@ def morpion(connexion=[None,None,None]):
                     y = event.pos[1]
                     if x > 220 and x < 809 and y > 337 and y < 521:
                         if connexion[0]!=None:
-                            quit = waitScreen(fenetre, connexion, "#C5C200", "#474600", "morpion")
+                            quit = waitScreen(fenetre, connexion, "#FAF623C7", "#FAF6236D", "morpion")
                             fenetre.fill("#FAF723")
                             printImage("./image/morpion/play.png", (600, 522.97), [220, 20], fenetre)
                             pygame.display.flip()
-                            if quit==1:
+                            if quit=="NULL":
+                                return 0
+                            elif quit==1:
                                 fin = 1 
                                 conn = connexion[0]
                         else:
@@ -89,8 +91,8 @@ def morpion(connexion=[None,None,None]):
 
 
     kijou=1
-    point_rouge = 0
-    point_jaune = 0
+    point_j1 = 0
+    point_j2 = 0
 
     fin = 0
     while fin== 0:
@@ -107,15 +109,17 @@ def morpion(connexion=[None,None,None]):
         while end==0:
 
             if kijou%2 == 1:
-                couleur = nomj1  
+                couleur = "O"
+                printText("Au tour de " + nomj1, 64, "black", (500, 10), fenetre, police="./police/Lemon Tea.ttf", Alignement="Center") 
             else: 
-                couleur = nomj2
+                couleur = "X"
+                printText("Au tour de " + nomj2, 64, "black", (500, 10), fenetre, police="./police/Lemon Tea.ttf", Alignement="Center")
             
-            printText("Au tour de " + couleur, 64, "black", (500, 10), fenetre, police="./police/Lemon Tea.ttf", Alignement="Center")
+            
             printText(nomj1 + " : ", 44, "black", (10, 300), fenetre, police="./police/Lemon Tea.ttf")
-            printText(str(point_rouge), 64, "black", (10, 370), fenetre, police="./police/Lemon Tea.ttf")
+            printText(str(point_j1), 64, "black", (10, 370), fenetre, police="./police/Lemon Tea.ttf")
             printText(nomj2+" : ", 44, "black", (995, 300), fenetre, police="./police/Lemon Tea.ttf", Alignement="Right")
-            printText(str(point_jaune), 64, "black", (945, 370), fenetre, police="./police/Lemon Tea.ttf")
+            printText(str(point_j2), 64, "black", (945, 370), fenetre, police="./police/Lemon Tea.ttf")
             pygame.display.flip()
 
             choix = False
@@ -123,7 +127,7 @@ def morpion(connexion=[None,None,None]):
                 if conn==None or connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
                     prop = get_case()
                 elif connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
-                    prop = recv_int_data(connexion, fenetre, "#C5C200", "#474600")
+                    prop = recv_int_data(connexion, fenetre, "#FAF623C7", "#FAF6236D")
 
                 if prop=="NULL":
                     if conn!=None:
@@ -201,11 +205,13 @@ def morpion(connexion=[None,None,None]):
 
             if hautDroite + basGauche > 2 or hautGauche + basDroite > 2 or droite+gauche > 2 or haut+bas > 2:
                 if kijou%2 == 1:
-                    point_rouge += 1
+                    point_j1 += 1
+                    printText(nomj1 + " a gagné ", 78, "#288300", (500, 10), fenetre, police="./police/Lemon Tea.ttf", Alignement="Center")
                 else: 
-                    point_jaune += 1
+                    point_j2 += 1
+                    printText(nomj2 + " a gagné ", 78, "#288300", (500, 10), fenetre, police="./police/Lemon Tea.ttf", Alignement="Center")
 
-                printText(couleur + " a gagné ", 78, "#288300", (500, 10), fenetre, police="./police/Lemon Tea.ttf", Alignement="Center")
+                
                 
                 end = 1
                 

@@ -114,14 +114,14 @@ def main():
                                 restart(page, jeux2, fenetre)  
                         elif x<598 and x>400:
                             if page==1:
-                                pendu()
+                                pendu(connexion)
                                 restart(page, jeux1, fenetre)
                             if page==2:
                                 motus()
                                 restart(page, jeux2, fenetre) 
                         elif x<899 and x>700:
                             if page==1:
-                                chifoumi()
+                                chifoumi(connexion)
                                 restart(page, jeux1, fenetre)
                             if page==2:
                                 memory()

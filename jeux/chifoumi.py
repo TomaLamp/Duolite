@@ -113,22 +113,24 @@ def chifoumi(connexion=[None,None,None]):
                     
 
                     if x>170*scale_x and x<538*scale_x and y>49*scale_y and y<147*scale_y:
-                        a = 2
-                        end = 1
-                    elif x>170*scale_x and x<537*scale_x and y>250*scale_y and y<347*scale_y:
                         if connexion[0]!=None:
-                            quit = waitScreen(fenetre, connexion, "#8A1900", "#000000", "justePrix")
+                            quit = waitScreen(fenetre, connexion, "#D82A03", "#6F1E00", "chifoumi")
                             fenetre.fill("#F5411A")
                             printImage("./image/chifoumi/joueur1.png", (371*scale_x, 99*scale_y), (170*scale_x, 250*scale_y), fenetre)
                             printImage("./image/chifoumi/joueur2.png", (371*scale_x, 99*scale_y), (170*scale_x, 50*scale_y), fenetre)
                             pygame.display.flip()
-                            if quit==1:
+                            if quit=="NULL":
+                                return 0
+                            elif quit==1:
                                 end=1
-                                a=1
+                                a=2
                                 conn = connexion[0]
                         else:
                             end=1
-                            a=2 
+                            a=2
+                    elif x>170*scale_x and x<537*scale_x and y>250*scale_y and y<347*scale_y:
+                        a = 1
+                        end = 1
         
             printImage("./image/chifoumi/joueur1.png", (371*scale_x, 99*scale_y), (170*scale_x, 250*scale_y), fenetre)
             printImage("./image/chifoumi/joueur2.png", (371*scale_x, 99*scale_y), (170*scale_x, 50*scale_y), fenetre)
@@ -159,26 +161,19 @@ def chifoumi(connexion=[None,None,None]):
 
                     pygame.display.flip()
 
-                    if conn == None:
-                        ton_coup = position()
-                    elif connexion[1]==True:
-                        ton_coup = position()
-                        conn.send(ton_coup.to_bytes(1))
-                    elif connexion[1]==False:
-                        ton_coup = recv_int_data(connexion, fenetre, "#8A1900", "#000000")
                     
+                    ton_coup = position()
                     if ton_coup=="NULL":
                         return 0
 
                     if a==2:
-                        affiche_image(0, 1)
                         if conn == None:
+                            affiche_image(0, 1)
                             ton_coup = position()
-                        elif connexion[1]==True:
-                            ton_coup = position()
+                        else:
+                            affiche_image(ton_coup, 1)
                             conn.send(ton_coup.to_bytes(1))
-                        elif connexion[1]==True:
-                            mon_coup = recv_int_data(connexion, fenetre, "#8A1900", "#000000")
+                            mon_coup = recv_int_data(connexion, fenetre, "#D82A03", "#6F1E00")
                         
                         if mon_coup=="NULL":
                             return 0
@@ -198,14 +193,15 @@ def chifoumi(connexion=[None,None,None]):
                     printImage("./image/chifoumi/floue.png", (700*scale_x, 400*scale_y), (0*scale_x, 0*scale_y), fenetre)
                     printImage("./image/pendu/fleche.png", (50*scale_x, 34.35*scale_y), (640*scale_x, 10*scale_y), fenetre, rotation=180)
 
-                    if(a==2 and mon_score==10):
-                        printImage("./image/chifoumi/VJ2.png", (500*scale_x, 254.2*scale_y), (101.5*scale_x, 80*scale_y), fenetre)
-                    elif(a==1 and mon_score==10):
+                    if mon_score==10 and (conn!=None or a==1):
                         printImage("./image/chifoumi/perdu.png", (500*scale_x, 207.8*scale_y), (101.5*scale_x, 75*scale_y), fenetre)
+                    elif ton_score==10 and (conn!=None or a==1):
+                        printImage("./image/chifoumi/victoire.png", (500*scale_x, 181.62*scale_y), (101.5*scale_x, 100*scale_y), fenetre)
+                    elif(a==2 and mon_score==10):
+                        printImage("./image/chifoumi/VJ2.png", (500*scale_x, 254.2*scale_y), (101.5*scale_x, 80*scale_y), fenetre)
                     elif(a==2 and ton_score==10):
                         printImage("./image/chifoumi/VJ1.png", (500*scale_x, 254.2*scale_y), (101.5*scale_x, 80*scale_y), fenetre)
-                    elif(a==1 and ton_score==10):
-                        printImage("./image/chifoumi/victoire.png", (500*scale_x, 181.62*scale_y), (101.5*scale_x, 100*scale_y), fenetre)
+                    
                     pygame.display.flip()
 
                     end=0
@@ -213,7 +209,7 @@ def chifoumi(connexion=[None,None,None]):
                         for event in pygame.event.get():   
                             if(event.type == QUIT): 
                                 if conn!=None:
-                                    conn.send((404).to_bytes)
+                                    conn.send((404).to_bytes(2))
                                 return 0
 
                             if (event.type == MOUSEBUTTONDOWN):
