@@ -69,6 +69,7 @@ def createRoom(code):
                 elif str(data, "utf-8", errors='ignore')!="" :
                     conn.send(b"KO")
                     conn.close()
+                    connexion=False
 
             for event in pygame.event.get():
                 if (event.type == pygame.MOUSEBUTTONUP):

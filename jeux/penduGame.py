@@ -120,7 +120,7 @@ def pendu(connexion=[None,None,None]):
                     elif x>150*scale_x and x<649*scale_x and y>249*scale_y and y<367*scale_y:
                         if connexion[0]!=None:
                             quit = waitScreen(fenetre, connexion, "#B20000FF", "#000000", "pendu")
-                            fenetre.fill(fenetre.fill('red'))
+                            fenetre.fill('red')
                             printImage("./image/pendu/joueur.png", (500*scale_x, 123.8*scale_y), (150*scale_x, 30*scale_y), fenetre)
                             printImage("./image/pendu/joueur2.png", (500*scale_x, 123.8*scale_y), (150*scale_x, 250*scale_y), fenetre)
                             pygame.display.flip()
@@ -151,42 +151,46 @@ def pendu(connexion=[None,None,None]):
             if nb_joueur == 1:
                 mot_choisi = choice(liste_mots).rstrip()
             else:
-                end=0
-                while end==0:
-                    if kijou%2 == 1:
-                        joueur = nomj1
-                        j2 = nomj2
-                    else:
-                        joueur = nomj2
-                        j2 = nomj1
-                    fenetre.fill('red')
+                if kijou%2 == 1:
+                    joueur = nomj1
+                    j2 = nomj2
+                else:
+                    joueur = nomj2
+                    j2 = nomj1
+                fenetre.fill('red')
 
-                    if conn==None:
-                        printText(joueur +" ne regardez pas", int(42*scale_y), "black", (500, 70*scale_y), fenetre, Alignement="Center")
-                        printText(j2 +" vous allez choisir un mot pour l'adversaire", int(55), "black", (500, 150*scale_y), fenetre, Alignement="Center")
+                if conn==None:
+                    printText(joueur +" ne regardez pas", int(42*scale_y), "black", (500, 70*scale_y), fenetre, Alignement="Center")
+                    printText(j2 +" vous allez choisir un mot pour l'adversaire", int(55), "black", (500, 150*scale_y), fenetre, Alignement="Center")
                         
-                        printImage("./image/pendu/suivant.png", (200*scale_x, 47.68*scale_y), (280*scale_x, 250*scale_y), fenetre)
-                        pygame.display.flip()
+                    printImage("./image/pendu/suivant.png", (200*scale_x, 47.68*scale_y), (280*scale_x, 250*scale_y), fenetre)
+                    pygame.display.flip()
 
+                    end=0
+                    while end==0:
                         for event in pygame.event.get():
 
                             if (event.type == MOUSEBUTTONUP):
                                     x = event.pos[0]
                                     y = event.pos[1]
                                     if x>280*scale_x and x<476*scale_x and y>250*scale_y and y<296*scale_y:
-                                        end = 1
+                                        end=1
 
                             if (event.type == KEYDOWN):
                                 if event.key==K_RETURN:
-                                    end = 1
+                                    end=1
 
                             if (event.type == QUIT): 
                                 return 0
                             
-                    elif connexion[2]==True and kijou%2 == 1 or connexion[2]==False and kijou%2 == 0:
-                        printText("Attendez", int(42*scale_y), "black", (500, 70*scale_y), fenetre, Alignement="Center")
-                        printText(j2 +" est en train de vous choisir un mot", int(55), "black", (500, 150*scale_y), fenetre, Alignement="Center")
-                        mot_choisi = recv_str_data(connexion, fenetre,"#B20000FF", "#000000")                    
+                elif connexion[2]==True and kijou%2 == 1 or connexion[2]==False and kijou%2 == 0:
+                    printText("Attendez", int(42*scale_y), "black", (500, 250), fenetre, Alignement="Center", Alignementy="Center")
+                    printText(j2 +" est en train de vous choisir un mot", int(55), "black", (500, 350), fenetre, Alignement="Center", Alignementy="Center")
+                    pygame.display.flip()
+                    mot_choisi = recv_str_data(connexion, fenetre,"#B20000FF", "#000000") 
+                    if mot_choisi == "NULL":
+                        conn.send(b"404")
+                        return 0                  
 
 
                 if conn==None or connexion[2]==True and kijou%2 == 0 or connexion[2]==False and kijou%2 == 1:
@@ -401,20 +405,21 @@ def pendu(connexion=[None,None,None]):
                     if partie == 5:
                         pygame.time.wait(1000)
                         fenetre.fill('red')
-                        end=0
-                        while end==0:
-                            if point>pointj2:
-                                printText("Victoire de "+nomj1, int(42*scale_y), "green", (500, 200*scale_y), fenetre, Alignement="Center")
-                            elif point<pointj2:
-                                printText("Victoire de "+nomj2, int(42*scale_y), "green", (500, 200*scale_y), fenetre, Alignement="Center")
-                            else:
-                                printText("Egalité", int(62*scale_y), "#9C0000", (500, 195*scale_y), fenetre, Alignement="Center")
+            
+                        if point>pointj2:
+                            printText("Victoire de "+nomj1, int(42*scale_y), "green", (500, 200*scale_y), fenetre, Alignement="Center")
+                        elif point<pointj2:
+                            printText("Victoire de "+nomj2, int(42*scale_y), "green", (500, 200*scale_y), fenetre, Alignement="Center")
+                        else:
+                            printText("Egalité", int(62*scale_y), "#9C0000", (500, 195*scale_y), fenetre, Alignement="Center")
                                 
                             
-                            printText(nomj1+" : " +str(point)+" points / "+nomj2+" : "+str(pointj2)+ " points", int(42*scale_y), "black", (500, 150*scale_y), fenetre, Alignement="Center")
-                            printImage("./image/pendu/suivant.png", (200*scale_x, 47.68*scale_y), (500, 250*scale_y), fenetre, Alignement="Center")
-                            pygame.display.flip()
+                        printText(nomj1+" : " +str(point)+" points / "+nomj2+" : "+str(pointj2)+ " points", int(42*scale_y), "black", (500, 150*scale_y), fenetre, Alignement="Center")
+                        printImage("./image/pendu/suivant.png", (200*scale_x, 47.68*scale_y), (500, 250*scale_y), fenetre, Alignement="Center")
+                        pygame.display.flip()
 
+                        end=0
+                        while end==0:
                             for event in pygame.event.get():
 
                                 if (event.type == MOUSEBUTTONUP):
@@ -425,7 +430,7 @@ def pendu(connexion=[None,None,None]):
 
                                 if (event.type == KEYDOWN):
                                     if event.key==K_RETURN:
-                                        end = 1
+                                        end=1
 
                                 if (event.type == QUIT): 
                                     if conn!=None:
@@ -443,6 +448,8 @@ def pendu(connexion=[None,None,None]):
                             if(x>21*scale_x and x<51*scale_x and y>50*scale_y and y<61*scale_y) or (x>5*scale_x and x<20*scale_x and y>41*scale_y and y<71*scale_y):
                                 end=1
                                 restart=0
+                                if conn!=None:
+                                    conn.send(b"404")
 
                     if (event.type == KEYDOWN):
                             if event.key==K_RETURN:

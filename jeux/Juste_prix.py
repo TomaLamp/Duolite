@@ -68,9 +68,17 @@ def justePrix(connexion=[None,None,None]):
                                 conn.send((0).to_bytes(2))
                             return int(nombre)
 
-                if (event.type == KEYDOWN or event.type == MOUSEBUTTONUP) and len(nombre)>0:
-                    if conn != None:
+                if (event.type == KEYDOWN or event.type == MOUSEBUTTONUP):
+                    if conn != None and len(nombre)>0:
                         conn.send(int(nombre).to_bytes(2))
+                        try:
+                            data = int.from_bytes(conn.recv(1024), "big")
+                            if data==4004:
+                                result = quitScreen(fenetre, connexion, "#5E0066", "#0F0011")
+                                if result=="NULL":
+                                    return "NULL"
+                        except BlockingIOError:
+                            pass
                     rectwidth = printImage("./image/juste prix/fond.jpg", (90, 50), (445, 270), fenetre).width
                     printText(nombre, 72, "black", (rectwidth/2 + 445, 270), fenetre, Alignement="Center")
                     pygame.display.flip()  
@@ -104,8 +112,7 @@ def justePrix(connexion=[None,None,None]):
                                 
             for event in pygame.event.get():
                 if (event.type == pygame.QUIT): 
-                        conn.send((4004).to_bytes(2))
-                        return 0
+                        return "NULL"
                 
         return ton_nombre
                 
@@ -421,8 +428,8 @@ def justePrix(connexion=[None,None,None]):
                                 conn.send((4004).to_bytes(2))
                             return 0
 
-                        if connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
-                            conn.send(ton_nombre.to_bytes(2))
+                        
+                            
 
                         printImage("./image/juste prix/fond.jpg", (450, 90), [400, 170], fenetre)
 
@@ -468,9 +475,11 @@ def justePrix(connexion=[None,None,None]):
                                             printImage("./image/juste prix/fond.jpg", (300, 82), [680, 500], fenetre)
                                             pygame.display.flip()
                                         if(x>21 and x<51 and y>50 and y<61) or (x>5 and x<20 and y>41 and y<71):
-                                                fin=1
-                                                restart=1
-                                                end=1
+                                            fin=1
+                                            restart=1
+                                            end=1
+                                            if conn!=None:
+                                                conn.send((404).to_bytes(2)) 
 
                     
                                     if (event.type == QUIT):

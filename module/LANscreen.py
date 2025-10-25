@@ -235,5 +235,5 @@ def recv_str_data(connexion, fenetre, color, subcolor, nbError="404"):
                         
         for event in pygame.event.get():
             if (event.type == pygame.QUIT): 
-                conn.send(nbError.to_bytes(2))
+                conn.send(bytes(nbError, "utf-8"))
                 return "NULL"

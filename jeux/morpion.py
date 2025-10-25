@@ -127,7 +127,7 @@ def morpion(connexion=[None,None,None]):
                 if conn==None or connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
                     prop = get_case()
                 elif connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
-                    prop = recv_int_data(connexion, fenetre, "#FAF623C7", "#FAF6236D")
+                    prop = recv_int_data(connexion, fenetre, "#FAF62397", "#FAF6234C")
 
                 if prop=="NULL":
                     if conn!=None:

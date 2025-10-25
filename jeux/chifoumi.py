@@ -221,6 +221,8 @@ def chifoumi(connexion=[None,None,None]):
                                 if(x>656*scale_x and x<686*scale_x and y>20*scale_y and y<31*scale_y) or (x>640*scale_x and x<655*scale_x and y>11*scale_y and y<41*scale_y):
                                     end=1
                                     restart=1
+                                    if conn!=None:
+                                        conn.send((404).to_bytes(2))
                             
                             if(event.type == KEYDOWN): 
                                 if event.key==K_RETURN:
