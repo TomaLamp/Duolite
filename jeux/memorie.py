@@ -2,9 +2,10 @@ from pygame import *
 import pygame
 from random import *
 from module.pygameCore import *
+from module.LANscreen import *
 
 
-def memory():
+def memory(connexion=[None, None, None]):
 
     fenetre = initScreen((1000,600), "memorie", "red", './image/memorie/icon.png')
 
@@ -13,7 +14,13 @@ def memory():
     pygame.display.flip()
 
     nomj1, nomj2 = get_nom()
-                
+    
+    conn = None
+    if connexion[0]!=None and connexion[2]==True:
+        nomj2=connexion[1]
+    elif connexion[0]!=None and connexion[2]==False:
+        nomj2=nomj1
+        nomj1=connexion[1]
 
     fin = 0
     while fin == 0:
@@ -22,7 +29,18 @@ def memory():
                 x = event.pos[0]
                 y = event.pos[1]
                 if x > 150 and x < 850 and y > 110 and y < 461:
-                    fin = 1 
+                    if connexion[0]!=None:
+                        quit = waitScreen(fenetre, connexion, "#B20000FF", "#000000", "memorie")
+                        fenetre.fill("red")
+                        printImage("./image/memorie/play.png", (700, 350.315), (150,110), fenetre)
+                        pygame.display.flip()
+                        if quit=="NULL":
+                            return 0
+                        elif quit==1:
+                            fin = 1 
+                            conn = connexion[0]
+                    else:
+                        fin=1
                             
             if (event.type == KEYDOWN) or (event.type == QUIT): 
                 return 0
@@ -82,119 +100,151 @@ def memory():
             i=-1
             j=-1
 
-            for event in pygame.event.get():
-                if (event.type == MOUSEBUTTONUP):
-                        x = event.pos[0]
-                        y = event.pos[1]
-                        if y>85 and y<162:
-                            j=0
-                        if y>170 and y<248:
-                            j=1
-                        if y>254 and y<333:
-                            j=2
-                        if y>340 and y<418:
-                            j=3
-                        if y>426 and y<503:
-                            j=4
-                        if y>512 and y<588:
-                            j=5
-                        
-                        if x>200 and x<278:
-                            i=0
-                        if x>298 and x<380:
-                            i=1
-                        if x>398 and x<480:
-                            i=2
-                        if x>500 and x<579:
-                            i=3
-                        if x>600 and x<679:
-                            i=4
-                        if x>702 and x<780:
-                            i=5
-
-                        
-                        if i!=-1 and j!=-1:
-                            k = placement[i][j]
-                            if k!= 0:
-                                printImage(f"./image/memorie/cartes/mem{k}.jpg", (80, 80), [200+100*i,85+85*j], fenetre)
-                                pygame.display.flip()
-
-
-                            count+=1
-
-                            if count%2 == 1:
-                                i1 = i
-                                j1 = j 
+            if conn==None or connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
+                end=0
+                while end==0:
+                    for event in pygame.event.get():
+                        if (event.type == MOUSEBUTTONUP):
+                            x = event.pos[0]
+                            y = event.pos[1]
+                            if y>85 and y<162:
+                                j=0
+                            if y>170 and y<248:
+                                j=1
+                            if y>254 and y<333:
+                                j=2
+                            if y>340 and y<418:
+                                j=3
+                            if y>426 and y<503:
+                                j=4
+                            if y>512 and y<588:
+                                j=5
                             
-                            if count%2 == 0:
-                                if placement[i1][j1] == placement[i][j]:
-                                    placement[i1][j1] = 0
-                                    placement[i][j] = 0
+                            if x>200 and x<278:
+                                i=0
+                            if x>298 and x<380:
+                                i=1
+                            if x>398 and x<480:
+                                i=2
+                            if x>500 and x<579:
+                                i=3
+                            if x>600 and x<679:
+                                i=4
+                            if x>702 and x<780:
+                                i=5
+                        
+                        if (event.type == QUIT): 
+                            if conn!=None:
+                                conn.send(b"404")
+                            return 0
 
-                                    if kijou%2==0:
-                                        point1+=1
-                                    else:
-                                        point2+=1
-
-                                    if placement ==  [[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0]]:
-                                        
-                                        if point1>point2:
-                                            vic = nomj1
-                                        elif point1<point2:
-                                            vic = nomj2
-
-                                        printImage("./image/memorie/rouge.png", (50, 50), [20,250], fenetre)
-                                        printImage("./image/memorie/rouge.png", (50, 50), [960,250], fenetre)
-                                        printText(str(point1), 40, "black", (20, 250), fenetre)
-                                        printText(str(point2), 40, "black", (960, 250), fenetre)
-                                        
-                                        
-                                        printImage("./image/memorie/rouge.png", (500, 50), [300,20], fenetre)
-
-                                        if point1!=point2:
-                                            printText("Victoire de "+vic, 62, "#4E8102", (500, 20), fenetre, Alignement="Center")
-                                        else:
-                                            printText("Egalité", 62, "#4E8102", (430, 20), fenetre)
-
-                                        pygame.display.flip()
-
-                                        end=0
-                                        while end==0:
-                                            for event in pygame.event.get():
-                                                if (event.type == MOUSEBUTTONUP):
-                                                        x = event.pos[0]
-                                                        y = event.pos[1]
-                                                        if x<990 and x>790 and y>530 and y<583:
-                                                            end=1
-                                                            fin=1
-
-                                                if (event.type == QUIT): 
-                                                    return 0
-
-                                else:
-                                    kijou+=1
-
-                                    printImage("./image/memorie/dos.png", (80, 80), [200+100*i,85+85*j], fenetre)
-                                    printImage("./image/memorie/dos.png", (80, 80), [200+100*i1,85+85*j1], fenetre)
-
-        
-
-                                
-
-                                    end=0
-                                    while end==0:
-                                        for event in pygame.event.get():
-                                            if (event.type == MOUSEBUTTONUP):
-                                                    x = event.pos[0]
-                                                    y = event.pos[1]
-                                                    if x<990 and x>790 and y>530 and y<583:
-                                                        end=1
-
-                                            if (event.type == QUIT): 
-                                                return 0
-                            
-                if (event.type == QUIT): 
+                    if i!=-1 and j!=-1:
+                        end=1
+                        if conn!=None:
+                            conn.send(bytes(str(i)+str(j), "utf-8"))
+            
+            else:
+                ijString = recv_int_data(connexion, fenetre,"#B20000FF", "#000000")
+                if ijString=="NULL":
+                    conn.send(b"404")
                     return 0
+                i=int(ijString[0])
+                j=int(ijString[1])
+
+            
+            k = placement[i][j]
+            if k!= 0:
+                printImage(f"./image/memorie/cartes/mem{k}.jpg", (80, 80), [200+100*i,85+85*j], fenetre)
+                pygame.display.flip()
+
+
+            count+=1
+
+            if count%2 == 1:
+                i1 = i
+                j1 = j 
+            
+            if count%2 == 0:
+                if placement[i1][j1] == placement[i][j]:
+                    placement[i1][j1] = 0
+                    placement[i][j] = 0
+
+                    if kijou%2==0:
+                        point1+=1
+                    else:
+                        point2+=1
+
+                    if placement ==  [[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0]]:
+                        
+                        if point1>point2:
+                            vic = nomj1
+                        elif point1<point2:
+                            vic = nomj2
+
+                        printImage("./image/memorie/rouge.png", (50, 50), [20,250], fenetre)
+                        printImage("./image/memorie/rouge.png", (50, 50), [960,250], fenetre)
+                        printText(str(point1), 40, "black", (20, 250), fenetre)
+                        printText(str(point2), 40, "black", (960, 250), fenetre)
+                        
+                        
+                        printImage("./image/memorie/rouge.png", (500, 50), [300,20], fenetre)
+
+                        if point1!=point2:
+                            printText("Victoire de "+vic, 62, "#4E8102", (500, 20), fenetre, Alignement="Center")
+                        else:
+                            printText("Egalité", 62, "#4E8102", (430, 20), fenetre)
+
+                        pygame.display.flip()
+
+                        end=0
+                        while end==0:
+                            for event in pygame.event.get():
+                                if (event.type == MOUSEBUTTONUP):
+                                        x = event.pos[0]
+                                        y = event.pos[1]
+                                        if x<990 and x>790 and y>530 and y<583:
+                                            end=1
+                                            fin=1
+
+                                if (event.type == QUIT): 
+                                    if conn!=None:
+                                        conn.send(b"404") 
+                                    return 0
+
+                else:
+                    kijou+=1
+
+                    printImage("./image/memorie/dos.png", (80, 80), [200+100*i,85+85*j], fenetre)
+                    printImage("./image/memorie/dos.png", (80, 80), [200+100*i1,85+85*j1], fenetre)
+
+                    if conn==None or connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0: 
+                        end=0
+                        while end==0:
+                            for event in pygame.event.get():
+                                if (event.type == MOUSEBUTTONUP):
+                                        x = event.pos[0]
+                                        y = event.pos[1]
+                                        if x<990 and x>790 and y>530 and y<583:
+                                            end=1
+                                            if conn!=None:
+                                                conn.send(b"continue")
+
+                                if event.type == pygame.K_BACKSPACE:
+                                    end=1
+                                    if conn!=None:
+                                        conn.send(b"continue")
+
+                                if (event.type == QUIT): 
+                                    if conn!=None:
+                                        conn.send(b"404") 
+                                    return 0
+                    else:
+                        data = recv_str_data(connexion, fenetre,"#B20000FF", "#000000")
+                        if data=="NULL":
+                            conn.send(b"404")
+                            return 0
+                        
+
                 
 if __name__ == "__main__":
     memory()

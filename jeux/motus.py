@@ -387,7 +387,7 @@ def motus(connexion=[None, None, None]):
                             
                 elif connexion[2]==True and kijou%2 == 1 or connexion[2]==False and kijou%2 == 0:
                     printText("Attendez", int(55), "black", (500, 250), fenetre, Alignement="Center", Alignementy="Center")
-                    printText(j2 +" est en train de vous choisir un mot", int(55), "black", (500, 350), fenetre, Alignement="Center", Alignementy="Center")
+                    printText(joueur +" est en train de vous choisir un mot", int(55), "black", (500, 350), fenetre, Alignement="Center", Alignementy="Center")
                     pygame.display.flip()
                     mot_choisi = recv_str_data(connexion, fenetre,"#2C5C83", "#122C42") 
                     if mot_choisi == "NULL":
@@ -481,6 +481,9 @@ def motus(connexion=[None, None, None]):
                                 if conn!=None:
                                     conn.send(b"404")
                                 return 0
+                            
+                    if conn!=None:
+                        conn.send(bytes(mot_choisi, "utf-8"))
 
 
                 fenetre.fill("#4682B4")
