@@ -1,10 +1,12 @@
 from pygame import *
 import pygame
+import pickle
 from random import *
 from module.pygameCore import *
+from module.LANscreen import *
 
 
-def mastermind():
+def mastermind(connexion=[None, None, None]):
 
     def affich_combi(l, tour):
 
@@ -24,7 +26,12 @@ def mastermind():
     pygame.display.flip()
 
     nomj1, nomj2 = get_nom()
-                
+    conn = None
+    if connexion[0]!=None and connexion[2]==True:
+        nomj2=connexion[1]
+    elif connexion[0]!=None and connexion[2]==False:
+        nomj2=nomj1
+        nomj1=connexion[1]
 
     fin = 0
     while fin == 0:
@@ -47,7 +54,6 @@ def mastermind():
         end = 0
         while end==0:
             printImage("./image/mastermind/1joueur.png", (750, 185.7), [125, 65], fenetre)
-            pygame.display.flip()
             printImage("./image/mastermind/2joueur.png", (750, 185.7), [125, 350], fenetre)
             pygame.display.flip()
 
@@ -60,8 +66,18 @@ def mastermind():
                             end=1
                             nbjoueur = 1
                         elif x>125 and x<875 and y>350 and y<535.7:
-                            end=1
-                            nbjoueur = 2
+                            if connexion[0]!=None:
+                                quit = waitScreen(fenetre, connexion, "#B404BABB", "#500153", "mastermind")
+                                fenetre.fill("#DD00E4")
+                                if quit=="NULL":
+                                    return 0
+                                elif quit==1:
+                                    end=1
+                                    nbjoueur = 2
+                                    conn = connexion[0]
+                            else:
+                                end=1
+                                nbjoueur = 2
 
 
                 if (event.type == QUIT): 
@@ -125,7 +141,7 @@ def mastermind():
             while end==0 and tour<17:
 
                 if nbjoueur==2:
-                    printImage("./image/mastermind/cache.png", (800, 55), [140,10], fenetre)
+                    printImage("./image/mastermind/cache.png", (800, 55), [100,10], fenetre)
                     if kijou%2==0:
                         printText(nomj1+" choisissez une combinaison", 60, "black", (500,20), fenetre, Alignement="Center")
                     else:
@@ -133,78 +149,108 @@ def mastermind():
                     pygame.display.flip()
 
                 choix=[]
-                fin = 0
-                while fin == 0:
-                    for event in pygame.event.get():
-                        if (event.type == MOUSEBUTTONUP):
-                            x = event.pos[0]
-                            y = event.pos[1]
-                            #print(x,y)
-                            if x > 30 and x < 180 and y > 470 and y < 570 and len(choix)<4:
-                                if y > 470 and y < 520:
-                                    if x<80:
-                                        choix.append("blanc")
-                                    elif x<130:
-                                        choix.append("rouge")
-                                    elif x<180:
-                                        choix.append("vert")
-                                elif y > 520 and y < 570:
-                                    if x<80:
-                                        choix.append("orange")
-                                    elif x<130:
-                                        choix.append("bleu")
-                                    elif x<180:
-                                        choix.append("jaune")
-                                affich_combi(choix, tour)
-                            if x > 180 and x < 230 and y > 470 and y < 570 and len(choix)!=0:
-                                del choix[-1]
 
+                if conn==None or connexion[2]==True and kijou%2 == 0 or connexion[2]==False and kijou%2 == 1:
+                    fin = 0
+                    while fin == 0:
+                        for event in pygame.event.get():
+                            if (event.type == MOUSEBUTTONUP):
+                                x = event.pos[0]
+                                y = event.pos[1]
+                                #print(x,y)
+                                if x > 30 and x < 180 and y > 470 and y < 570 and len(choix)<4:
+                                    if y > 470 and y < 520:
+                                        if x<80:
+                                            choix.append("blanc")
+                                        elif x<130:
+                                            choix.append("rouge")
+                                        elif x<180:
+                                            choix.append("vert")
+                                    elif y > 520 and y < 570:
+                                        if x<80:
+                                            choix.append("orange")
+                                        elif x<130:
+                                            choix.append("bleu")
+                                        elif x<180:
+                                            choix.append("jaune")
+                                    affich_combi(choix, tour)
+                                    if conn!=None:
+                                        conn.send(pickle.dump(choix))
+                                if x > 180 and x < 230 and y > 470 and y < 570 and len(choix)!=0:
+                                    del choix[-1]
+
+                                    printImage("./image/mastermind/fond.png", (170, 22.58), [xc,yc[16-tour]], fenetre)
+                                    pygame.display.flip()
+
+                                    affich_combi(choix, tour)
+                                    if conn!=None:
+                                        conn.send(pickle.dump(choix))
+
+                                if x>771 and x<970 and y>495 and y<540 and len(choix)==4:
+                                    fin=1
+                                    if conn!=None:
+                                        conn.send(pickle.dump(["next"]))
+
+                            if (event.type == QUIT): 
+                                if conn!=None:
+                                    conn.send(pickle.dump(["404"]))
+                                return 0
+                
+                else:
+                    while True:
+                        try:
+                            data = pickle.load(conn.recv(1024))
+                            if data[0]=="next":
+                                break
+                            elif data[0]=="404":
+                                result = quitScreen(fenetre, connexion, "#B404BABB", "#500153")
+                                if result=="NULL":
+                                    return 0
+                            else:
+                                choix=list(data)
                                 printImage("./image/mastermind/fond.png", (170, 22.58), [xc,yc[16-tour]], fenetre)
-                                pygame.display.flip()
-
                                 affich_combi(choix, tour)
+                        except BlockingIOError:
+                            pass 
 
-                            if x>771 and x<970 and y>495 and y<540 and len(choix)==4:
-                                verif = list(combinaison)
-                                bon=0
-                                place=0
-                                j=0
-                                l_verif = [0,0,0,0]
-                                for i in range(4):
-                                    if choix[i]==combinaison[i]:
-                                        bon+=1
-                                        del verif[i-j]
-                                        j+=1
-                                        l_verif[i]=1
+                        for event in pygame.event.get():
+                            if (event.type == pygame.QUIT): 
+                                conn.send(pickle.dump(["404"]))
+                                return 0                              
                                 
-                                if bon!=4:
-                                    for i in range(len(choix)):
-                                        if l_verif[i]!=1 and choix[i] in verif:
-                                            place+=1
-                                            del verif[verif.index(choix[i])]
-                                    fin=1
-                                    kijou+=1
-                                else:
-                                    print("gagné")
-                                    fin=1
-                                    end=1
+                verif = list(combinaison)
+                bon=0
+                place=0
+                j=0
+                l_verif = [0,0,0,0]
+                for i in range(4):
+                    if choix[i]==combinaison[i]:
+                        bon+=1
+                        del verif[i-j]
+                        j+=1
+                        l_verif[i]=1
+                
+                if bon!=4:
+                    for i in range(len(choix)):
+                        if l_verif[i]!=1 and choix[i] in verif:
+                            place+=1
+                            del verif[verif.index(choix[i])]
+                    kijou+=1
+                else:
+                    end=1
 
-                                printImage("./image/mastermind/blanc.jpg", (30*place, 22.58), [592,yc[16-tour]+3], fenetre)
-                                printImage("./image/mastermind/rouge.png", (30*bon, 22.58), [410-30*bon,yc[16-tour]+3], fenetre)
-                                if place!=0:
-                                    printText(str(place), 20, "black", (595,yc[16-tour]+8), fenetre)
-                                if bon!=0:
-                                    printText(str(bon), 20, "black", (395,yc[16-tour]+8), fenetre)
-                                
-                                pygame.display.flip()
-                                tour+=1
+                printImage("./image/mastermind/blanc.jpg", (30*place, 22.58), [592,yc[16-tour]+3], fenetre)
+                printImage("./image/mastermind/rouge.png", (30*bon, 22.58), [410-30*bon,yc[16-tour]+3], fenetre)
+                if place!=0:
+                    printText(str(place), 20, "black", (595,yc[16-tour]+8), fenetre)
+                if bon!=0:
+                    printText(str(bon), 20, "black", (395,yc[16-tour]+8), fenetre)
+                
+                pygame.display.flip()
+                tour+=1
                             
 
                                 
-                                
-                                            
-                        if (event.type == KEYDOWN) or (event.type == QUIT): 
-                            return 0
 
             
             affich_combi(combinaison, 17)
@@ -257,9 +303,13 @@ def mastermind():
                         if(x>21 and x<51 and y>20 and y<31) or (x>5 and x<20 and y>11 and y<41):
                             restart=1
                             end=1
+                            if conn!=None:
+                                conn.send(pickle.dump(["404"]))
 
 
-                    if (event.type == KEYDOWN) or (event.type == QUIT): 
+                    if (event.type == QUIT): 
+                        if conn!=None:
+                            conn.send(pickle.dump(["404"]))
                         return 0
 
 if __name__ == "__main__":

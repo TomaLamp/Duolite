@@ -1,5 +1,6 @@
 from pygame import *
 import pygame
+import pickle
 from random import *
 from module.pygameCore import *
 from module.LANscreen import *
@@ -55,11 +56,24 @@ def memory(connexion=[None, None, None]):
         carte = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17, 18, 18]
         placement = [[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0]]
 
-        for j in range(6):
-            for i in range(6):
-                r = randint(0, len(carte)-1)
-                placement[j][i] = carte[r]
-                del(carte[r])
+        if conn==None or connexion[2]==True:
+            for j in range(6):
+                for i in range(6):
+                    r = randint(0, len(carte)-1)
+                    placement[j][i] = carte[r]
+                    del(carte[r])
+
+            if conn!=None:
+                data=pickle.dumps(placement)
+                conn.send(data)
+        else:
+            while True:
+                try:
+                    recv_data = conn.recv(1024)
+                    placement = pickle.loads(recv_data)
+                    break
+                except BlockingIOError:
+                    pass
 
 
         c=0
@@ -100,7 +114,7 @@ def memory(connexion=[None, None, None]):
             i=-1
             j=-1
 
-            if conn==None or connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
+            if conn==None or connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
                 end=0
                 while end==0:
                     for event in pygame.event.get():
@@ -144,7 +158,7 @@ def memory(connexion=[None, None, None]):
                             conn.send(bytes(str(i)+str(j), "utf-8"))
             
             else:
-                ijString = recv_int_data(connexion, fenetre,"#B20000FF", "#000000")
+                ijString = recv_str_data(connexion, fenetre,"#B20000FF", "#000000")
                 if ijString=="NULL":
                     conn.send(b"404")
                     return 0
@@ -212,12 +226,7 @@ def memory(connexion=[None, None, None]):
                                     return 0
 
                 else:
-                    kijou+=1
-
-                    printImage("./image/memorie/dos.png", (80, 80), [200+100*i,85+85*j], fenetre)
-                    printImage("./image/memorie/dos.png", (80, 80), [200+100*i1,85+85*j1], fenetre)
-
-                    if conn==None or connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0: 
+                    if conn==None or connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1: 
                         end=0
                         while end==0:
                             for event in pygame.event.get():
@@ -229,10 +238,11 @@ def memory(connexion=[None, None, None]):
                                             if conn!=None:
                                                 conn.send(b"continue")
 
-                                if event.type == pygame.K_BACKSPACE:
-                                    end=1
-                                    if conn!=None:
-                                        conn.send(b"continue")
+                                if (event.type == KEYDOWN):
+                                    if event.key == K_RETURN:
+                                        end = 1
+                                        if conn!=None:
+                                            conn.send(b"continue")
 
                                 if (event.type == QUIT): 
                                     if conn!=None:
@@ -243,6 +253,11 @@ def memory(connexion=[None, None, None]):
                         if data=="NULL":
                             conn.send(b"404")
                             return 0
+                        
+                    kijou+=1
+
+                    printImage("./image/memorie/dos.png", (80, 80), [200+100*i,85+85*j], fenetre)
+                    printImage("./image/memorie/dos.png", (80, 80), [200+100*i1,85+85*j1], fenetre)
                         
 
                 

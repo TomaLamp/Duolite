@@ -124,7 +124,7 @@ def main():
                                 chifoumi(connexion)
                                 restart(page, jeux1, fenetre)
                             if page==2:
-                                memory()
+                                memory(connexion)
                                 restart(page, jeux2, fenetre) 
                     if y > 400 and y < 543:
                         if x<298 and x>99:
@@ -132,7 +132,7 @@ def main():
                                 puissance4(connexion)
                                 restart(page, jeux1, fenetre)
                             if page==2:
-                                mastermind()
+                                mastermind(connexion)
                                 restart(page, jeux2, fenetre)
                         elif x<598 and x>400:
                             if page==1:
