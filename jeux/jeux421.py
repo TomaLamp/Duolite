@@ -1,14 +1,14 @@
 from pygame import *
 import pygame
-from math import *
-from time import *
+from time import sleep
+import random
+import pickle
 from module.pygameCore import *
+from module.LANscreen import *
 
 
-def jeux421():
 
-    import random
-    from time import sleep
+def jeux421(connexion=[None, None, None]):
 
     def tirage(d1, d2, d3):
 
@@ -92,6 +92,13 @@ def jeux421():
     pygame.display.flip()
 
     nomj1, nomj2 = get_nom()
+
+    conn = None
+    if connexion[0]!=None and connexion[2]==True:
+        nomj2=connexion[1]
+    elif connexion[0]!=None and connexion[2]==False:
+        nomj2=nomj1
+        nomj1=connexion[1]
         
 
     fin = 0
@@ -101,9 +108,20 @@ def jeux421():
                 x = event.pos[0]
                 y = event.pos[1]
                 if x > 161 and x < 859 and y > 298 and y < 485:
-                    fin = 1 
+                    if connexion[0]!=None:
+                        quit = waitScreen(fenetre, connexion, "#E3C400", "#BE9F02", "421")
+                        fenetre.fill("#FFFF00")
+                        printImage("./image/421/play.png", (700, 472.73), [160,36], fenetre)
+                        pygame.display.flip()
+                        if quit=="NULL":
+                            return 0
+                        elif quit==1:
+                            fin = 1 
+                            conn = connexion[0]
+                    else:
+                        fin=1
                     
-            if (event.type == KEYDOWN) or (event.type == QUIT): 
+            if (event.type == QUIT): 
                 return 0
 
     printImage("./image/421/jaune.png", (1000, 600), [0, 0], fenetre)
@@ -118,37 +136,36 @@ def jeux421():
 
     printText("score :", 33, "black", (950, 20), fenetre, underline=True, Alignement="Right")
 
+    printText(nomj1+" : "+str(0), 33, "black", (10, 90), fenetre)
+
+    printText(nomj2+" : "+str(0), 33, "black", (10, 120), fenetre)
+
+    printText("Pot :", 33, "black", (10, 10), fenetre)
+
+    printText(str(21), 33, "black", (65, 10), fenetre)
+
+    printText("Point :", 33, "black", (10, 60), fenetre, underline=True)
+
     pygame.display.flip()
 
-
+    tour = 0
+    coup_max=3
+    score = [[],[]]
     kijou = 0
     point1 = 0
     point2 = 0
     pot = 21
     end = 0
     while end==0:
-
-        printImage("./image/421/jaune.png", (30, 60), [110, 90], fenetre)
-
-        printImage("./image/421/jaune.png", (25, 25), [65, 10], fenetre)
-
-        printText("Pot :", 33, "black", (10, 10), fenetre)
-
-        printText("Point :", 33, "black", (10, 60), fenetre, underline=True)
-
-        printText(nomj1+" : "+str(point1), 33, "black", (10, 90), fenetre)
-
-        printText(nomj2+" : "+str(point2), 33, "black", (10, 120), fenetre)
-
-        printText(str(pot), 33, "black", (65, 10), fenetre)
-
+        
+        if tour%2==0:
+            printImage("./image/421/jaune.png", (50, 70), [950, 50], fenetre)
+  
         printImage("./image/421/blanc.png", (100, 100), [200, 200], fenetre)
 
         printImage("./image/421/blanc.png", (100, 100), [450, 200], fenetre)
 
         printImage("./image/421/blanc.png", (100, 100), [700, 200], fenetre)
-
-        printImage("./image/421/jaune.png", (50, 70), [950, 50], fenetre)
 
         printImage("./image/421/jaune.png", (520, 70), [250, 70], fenetre)
 
@@ -162,198 +179,219 @@ def jeux421():
         d1 = 1
         d2 = 1
         d3 = 1
-        score1 = [0, 0, 0]
-        while fin==0:
+        score[kijou%2] = [0, 0, 0]
+
+        while coup<coup_max and fin==0:
+            x=0
+            y=0
             for event in pygame.event.get():
                 if (event.type == MOUSEBUTTONUP):
                         x = event.pos[0]
                         y = event.pos[1]
-                        #print(x ,y)
-                        if x > 99 and x < 449 and y > 419 and y < 502:
-                            lancer = tirage(d1, d2, d3)
-                            affich(lancer, score1)
-                            coup+=1
-                            fin=1
-                if (event.type == QUIT): 
-                    return 0
-
-
-        
-        fin=0
-        while coup<3 and fin==0:
-            for event in pygame.event.get():
-                if (event.type == MOUSEBUTTONUP):
-                        x = event.pos[0]
-                        y = event.pos[1]
-                        #print(x ,y)
-                        if x > 99 and x < 449 and y > 419 and y < 502:
-                            lancer = tirage(d1, d2, d3)
-                            affich(lancer, score1)
-                            coup+=1
-                        if x > 200 and x < 300 and y > 200 and y < 300:
-                            if d1 == 1:
-                                keep(d1, 1, lancer[0])
-                                score1[0] = lancer[0]
-                                lancer[0] = 0
-                                d1 = 0
-                            else:
-                                keep(d1, 1, score1[0])
-                                lancer[0] = score1[0]
-                                score1[0] = 0
-                                d1 = 1
-                        if x > 450 and x < 550 and y > 200 and y < 300:
-                            if d2 == 1:
-                                keep(d2, 2, lancer[1])
-                                score1[1] = lancer[1]
-                                lancer[1] = 0
-                                d2 = 0
-                            else:
-                                keep(d2, 2, score1[1])
-                                lancer[1] = score1[1]
-                                score1[1] = 0
-                                d2 = 1
-                        if x > 700 and x < 800 and y > 200 and y < 300:
-                            if d3 == 1:
-                                keep(d3, 3, lancer[2])
-                                score1[2] = lancer[2]
-                                lancer[2] = 0
-                                d3 = 0
-                            else:
-                                keep(d3, 3, score1[2])
-                                lancer[2] = score1[2]
-                                score1[2] = 0
-                                d3 = 1
-                        if x > 550 and x < 900 and y > 419 and y < 504:
-                            fin=1
+                        
+                        if conn!=None and connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
+                            conn.send(pickle.dumps([x,y]))
                             
                 if (event.type == QUIT): 
+                    if conn!=None:
+                        conn.send(pickle.dumps(["404"]))
                     return 0
+            
 
-        coup_max = coup
-        if score1[0] == 0:
-            score1[0] = lancer[0]
-        if score1[1] == 0:
-            score1[1] = lancer[1]
-        if score1[2] == 0:
-            score1[2] = lancer[2]
-        score1.sort()
-        if score1 == [1, 2, 4]:
-            score1.sort(reverse=True)
+            if conn!=None and connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
+                while True:
+                    try:
+                        data = pickle.loads(conn.recv(1024))
+                        if len(data)!=0 and data[0]=="404":
+                            result = quitScreen(fenetre, connexion, "#E3C400", "#BE9F02")
+                            if result=="NULL":
+                                return 0
+                        else:
+                            x=data[0]
+                            y=data[1]
+                    except BlockingIOError:
+                        pass 
+
+                    for event in pygame.event.get():
+                        if (event.type == pygame.QUIT): 
+                            conn.send(pickle.dumps(["404"]))
+                            return 0
+
+
+            if x > 99 and x < 449 and y > 419 and y < 502:
+                if conn==None or connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
+                    lancer = tirage(d1, d2, d3)
+                    if conn!=None:
+                        conn.send(pickle.dumps(lancer))
+                else:
+                    while True:
+                        try:
+                            lancer = pickle.loads(conn.recv(1024))
+                        except BlockingIOError:
+                            pass 
+
+                affich(lancer, score[kijou%2])
+                coup+=1
+            if x > 200 and x < 300 and y > 200 and y < 300 and coup!=0:
+                if d1 == 1:
+                    keep(d1, 1, lancer[0])
+                    score[kijou%2][0] = lancer[0]
+                    lancer[0] = 0
+                    d1 = 0
+                else:
+                    keep(d1, 1, score[kijou%2][0])
+                    lancer[0] = score[kijou%2][0]
+                    score[kijou%2][0] = 0
+                    d1 = 1
+            if x > 450 and x < 550 and y > 200 and y < 300 and coup!=0:
+                if d2 == 1:
+                    keep(d2, 2, lancer[1])
+                    score[kijou%2][1] = lancer[1]
+                    lancer[1] = 0
+                    d2 = 0
+                else:
+                    keep(d2, 2, score[kijou%2][1])
+                    lancer[1] = score[kijou%2][1]
+                    score[kijou%2][1] = 0
+                    d2 = 1
+            if x > 700 and x < 800 and y > 200 and y < 300 and coup!=0:
+                if d3 == 1:
+                    keep(d3, 3, lancer[2])
+                    score[kijou%2][2] = lancer[2]
+                    lancer[2] = 0
+                    d3 = 0
+                else:
+                    keep(d3, 3, score[kijou%2][2])
+                    lancer[2] = score[kijou%2][2]
+                    score[kijou%2][2] = 0
+                    d3 = 1
+            if x > 550 and x < 900 and y > 419 and y < 504 and coup!=0:
+                fin=1
+
+        
+        if score[kijou%2][0] == 0:
+            score[kijou%2][0] = lancer[0]
+        if score[kijou%2][1] == 0:
+            score[kijou%2][1] = lancer[1]
+        if score[kijou%2][2] == 0:
+            score[kijou%2][2] = lancer[2]
+        score[kijou%2].sort()
+        if score[kijou%2] == [1, 2, 4]:
+            score[kijou%2].sort(reverse=True)
 
         if kijou%2 == 0:
-            printText(str(score1[0]) + str(score1[1]) + str(score1[2]), 33, "black", (955, 55), fenetre)
+            printText(str(score[kijou%2][0]) + str(score[kijou%2][1]) + str(score[kijou%2][2]), 33, "black", (955, 55), fenetre)
             pygame.display.flip()
         else:
-            printText(str(score1[0]) + str(score1[1]) + str(score1[2]), 33, "black", (955, 85), fenetre)
+            printText(str(score[kijou%2][0]) + str(score[kijou%2][1]) + str(score[kijou%2][2]), 33, "black", (955, 85), fenetre)
             pygame.display.flip()
-                    
-        kijou+=1
 
-        printImage("./image/421/jaune.png", (600, 70), [500, 70], fenetre, Alignement="Center")
 
-        printText("Au tour de " + (nomj1 if kijou%2==0 else nomj2), 76, "red", (500, 70), fenetre, Alignement="Center")
-        pygame.display.flip()
+        # printImage("./image/421/jaune.png", (600, 70), [500, 70], fenetre, Alignement="Center")
 
-        coup = 0
-        fin=0
-        d1 = 1
-        d2 = 1
-        d3 = 1
-        score2 = [0, 0, 0]
-        while fin==0:
-            for event in pygame.event.get():
-                if (event.type == MOUSEBUTTONUP):
-                        x = event.pos[0]
-                        y = event.pos[1]
-                        #print(x ,y)
-                        if x > 99 and x < 449 and y > 419 and y < 502:
-                            lancer = tirage(d1, d2, d3)
-                            affich(lancer, score2)
-                            coup+=1
-                            fin=1
+        # printText("Au tour de " + (nomj1 if kijou%2==0 else nomj2), 76, "red", (500, 70), fenetre, Alignement="Center")
+        # pygame.display.flip()
 
-                if (event.type == QUIT): 
-                    return 0
+        # coup = 0
+        # fin=0
+        # d1 = 1
+        # d2 = 1
+        # d3 = 1
+        # score2 = [0, 0, 0]
+        # while fin==0:
+        #     for event in pygame.event.get():
+        #         if (event.type == MOUSEBUTTONUP):
+        #                 x = event.pos[0]
+        #                 y = event.pos[1]
+        #                 #print(x ,y)
+        #                 if x > 99 and x < 449 and y > 419 and y < 502:
+        #                     lancer = tirage(d1, d2, d3)
+        #                     affich(lancer, score2)
+        #                     coup+=1
+        #                     fin=1
+
+        #         if (event.type == QUIT): 
+        #             return 0
 
         
-        fin=0
-        while coup<coup_max and fin==0:
-            for event in pygame.event.get():
-                if (event.type == MOUSEBUTTONUP):
-                        x = event.pos[0]
-                        y = event.pos[1]
-                        #print(x ,y)
-                        if x > 99 and x < 449 and y > 419 and y < 502:
-                            lancer = tirage(d1, d2, d3)
-                            affich(lancer, score2)
-                            coup+=1
-                        if x > 200 and x < 300 and y > 200 and y < 300:
-                            if d1 == 1:
-                                keep(d1, 1, lancer[0])
-                                score2[0] = lancer[0]
-                                lancer[0] = 0
-                                d1 = 0
-                            else:
-                                keep(d1, 1, score2[0])
-                                lancer[0] = score2[0]
-                                score2[0] = 0
-                                d1 = 1
-                        if x > 450 and x < 550 and y > 200 and y < 300:
-                            if d2 == 1:
-                                keep(d2, 2, lancer[1])
-                                score2[1] = lancer[1]
-                                lancer[1] = 0
-                                d2 = 0
-                            else:
-                                keep(d2, 2, score2[1])
-                                lancer[1] = score2[1]
-                                score2[1] = 0
-                                d2 = 1
-                        if x > 700 and x < 800 and y > 200 and y < 300:
-                            if d3 == 1:
-                                keep(d3, 3, lancer[2])
-                                score2[2] = lancer[2]
-                                lancer[2] = 0
-                                d3 = 0
-                            else:
-                                keep(d3, 3, score2[2])
-                                lancer[2] = score2[2]
-                                score2[2] = 0
-                                d3 = 1
-                        if x > 550 and x < 900 and y > 419 and y < 504:
-                            fin=1
+        # fin=0
+        # while coup<coup_max and fin==0:
+        #     for event in pygame.event.get():
+        #         if (event.type == MOUSEBUTTONUP):
+        #                 x = event.pos[0]
+        #                 y = event.pos[1]
+        #                 #print(x ,y)
+        #                 if x > 99 and x < 449 and y > 419 and y < 502:
+        #                     lancer = tirage(d1, d2, d3)
+        #                     affich(lancer, score2)
+        #                     coup+=1
+        #                 if x > 200 and x < 300 and y > 200 and y < 300:
+        #                     if d1 == 1:
+        #                         keep(d1, 1, lancer[0])
+        #                         score2[0] = lancer[0]
+        #                         lancer[0] = 0
+        #                         d1 = 0
+        #                     else:
+        #                         keep(d1, 1, score2[0])
+        #                         lancer[0] = score2[0]
+        #                         score2[0] = 0
+        #                         d1 = 1
+        #                 if x > 450 and x < 550 and y > 200 and y < 300:
+        #                     if d2 == 1:
+        #                         keep(d2, 2, lancer[1])
+        #                         score2[1] = lancer[1]
+        #                         lancer[1] = 0
+        #                         d2 = 0
+        #                     else:
+        #                         keep(d2, 2, score2[1])
+        #                         lancer[1] = score2[1]
+        #                         score2[1] = 0
+        #                         d2 = 1
+        #                 if x > 700 and x < 800 and y > 200 and y < 300:
+        #                     if d3 == 1:
+        #                         keep(d3, 3, lancer[2])
+        #                         score2[2] = lancer[2]
+        #                         lancer[2] = 0
+        #                         d3 = 0
+        #                     else:
+        #                         keep(d3, 3, score2[2])
+        #                         lancer[2] = score2[2]
+        #                         score2[2] = 0
+        #                         d3 = 1
+        #                 if x > 550 and x < 900 and y > 419 and y < 504:
+        #                     fin=1
                             
-                if (event.type == QUIT): 
-                    return 0
+        #         if (event.type == QUIT): 
+        #             return 0
 
-        if score2[0] == 0:
-            score2[0] = lancer[0]
-        if score2[1] == 0:
-            score2[1] = lancer[1]
-        if score2[2] == 0:
-            score2[2] = lancer[2]
-        score2.sort()
-        if score2 == [1, 2, 4]:
-            score2.sort(reverse=True)
+        # if score2[0] == 0:
+        #     score2[0] = lancer[0]
+        # if score2[1] == 0:
+        #     score2[1] = lancer[1]
+        # if score2[2] == 0:
+        #     score2[2] = lancer[2]
+        # score2.sort()
+        # if score2 == [1, 2, 4]:
+        #     score2.sort(reverse=True)
 
-        if kijou%2==1:
-            printText(str(score2[0]) + str(score2[1]) + str(score2[2]), 33, "black", (955, 85), fenetre)
-            pygame.display.flip()
-        else:
-            printText(str(score2[0]) + str(score2[1]) + str(score2[2]), 33, "black", (955, 55), fenetre)
-            pygame.display.flip()
+        # if kijou%2==1:
+        #     printText(str(score2[0]) + str(score2[1]) + str(score2[2]), 33, "black", (955, 85), fenetre)
+        #     pygame.display.flip()
+        # else:
+        #     printText(str(score2[0]) + str(score2[1]) + str(score2[2]), 33, "black", (955, 55), fenetre)
+        #     pygame.display.flip()
 
+        tour+=1
+        if tour%2==0:
+            jeton1 = comptage(score[0])
+            jeton2 = comptage(score[1])
 
-        jeton1 = comptage(score1)
-        jeton2 = comptage(score2)
+            valscore1 = score[0][0] + score[0][1] + score[0][2]
+            valscore2 = score[1][0] + score[1][1] + score[1][2]
 
-        valscore1 = score1[0] + score1[1] + score1[2]
-        valscore2 = score2[0] + score2[1] + score2[2]
-
-        
-
-        if kijou%2==1:
-            if score1 == [1,2,2]:
+            
+            coup_max = 3
+            if score[0] == [1,2,2]:
                 if pot!=0:
                     if pot>=2:
                         point1+=2
@@ -368,7 +406,7 @@ def jeux421():
                     else:
                         point1+=point2
                         point2=0
-            if score2 == [1,2,2]:
+            if score[1] == [1,2,2]:
                 if pot!=0:
                     if pot>=2:
                         point2+=2
@@ -450,138 +488,136 @@ def jeux421():
                             point1+=point2
                             point2=0
 
+            # else:
+            #     if score[1] == [1,2,2]:
+            #         if pot!=0:
+            #             if pot>=2:
+            #                 point1+=2
+            #                 pot-=2
+            #             else:
+            #                 point1+=pot
+            #                 pot=0
+            #         else:
+            #             if point2>=2:
+            #                 point1+=2
+            #                 point2-=2
+            #             else:
+            #                 point1+=point2
+            #                 point2=0
+            #     if score[0] == [1,2,2]:
+            #         if pot!=0:
+            #             if pot>=2:
+            #                 point2+=2
+            #                 pot-=2
+            #             else:
+            #                 point2+=pot
+            #                 pot=0
+            #         else:
+            #             if point1>=2:
+            #                 point2+=2
+            #                 point1-=2
+            #             else:
+            #                 point2+=point1
+            #                 point1=0
+
+            #     if jeton1 > jeton2:
+            #         if pot!=0:
+            #             if pot>=jeton1:
+            #                 point1 += jeton1
+            #                 pot-=jeton1
+            #             else:
+            #                 point1 += pot
+            #                 pot=0
+            #         else:
+            #             if point2>=jeton1:
+            #                 point2-=jeton1
+            #                 point1+=jeton1
+            #             else:
+            #                 point1+=point2
+            #                 point2=0
+                        
+                        
+            #     elif jeton1 < jeton2:
+            #         if pot!=0:
+            #             if pot>=jeton2:
+            #                 point2 += jeton2
+            #                 pot-=jeton2
+            #             else:
+            #                 point2 += pot
+            #                 pot=0
+            #         else:
+            #             if point1>=jeton2:
+            #                 point1-=jeton2
+            #                 point2+=jeton2
+            #             else:
+            #                 point2+=point1
+            #                 point2=0
+
+            #     else:
+            #         if valscore1>valscore2:
+            #             if pot!=0:
+            #                 if pot>=jeton1:
+            #                     point1 += jeton1
+            #                     pot-=jeton1
+            #                 else:
+            #                     point1 += pot
+            #                     pot=0
+            #             else:
+            #                 if point2>=jeton1:
+            #                     point2-=jeton1
+            #                     point1+=jeton1
+            #                 else:
+            #                     point1+=point2
+            #                     point1=0
+
+            #         elif valscore2>valscore1:
+            #             if pot!=0:
+            #                 if pot>=jeton2:
+            #                     point2 += jeton2
+            #                     pot-=jeton2
+            #                 else:
+            #                     point2 += pot
+            #                     pot=0
+            #             else:
+            #                 if point1>=jeton2:
+            #                     point1-=jeton2
+            #                     point2+=jeton2
+            #                 else:
+            #                     point2+=point1
+            #                     point1=0
+
         else:
-            if score2 == [1,2,2]:
-                if pot!=0:
-                    if pot>=2:
-                        point1+=2
-                        pot-=2
-                    else:
-                        point1+=pot
-                        pot=0
-                else:
-                    if point2>=2:
-                        point1+=2
-                        point2-=2
-                    else:
-                        point1+=point2
-                        point2=0
-            if score1 == [1,2,2]:
-                if pot!=0:
-                    if pot>=2:
-                        point2+=2
-                        pot-=2
-                    else:
-                        point2+=pot
-                        pot=0
-                else:
-                    if point1>=2:
-                        point2+=2
-                        point1-=2
-                    else:
-                        point2+=point1
-                        point1=0
-
-            if jeton1 > jeton2:
-                if pot!=0:
-                    if pot>=jeton1:
-                        point1 += jeton1
-                        pot-=jeton1
-                    else:
-                        point1 += pot
-                        pot=0
-                else:
-                    if point2>=jeton1:
-                        point2-=jeton1
-                        point1+=jeton1
-                    else:
-                        point1+=point2
-                        point2=0
-                    
-                    
-            elif jeton1 < jeton2:
-                if pot!=0:
-                    if pot>=jeton2:
-                        point2 += jeton2
-                        pot-=jeton2
-                    else:
-                        point2 += pot
-                        pot=0
-                else:
-                    if point1>=jeton2:
-                        point1-=jeton2
-                        point2+=jeton2
-                    else:
-                        point2+=point1
-                        point2=0
-
-            else:
-                if valscore1>valscore2:
-                    if pot!=0:
-                        if pot>=jeton1:
-                            point1 += jeton1
-                            pot-=jeton1
-                        else:
-                            point1 += pot
-                            pot=0
-                    else:
-                        if point2>=jeton1:
-                            point2-=jeton1
-                            point1+=jeton1
-                        else:
-                            point1+=point2
-                            point1=0
-
-                elif valscore2>valscore1:
-                    if pot!=0:
-                        if pot>=jeton2:
-                            point2 += jeton2
-                            pot-=jeton2
-                        else:
-                            point2 += pot
-                            pot=0
-                    else:
-                        if point1>=jeton2:
-                            point1-=jeton2
-                            point2+=jeton2
-                        else:
-                            point2+=point1
-                            point1=0
+            kijou+=1
+            coup_max = coup
 
 
+        if tour%2==0:
 
+            printImage("./image/421/jaune.png", (150, 60), [10, 90], fenetre)
 
-        printImage("./image/421/jaune.png", (150, 60), [10, 90], fenetre)
+            printText(nomj1+" : "+str(point1), 33, "black", (10, 90), fenetre)
 
-        printText(nomj1+" : "+str(point1), 33, "black", (10, 90), fenetre)
+            printText(nomj2+" : "+str(point2), 33, "black", (10, 120), fenetre)
 
-        printText(nomj2+" : "+str(point2), 33, "black", (10, 120), fenetre)
+            printImage("./image/421/jaune.png", (25, 25), [65, 10], fenetre)
 
-        printImage("./image/421/jaune.png", (25, 25), [65, 10], fenetre)
+            printText(str(pot), 33, "black", (65, 10), fenetre)
 
-        printText(str(pot), 33, "black", (65, 10), fenetre)
-
-        pygame.display.flip()
+            pygame.display.flip()
 
         fin=0
         if pot==0 and(point1==0 or point2==0):
             if point1==0:
-                if kijou%2==1:
-                    j=nomj1
-                else:
-                    j=nomj2
+                winner = nomj1
             else:
-                if kijou%2==1:
-                    j=nomj2
-                else:
-                    j=nomj1
+                winner = nomj2
             point1 = 0
             point2 = 0
             pot = 21
 
-            printImage("./image/421/jaune.png", (500, 70), [270, 70], fenetre)
+            printImage("./image/421/jaune.png", (520, 70), [250, 70], fenetre)
 
-            printText("Victoire de " + j, 76, "#556B2F", (250, 70), fenetre)
+            printText("Victoire de " + winner, 76, "#556B2F", (250, 70), fenetre)
 
             pygame.display.flip()
 
@@ -592,7 +628,14 @@ def jeux421():
                         y = event.pos[1]
                         if x > 550 and x < 900 and y > 419 and y < 504:
                             fin=1
+
+                if (event.type == KEYDOWN):
+                    if event.key==K_RETURN:
+                        fin=1
+
                 if (event.type == QUIT): 
+                    if conn!=None:
+                        conn.send(pickle.dumps(["404"]))
                     return 0
 
     

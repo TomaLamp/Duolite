@@ -133,8 +133,15 @@ def mastermind(connexion=[None, None, None]):
 
             couleur = ["rouge","blanc","vert","orange","bleu","jaune"]
             combinaison = []
-            for i in range(4):
-                combinaison.append(choice(couleur))
+
+            if conn==None or connexion[2]==True:
+                for i in range(4):
+                    combinaison.append(choice(couleur))
+                
+                if conn!= None:
+                    conn.send(pickle.dumps(combinaison))
+            else:
+                combinaison = pickle.loads(conn.recv(1024))
 
             tour=1
             end=0
@@ -175,7 +182,7 @@ def mastermind(connexion=[None, None, None]):
                                             choix.append("jaune")
                                     affich_combi(choix, tour)
                                     if conn!=None:
-                                        conn.send(pickle.dump(choix))
+                                        conn.send(pickle.dumps(choix))
                                 if x > 180 and x < 230 and y > 470 and y < 570 and len(choix)!=0:
                                     del choix[-1]
 
@@ -184,25 +191,25 @@ def mastermind(connexion=[None, None, None]):
 
                                     affich_combi(choix, tour)
                                     if conn!=None:
-                                        conn.send(pickle.dump(choix))
+                                        conn.send(pickle.dumps(choix))
 
                                 if x>771 and x<970 and y>495 and y<540 and len(choix)==4:
                                     fin=1
                                     if conn!=None:
-                                        conn.send(pickle.dump(["next"]))
+                                        conn.send(pickle.dumps(["next"]))
 
                             if (event.type == QUIT): 
                                 if conn!=None:
-                                    conn.send(pickle.dump(["404"]))
+                                    conn.send(pickle.dumps(["404"]))
                                 return 0
                 
                 else:
                     while True:
                         try:
-                            data = pickle.load(conn.recv(1024))
-                            if data[0]=="next":
+                            data = pickle.loads(conn.recv(1024))
+                            if len(data)!=0 and data[0]=="next":
                                 break
-                            elif data[0]=="404":
+                            elif len(data)!=0 and data[0]=="404":
                                 result = quitScreen(fenetre, connexion, "#B404BABB", "#500153")
                                 if result=="NULL":
                                     return 0
@@ -215,7 +222,7 @@ def mastermind(connexion=[None, None, None]):
 
                         for event in pygame.event.get():
                             if (event.type == pygame.QUIT): 
-                                conn.send(pickle.dump(["404"]))
+                                conn.send(pickle.dumps(["404"]))
                                 return 0                              
                                 
                 verif = list(combinaison)
@@ -304,12 +311,12 @@ def mastermind(connexion=[None, None, None]):
                             restart=1
                             end=1
                             if conn!=None:
-                                conn.send(pickle.dump(["404"]))
+                                conn.send(pickle.dumps(["404"]))
 
 
                     if (event.type == QUIT): 
                         if conn!=None:
-                            conn.send(pickle.dump(["404"]))
+                            conn.send(pickle.dumps(["404"]))
                         return 0
 
 if __name__ == "__main__":

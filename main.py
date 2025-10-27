@@ -96,8 +96,8 @@ def main():
         if connexion[0]!=None:
             if isConnClose(connexion[0]):
                 connexion[0].close()
-                connexion[0]=None
                 decoScreen(fenetre, connexion)
+                connexion = [None, None, None]
                 restart(page, jeux, fenetre)
 
         for event in pygame.event.get():
@@ -110,7 +110,7 @@ def main():
                                 bataille_naval()
                                 restart(page, jeux1, fenetre) 
                             if page==2:
-                                jeux421()
+                                jeux421(connexion)
                                 restart(page, jeux2, fenetre)  
                         elif x<598 and x>400:
                             if page==1:
