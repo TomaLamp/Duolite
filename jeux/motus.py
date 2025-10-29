@@ -220,11 +220,11 @@ def motus(connexion=[None, None, None]):
     restart = 0
     while restart == 0:
         fenetre.fill("#4682B4")
+        printImage("./image/motus/1joueur.png", (750, 185.7), [150, 65], fenetre)
+        printImage("./image/motus/2joueur.png", (750, 185.7), [150, 350], fenetre)
+        pygame.display.flip()
         end = 0
         while end==0:
-            printImage("./image/motus/1joueur.png", (750, 185.7), [150, 65], fenetre)
-            printImage("./image/motus/2joueur.png", (750, 185.7), [150, 350], fenetre)
-            pygame.display.flip()
 
             for event in pygame.event.get():
 

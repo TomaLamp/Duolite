@@ -139,7 +139,7 @@ def main():
                                 justePrix(connexion)
                                 restart(page, jeux1, fenetre)
                             if page==2:
-                                yams()
+                                yams(connexion)
                                 restart(page, jeux2, fenetre)
                         elif x<899 and x>700:
                             if page==1:

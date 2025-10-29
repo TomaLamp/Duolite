@@ -167,7 +167,10 @@ def boogle():
                         self.grille[i][j] = De(lettres[comp])
                         comp += 1
         
-
+        @property
+        def Grille(self):
+            return self.grille
+        
         def AfficheGrille(self):
             """
             Affiche la grille en ne considérant que les éléments à l'intérieur des bordures.
@@ -176,7 +179,6 @@ def boogle():
             for i in range(1, len(self.grille) - 1):  # Exclure les bordures
                 for j in range(1, len(self.grille[i]) - 1):
 
-                    
                     rect = printImage("./image/421/blanc.png", (75, 75), [312.5+(j-1)*100, 112.5+(i-1)*100], fenetre).width
                     printText(self.grille[i][j].face_visible, 60, pygame.Color("black"), (312.5+(j-1)*100+rect/2, 135+(i-1)*100), fenetre, Alignement="Center")
                     pygame.display.flip()
@@ -321,15 +323,22 @@ def boogle():
             self.fin_timer = True
 
         def get_lettre(self, startTime):
-            lettre = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "<", ">"]
             end = 0
             while end==0:
                 for event in pygame.event.get():
                     if (event.type == MOUSEBUTTONUP):
                         x = event.pos[0]
                         y = event.pos[1]
+
+                        posj = (x-312.5)/100 + 1
+                        posi = (y-112.5)/100 + 1
+                        j = int((x-312.5)//100 + 1)
+                        i = int((y-112.5)//100 + 1)
+                        
                         if y>277 and y<327 and x>740 and self.fin_timer:
                             return ">"
+                        if i>0 and i<=4 and j>0 and j<=4 and posi-i<0.735 and posj-j<0.735:
+                            return self.grille.Grille[i][j].Face_visible
 
                     if event.type == KEYDOWN:
                         if event.key<=122 and event.key>=97:
@@ -345,7 +354,7 @@ def boogle():
                 if not self.fin_timer:
                     pygame.draw.rect(fenetre, "#A2B203", (850, 500, 200, 200))
                     printText("Timer : ", 60, "black", (850, 500), fenetre)
-                    printText(str(round(time.time()-startTime)), 60, "black", (900, 550), fenetre)
+                    printText(str(round(30-(time.time()-startTime))), 60, "black", (900, 550), fenetre)
                     pygame.display.flip()        
         
         def get_mot(self, startTime):
@@ -398,7 +407,7 @@ def boogle():
 
                     self.fin_timer = False
 
-                    # Définir un timer de 60 secondes
+                    # Définir un timer de 30 secondes
                     timer = Timer(30.0, self.OnTimedEvent)
                     timer.start()
                     start = time.time()

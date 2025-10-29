@@ -305,6 +305,9 @@ def pendu(connexion=[None,None,None]):
                         conn.send(bytes(lettre_choisi, "utf-8"))
                 else:
                     lettre_choisi = recv_str_data(connexion, fenetre,"#B20000FF", "#000000")
+                    if lettre_choisi=="NULL":
+                        conn.send(b"404")
+                        return 0
                     printImage("./image/pendu/dejavue.png", (30*scale_x, 30*scale_y), ((lettre.index(lettre_choisi))*30*scale_x, 0), fenetre)
                     printText(lettre_choisi, int(20*scale_y), "black", ((lettre.index(lettre_choisi))*30*scale_x+10*scale_x, 10*scale_y), fenetre)
                     pygame.display.flip()

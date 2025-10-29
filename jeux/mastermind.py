@@ -280,7 +280,7 @@ def mastermind(connexion=[None, None, None]):
 
             else:
 
-                printImage("./image/mastermind/cache.png", (800, 55), [140,10], fenetre)
+                printImage("./image/mastermind/cache.png", (800, 55), [100,10], fenetre)
                 if kijou%2==0:
                     point1+=17-tour
                     printText("Victoire de "+nomj1, 60, "green", (500,20), fenetre, Alignement="Center")

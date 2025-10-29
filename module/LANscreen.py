@@ -3,7 +3,7 @@ from module.pygameCore import *
 from module.connectLAN import *
 from random import randint
 import time
-import select
+import pickle
 
 def LANscreen(fenetre, connexion=[None, None, None]):
     pygame.draw.rect(fenetre, "#272728", (205,105,600,400), border_radius=50)
@@ -237,3 +237,32 @@ def recv_str_data(connexion, fenetre, color, subcolor, nbError="404"):
             if (event.type == pygame.QUIT): 
                 conn.send(bytes(nbError, "utf-8"))
                 return "NULL"
+            
+def recv_list_data(connexion, fenetre, color, subcolor, nbError="404"):
+    conn = connexion[0]
+    while True:
+        try:
+            data = pickle.loads(conn.recv(1024))
+            if len(data)!=0 and data[0]=="404":
+                result = quitScreen(fenetre, connexion, "#E3C400", "#BE9F02")
+                if result=="NULL":
+                    return ["NULL"]
+            else:
+                return data
+        except BlockingIOError:
+            pass 
+
+        for event in pygame.event.get():
+            if (event.type == pygame.QUIT): 
+                conn.send(pickle.dumps([nbError]))
+                return 0
+
+
+def send_data(connexion, data, fenetre, color, subcolor):
+    if isConnClose(connexion[0]):
+        result = quitScreen(fenetre, connexion, color, subcolor)
+        if result=="NULL":
+            return "NULL"
+    else:
+        connexion[0].send(data)
+        return "OK"

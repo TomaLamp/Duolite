@@ -3,60 +3,56 @@ import pygame
 from random import *
 from time import *
 from module.pygameCore import *
+from module.LANscreen import *
 
-def yams():
+def yams(connexion=[None, None, None]):
 
     def affich(l, score):
 
-            if score[0]==0:
-                for i in range(10):
+            for i in range(10):
+                if score[0]==0:
                     a = randint(1,6)
                     printImage(f"./image/421/de{a}.jpg", (100, 100), [83, 250], fenetre)
-                    pygame.display.flip()
-                    sleep(0.1)
-
-                printImage(f"./image/421/de{l[0]}.jpg", (100, 100), [83, 250], fenetre)
-                pygame.display.flip()
-            
-            if score[1]==0:
-                for i in range(10):
+                if score[1]==0:
                     a = randint(1,6)
                     printImage(f"./image/421/de{a}.jpg", (100, 100), [266, 250], fenetre)
-                    pygame.display.flip()
-                    sleep(0.1)
-
-                printImage(f"./image/421/de{l[1]}.jpg", (100, 100), [266, 250], fenetre)
-                pygame.display.flip()
-
-            if score[2]==0:
-                for i in range(10):
+                if score[2]==0:
                     a = randint(1,6)
                     printImage(f"./image/421/de{a}.jpg", (100, 100), [449, 250], fenetre)
-                    pygame.display.flip()
-                    sleep(0.1)
-
-
-                printImage(f"./image/421/de{l[2]}.jpg", (100, 100), [449, 250], fenetre)
-
-            if score[3]==0:
-                for i in range(10):
+                if score[3]==0:
                     a = randint(1,6)
                     printImage(f"./image/421/de{a}.jpg", (100, 100), [632, 250], fenetre)
-                    pygame.display.flip()
-                    sleep(0.1)
-
-
-                printImage(f"./image/421/de{l[3]}.jpg", (100, 100), [632, 250], fenetre)
-
-            if score[4]==0:
-                for i in range(10):
+                if score[4]==0:
                     a = randint(1,6)
                     printImage(f"./image/421/de{a}.jpg", (100, 100), [817, 250], fenetre)
-                    pygame.display.flip()
-                    sleep(0.1)
+                pygame.display.flip()
+                sleep(0.1)
 
 
+            if score[0]==0:
+                printImage(f"./image/421/de{l[0]}.jpg", (100, 100), [83, 250], fenetre)
+                pygame.display.flip()
+                sleep(0.1)
+            
+            if score[1]==0:
+                printImage(f"./image/421/de{l[1]}.jpg", (100, 100), [266, 250], fenetre)
+                pygame.display.flip()
+                sleep(0.1)
+
+            if score[2]==0:
+                printImage(f"./image/421/de{l[2]}.jpg", (100, 100), [449, 250], fenetre)
+                pygame.display.flip()
+                sleep(0.1)
+
+            if score[3]==0:
+                printImage(f"./image/421/de{l[3]}.jpg", (100, 100), [632, 250], fenetre)
+                pygame.display.flip()
+                sleep(0.1)
+
+            if score[4]==0:
                 printImage(f"./image/421/de{l[4]}.jpg", (100, 100), [817, 250], fenetre)
+                pygame.display.flip()
+                sleep(0.1)
             
             pygame.display.flip()
 
@@ -98,6 +94,13 @@ def yams():
     
     nomj1, nomj2 = get_nom()
 
+    conn = None
+    if connexion[0]!=None and connexion[2]==True:
+        nomj2=connexion[1]
+    elif connexion[0]!=None and connexion[2]==False:
+        nomj2=nomj1
+        nomj1=connexion[1]
+
     fin = 0
     while fin == 0:
         for event in pygame.event.get():
@@ -105,7 +108,18 @@ def yams():
                 x = event.pos[0]
                 y = event.pos[1]
                 if x > 150 and x < 850 and y > 110 and y < 467:
-                    fin = 1 
+                    if connexion[0]!=None:
+                        quit = waitScreen(fenetre, connexion, "#FFB300", "#B57200", "yams")
+                        fenetre.fill("orange")
+                        printImage("./image/yams/play.png", (700, 356.84), (150,110), fenetre)
+                        pygame.display.flip()
+                        if quit=="NULL":
+                            return 0
+                        elif quit==1:
+                            fin = 1 
+                            conn = connexion[0]
+                    else:
+                        fin=1
                         
             if (event.type == KEYDOWN) or (event.type == QUIT): 
                 return 0
@@ -159,93 +173,112 @@ def yams():
             d4 = 1
             d5 = 1
             score1 = [0, 0, 0, 0, 0]
-            while fin==0:
-                for event in pygame.event.get():
-                    if (event.type == MOUSEBUTTONUP):
-                            x = event.pos[0]
-                            y = event.pos[1]
-                            if x > 99 and x < 449 and y > 460 and y < 540:
-                                lancer = tirage(d1, d2, d3, d4, d5)
-                                affich(lancer, score1)
-                                coup+=1
-                                fin=1
-                    if (event.type == QUIT): 
-                        return 0
-
 
                     
             fin=0
             while coup<3 and fin==0:
+                x=0
+                y=0
                 for event in pygame.event.get():
                     if (event.type == MOUSEBUTTONUP):
-                            x = event.pos[0]
-                            y = event.pos[1]
-                            #print(x ,y)
-                            if x > 99 and x < 449 and y > 460 and y < 540:
-                                lancer = tirage(d1, d2, d3, d4, d5)
-                                affich(lancer, score1)
-                                coup+=1
-                            if x > 83 and x < 183 and y > 250 and y < 350:
-                                if d1 == 1:
-                                    keep(d1, 1, lancer[0])
-                                    score1[0] = lancer[0]
-                                    lancer[0] = 0
-                                    d1 = 0
-                                else:
-                                    keep(d1, 1, score1[0])
-                                    lancer[0] = score1[0]
-                                    score1[0] = 0
-                                    d1 = 1
-                            if x > 266 and x < 366 and y > 250 and y < 350:
-                                if d2 == 1:
-                                    keep(d2, 2, lancer[1])
-                                    score1[1] = lancer[1]
-                                    lancer[1] = 0
-                                    d2 = 0
-                                else:
-                                    keep(d2, 2, score1[1])
-                                    lancer[1] = score1[1]
-                                    score1[1] = 0
-                                    d2 = 1
-                            if x > 449 and x < 549 and y > 250 and y < 350:
-                                if d3 == 1:
-                                    keep(d3, 3, lancer[2])
-                                    score1[2] = lancer[2]
-                                    lancer[2] = 0
-                                    d3 = 0
-                                else:
-                                    keep(d3, 3, score1[2])
-                                    lancer[2] = score1[2]
-                                    score1[2] = 0
-                                    d3 = 1
-                            if x > 632 and x < 732 and y > 250 and y < 350:
-                                if d4 == 1:
-                                    keep(d4, 4, lancer[3])
-                                    score1[3] = lancer[3]
-                                    lancer[3] = 0
-                                    d4 = 0
-                                else:
-                                    keep(d4, 4, score1[3])
-                                    lancer[3] = score1[3]
-                                    score1[3] = 0
-                                    d4 = 1
-                            if x > 817 and x < 917 and y > 250 and y < 350:
-                                if d5 == 1:
-                                    keep(d5, 5, lancer[4])
-                                    score1[4] = lancer[4]
-                                    lancer[4] = 0
-                                    d5 = 0
-                                else:
-                                    keep(d5, 5, score1[4])
-                                    lancer[4] = score1[4]
-                                    score1[4] = 0
-                                    d5 = 1
+                            if conn==None or connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
+                                x = event.pos[0]
+                                y = event.pos[1]
+                                if conn!=None:
+                                    result = send_data(connexion, pickle.dumps([x,y]), fenetre,"#FFB300", "#B57200")
+                                    if result=="NULL":
+                                        return 0
 
-                            if x > 550 and x < 900 and y > 460 and y < 540:
-                                fin=1
-                                        
+                    
                     if (event.type == QUIT): 
+                        if conn!=None:
+                            conn.send(pickle.dumps(["404"]))
                         return 0
+                    
+                if conn!=None and connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
+                    data = recv_list_data(connexion, fenetre,"#FFB300", "#B57200")
+                    if len(data)!=0 and data[0]=="NULL":
+                        conn.send(pickle.dumps(["404"]))
+                        return 0
+                    else:
+                        x=data[0]
+                        y=data[0]
+                    
+
+                if x > 99 and x < 449 and y > 460 and y < 540:
+                    if conn==None or connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
+                        lancer = tirage(d1, d2, d3, d4, d5)
+                        if conn!=None:
+                            conn.send(pickle.dumps(lancer))
+                    else:
+                        while True:
+                            try:
+                                lancer = pickle.loads(conn.recv(1024))
+                                break
+                            except BlockingIOError:
+                                pass 
+
+                    affich(lancer, score1)
+                    coup+=1
+                if x > 83 and x < 183 and y > 250 and y < 350 and coup!=0:
+                    if d1 == 1:
+                        keep(d1, 1, lancer[0])
+                        score1[0] = lancer[0]
+                        lancer[0] = 0
+                        d1 = 0
+                    else:
+                        keep(d1, 1, score1[0])
+                        lancer[0] = score1[0]
+                        score1[0] = 0
+                        d1 = 1
+                if x > 266 and x < 366 and y > 250 and y < 350 and coup!=0:
+                    if d2 == 1:
+                        keep(d2, 2, lancer[1])
+                        score1[1] = lancer[1]
+                        lancer[1] = 0
+                        d2 = 0
+                    else:
+                        keep(d2, 2, score1[1])
+                        lancer[1] = score1[1]
+                        score1[1] = 0
+                        d2 = 1
+                if x > 449 and x < 549 and y > 250 and y < 350 and coup!=0:
+                    if d3 == 1:
+                        keep(d3, 3, lancer[2])
+                        score1[2] = lancer[2]
+                        lancer[2] = 0
+                        d3 = 0
+                    else:
+                        keep(d3, 3, score1[2])
+                        lancer[2] = score1[2]
+                        score1[2] = 0
+                        d3 = 1
+                if x > 632 and x < 732 and y > 250 and y < 350 and coup!=0:
+                    if d4 == 1:
+                        keep(d4, 4, lancer[3])
+                        score1[3] = lancer[3]
+                        lancer[3] = 0
+                        d4 = 0
+                    else:
+                        keep(d4, 4, score1[3])
+                        lancer[3] = score1[3]
+                        score1[3] = 0
+                        d4 = 1
+                if x > 817 and x < 917 and y > 250 and y < 350 and coup!=0:
+                    if d5 == 1:
+                        keep(d5, 5, lancer[4])
+                        score1[4] = lancer[4]
+                        lancer[4] = 0
+                        d5 = 0
+                    else:
+                        keep(d5, 5, score1[4])
+                        lancer[4] = score1[4]
+                        score1[4] = 0
+                        d5 = 1
+
+                if x > 550 and x < 900 and y > 460 and y < 540 and coup!=0:
+                    fin=1
+                                        
 
             if score1[0] == 0:
                 score1[0] = lancer[0]
@@ -370,358 +403,373 @@ def yams():
             bon = 0
             fin = 0
             while fin == 0:
-                for event in pygame.event.get():
-                    if (event.type == MOUSEBUTTONUP):
-                        x = event.pos[0]
-                        y = event.pos[1]
-
-                        xp = 0
-                        c = 0
-                        if y>27 and y<87:
-                            if kijou%2==0:
-                                if x>54 and x<104 and bon==0 and (t1==1 or test==0 and point_rempli1[0]==0):
-                                    if test!=0:
-                                        xp = 77
-                                        c = str(score1.count(1))
-                                        tot1j1 += score1.count(1)
-                                        totj1 += score1.count(1)
-                                    else:
-                                        xp=67
-                                    point_rempli1[0] = 1
-                                    bon=1
-                                    
-                                    
-                                        
-                                if x>104 and x<154 and bon==0 and(t2==1 or test==0 and point_rempli1[1]==0):
-                                    if test!=0:
-                                        xp = 127
-                                        c = str(score1.count(2)*2)
-                                        tot1j1 += score1.count(2)*2
-                                        totj1 += score1.count(2)*2
-                                    else:
-                                        xp=117
-                                    point_rempli1[1] = 1
-                                    bon=1
-                                        
-                                if x>154 and x<204 and bon==0 and (t3==1 or test==0 and point_rempli1[2]==0):
-                                    if test!=0:
-                                        xp = 177
-                                        c = str(score1.count(3)*3)
-                                        tot1j1 += score1.count(3)*3
-                                        totj1 += score1.count(3)*3
-                                    else:
-                                        xp=167
-                                    point_rempli1[2] = 1
-                                    bon=1
-                                        
-                                if x>204 and x<254 and bon==0 and (t4==1 or test==0 and point_rempli1[3]==0):
-                                    if test!=0:
-                                        xp = 225
-                                        c = str(score1.count(4)*4)
-                                        tot1j1 += score1.count(4)*4
-                                        totj1 += score1.count(4)*4
-                                    else:
-                                        xp=217
-                                    point_rempli1[3] = 1
-                                    bon=1
-                                        
-                                if x>254 and x<304 and bon==0 and (t5==1 or test==0 and point_rempli1[4]==0):
-                                    if test!=0:
-                                        xp = 275
-                                        c = str(score1.count(5)*5)
-                                        tot1j1 += score1.count(5)*5
-                                        totj1 += score1.count(5)*5
-                                    else:
-                                        xp=267
-                                    point_rempli1[4] = 1
-                                    bon=1
-                                        
-                                if x>304 and x<354 and bon==0 and (t6==1 or test==0 and point_rempli1[5]==0):
-                                    if test!=0:
-                                        xp = 325
-                                        c = str(score1.count(6)*6)
-                                        tot1j1 += score1.count(6)*6
-                                        totj1 += score1.count(6)*6
-                                    else:
-                                        xp=317
-                                    point_rempli1[5] = 1
-                                    bon=1
-                                        
-                                if x>491 and x<549 and bon==0 and (plus==1 or test==0 and point_rempli1[6]==0):
-                                    if test!=0:
-                                        xp = 515
-                                        c = str(score1[0]+score1[1]+score1[2]+score1[3]+score1[4])
-                                        tot2j1 += score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
-                                        totj1 += score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
-                                    else:
-                                        xp=507
-                                    point_rempli1[6] = 1
-                                    bon=1
-                                        
-                                if x>549 and x<618 and bon==0 and (moins==1 or test==0 and point_rempli1[7]==0):
-                                    if test!=0:
-                                        xp = 578
-                                        c = str(score1[0]+score1[1]+score1[2]+score1[3]+score1[4])
-                                        tot2j1 -= score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
-                                        totj1 -= score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
-                                    else:
-                                        xp=572
-                                    point_rempli1[7] = 1
-                                    bon=1
-                                        
-                                if x>698 and x<759 and bon==0 and (suite==1 or test==0 and point_rempli1[8]==0):
-                                    if test!=0:
-                                        xp = 722
-                                        c = str(20)
-                                        totj1 += 20
-                                    else:
-                                        xp=715
-                                    point_rempli1[8] = 1
-                                    bon=1
-                                        
-                                if x>759 and x<812 and bon==0 and (full==1 or test==0 and point_rempli1[9]==0):
-                                    if test!=0:
-                                        xp = 775
-                                        c = str(30)
-                                        totj1 += 30
-                                    else:
-                                        xp=770
-                                    point_rempli1[9] = 1
-                                    bon=1
-                                        
-                                if x>812 and x<874 and bon==0 and (carre==1 or test==0 and point_rempli1[10]==0):
-                                    if test!=0:
-                                        xp = 835
-                                        c = str(40)
-                                        totj1 += 40
-                                    else:
-                                        xp=830
-                                    point_rempli1[10] = 1
-                                    bon=1
-                                        
-                                if x>874 and x<938 and bon==0 and (yams==1 or test==0 and point_rempli1[11]==0):
-                                    if test!=0:
-                                        xp = 900
-                                        c = str(50)
-                                        totj1 += 50
-                                    else:
-                                        xp = 892
-                                    point_rempli1[11] = 1
-                                    bon=1
-                            else:
-                                    if x>54 and x<104 and bon==0 and (t1==1 or test==0 and point_rempli2[0]==0):
-                                        if test!=0:
-                                            xp = 77
-                                            c = str(score1.count(1))
-                                            tot1j2 += score1.count(1)
-                                            totj2 += score1.count(1)
-                                        else:
-                                            xp=67
-                                        point_rempli2[0] = 1
-                                        bon=1
-                                        
-                                        
-                                            
-                                    if x>104 and x<154 and bon==0 and(t2==1 or test==0 and point_rempli2[1]==0):
-                                        if test!=0:
-                                            xp = 127
-                                            c = str(score1.count(2)*2)
-                                            tot1j2 += score1.count(2)*2
-                                            totj2 += score1.count(2)*2
-                                        else:
-                                            xp=117
-                                        point_rempli2[1] = 1
-                                        bon=1
-                                            
-                                    if x>154 and x<204 and bon==0 and (t3==1 or test==0 and point_rempli2[2]==0):
-                                        if test!=0:
-                                            xp = 177
-                                            c = str(score1.count(3)*3)
-                                            tot1j2 += score1.count(3)*3
-                                            totj2 += score1.count(3)*3
-                                        else:
-                                            xp=167
-                                        point_rempli2[2] = 1
-                                        bon=1
-                                            
-                                    if x>204 and x<254 and bon==0 and (t4==1 or test==0 and point_rempli2[3]==0):
-                                        if test!=0:
-                                            xp = 225
-                                            c = str(score1.count(4)*4)
-                                            tot1j2 += score1.count(4)*4
-                                            totj2 += score1.count(4)*4
-                                        else:
-                                            xp=217
-                                        point_rempli2[3] = 1
-                                        bon=1
-                                            
-                                    if x>254 and x<304 and bon==0 and (t5==1 or test==0 and point_rempli2[4]==0):
-                                        if test!=0:
-                                            xp = 275
-                                            c = str(score1.count(5)*5)
-                                            tot1j2 += score1.count(5)*5
-                                            totj2 += score1.count(5)*5
-                                        else:
-                                            xp=267
-                                        point_rempli2[4] = 1
-                                        bon=1
-                                            
-                                    if x>304 and x<354 and bon==0 and (t6==1 or test==0 and point_rempli2[5]==0):
-                                        if test!=0:
-                                            xp = 325
-                                            c = str(score1.count(6)*6)
-                                            tot1j2 += score1.count(6)*6
-                                            totj2 += score1.count(6)*6
-                                        else:
-                                            xp=317
-                                        point_rempli2[5] = 1
-                                        bon=1
-                                            
-                                    if x>491 and x<549 and bon==0 and (plus==1 or test==0 and point_rempli2[6]==0):
-                                        if test!=0:
-                                            xp = 515
-                                            c = str(score1[0]+score1[1]+score1[2]+score1[3]+score1[4])
-                                            tot2j2 += score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
-                                            totj2 += score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
-                                        else:
-                                            xp=507
-                                        point_rempli2[6] = 1
-                                        bon=1
-                                            
-                                    if x>549 and x<618 and bon==0 and (moins==1 or test==0 and point_rempli2[7]==0):
-                                        if test!=0:
-                                            xp = 578
-                                            c = str(score1[0]+score1[1]+score1[2]+score1[3]+score1[4])
-                                            tot2j2 -= score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
-                                            totj2 -= score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
-                                        else:
-                                            xp=572
-                                        point_rempli2[7] = 1
-                                        bon=1
-                                            
-                                    if x>698 and x<759 and bon==0 and (suite==1 or test==0 and point_rempli2[8]==0):
-                                        if test!=0:
-                                            xp = 722
-                                            c = str(20)
-                                            totj2 += 20
-                                        else:
-                                            xp=715
-                                        point_rempli2[8] = 1
-                                        bon=1
-                                            
-                                    if x>759 and x<812 and bon==0 and (full==1 or test==0 and point_rempli2[9]==0):
-                                        if test!=0:
-                                            xp = 775
-                                            c = str(30)
-                                            totj2 += 30
-                                        else:
-                                            xp=770
-                                        point_rempli2[9] = 1
-                                        bon=1
-                                            
-                                    if x>812 and x<874 and bon==0 and (carre==1 or test==0 and point_rempli2[10]==0):
-                                        if test!=0:
-                                            xp = 835
-                                            c = str(40)
-                                            totj2 += 40
-                                        else:
-                                            xp=830
-                                        point_rempli2[10] = 1
-                                        bon=1
-                                            
-                                    if x>874 and x<938 and bon==0 and (yams==1 or test==0 and point_rempli2[11]==0):
-                                        if test!=0:
-                                            xp = 900
-                                            c = str(50)
-                                            totj2 += 50
-                                        else:
-                                            xp = 892
-                                        point_rempli2[11] = 1
-                                        bon=1
-                                    
-
-                            if c!=0 and xp!=0 and test!=0:
-                                printText(c, 20, "black", (xp, yp), fenetre)
-                                pygame.display.flip()
-                            elif test==0 and xp!=0:
-                                printImage("./image/yams/croix.png", (25, 25), [xp, yc], fenetre)
-                                pygame.display.flip()
-
-                            
-                            if kijou%2==0:
-                                if tot1j1>=63 and bonus1==0:
-                                    bonus1 = 1
-                                    totj1 += 30
-                                    printText(str(30), 20, "red", (450, yp), fenetre)
-                                    pygame.display.flip()
-                                elif point_rempli1[0] == point_rempli1[1] == point_rempli1[2] == point_rempli1[3] == point_rempli1[4] == point_rempli1[5] == 1 and bonus1==0:
-                                    bonus1 = 1
-                                    printImage("./image/yams/croix.png", (25, 25), [445, yc], fenetre)
-                                    pygame.display.flip()
-                            else:
-                                    if tot1j2>=63 and bonus2==0:
-                                        bonus2 = 1
-                                        totj2 += 30
-                                        printText(str(30), 20, "red", (450, yp), fenetre)
-                                        pygame.display.flip()
-                                    elif point_rempli2[0] == point_rempli2[1] == point_rempli2[2] == point_rempli2[3] == point_rempli2[4] == point_rempli2[5] == 1 and bonus2==0:
-                                        bonus2 = 1
-                                        printImage("./image/yams/croix.png", (25, 25), [445, yc], fenetre)
-                                        pygame.display.flip()
-
-                            
-                            if kijou%2==0:
-                                if tot1j1!=0:
-                                    printImage("./image/yams/cache.png", (25, 25), [370, yc], fenetre)
-                                    printText(str(tot1j1), 20, "red", (387, yp), fenetre, Alignement="Center")
-                                    pygame.display.flip()
-                                if tot2j1!=0:
-                                    printImage("./image/yams/cache.png", (25, 25), [650, yc], fenetre)
-                                    printText(str(tot2j1), 20, "red", (659, yp), fenetre, Alignement="Center")
-                                    pygame.display.flip()
-
-                                
-                                printImage("./image/yams/cache.png", (40, 25), [950, yc], fenetre)
-                                printText(str(totj1), 30, "green", (967, yp), fenetre, Alignement="Center")
-                                pygame.display.flip()
-                            else:
-                                    if tot1j2!=0:
-                                        printImage("./image/yams/cache.png", (25, 25), [370, yc], fenetre)
-                                        printText(str(tot1j2), 20, "red", (387, yp), fenetre, Alignement="Center")
-                                        pygame.display.flip()
-                                    if tot2j2!=0:
-                                        printImage("./image/yams/cache.png", (25, 25), [650, yc], fenetre)
-                                        printText(str(tot2j2), 20, "red", (659, yp), fenetre, Alignement="Center")
-                                        pygame.display.flip()
-
-                                    
-                                    printImage("./image/yams/cache.png", (40, 25), [950, yc], fenetre)
-                                    printText(str(totj2), 30, "green", (967, yp), fenetre, Alignement="Center")
-                                    pygame.display.flip()
-
+                if conn==None or connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
+                    for event in pygame.event.get():
+                        if (event.type == MOUSEBUTTONUP):
+                            x = event.pos[0]
+                            y = event.pos[1]
+                            if conn!=None:
+                                result = send_data(connexion, pickle.dumps([x,y]), fenetre,"#FFB300", "#B57200")
+                                if result=="NULL":
+                                    return 0
                         
-
-                        if point_rempli1 == [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] and point_rempli2 == [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]:
-                            end=1
-                            if totj1>totj2:   
-                                printImage("./image/yams/cache.png", (1000, 100), [0, 140], fenetre)
-                                printText("Victoire de "+nomj1, 76, "green", (500, 150), fenetre, Alignement="Center")
-                                pygame.display.flip()
-                            else:
-                                printImage("./image/yams/cache.png", (1000, 100), [0, 140], fenetre)
-                                printText("Victoire de "+nomj2, 76, "green", (500, 150), fenetre, Alignement="Center")
-                                pygame.display.flip()
-
-                        
-                        
-                        if x > 550 and x < 900 and y > 460 and y < 540 and bon==1:
-                            fin=1
-                            kijou+=1
-                            
-                            
-                                        
-                    if (event.type == KEYDOWN) or (event.type == QUIT): 
+                        if (event.type == QUIT): 
+                            if conn!=None:
+                                conn.send(pickle.dumps(["404"]))
+                            return 0
+                else:
+                    data = recv_list_data(connexion, fenetre,"#FFB300", "#B57200")
+                    if len(data)!=0 and data[0]=="NULL":
+                        conn.send(pickle.dumps(["404"]))
                         return 0
+                    else:
+                        x=data[0]
+                        y=data[0]
+
+                xp = 0
+                c = 0
+                if y>27 and y<87:
+                    if kijou%2==0:
+                        if x>54 and x<104 and bon==0 and (t1==1 or test==0 and point_rempli1[0]==0):
+                            if test!=0:
+                                xp = 77
+                                c = str(score1.count(1))
+                                tot1j1 += score1.count(1)
+                                totj1 += score1.count(1)
+                            else:
+                                xp=67
+                            point_rempli1[0] = 1
+                            bon=1
+                            
+                            
+                                
+                        if x>104 and x<154 and bon==0 and(t2==1 or test==0 and point_rempli1[1]==0):
+                            if test!=0:
+                                xp = 127
+                                c = str(score1.count(2)*2)
+                                tot1j1 += score1.count(2)*2
+                                totj1 += score1.count(2)*2
+                            else:
+                                xp=117
+                            point_rempli1[1] = 1
+                            bon=1
+                                
+                        if x>154 and x<204 and bon==0 and (t3==1 or test==0 and point_rempli1[2]==0):
+                            if test!=0:
+                                xp = 177
+                                c = str(score1.count(3)*3)
+                                tot1j1 += score1.count(3)*3
+                                totj1 += score1.count(3)*3
+                            else:
+                                xp=167
+                            point_rempli1[2] = 1
+                            bon=1
+                                
+                        if x>204 and x<254 and bon==0 and (t4==1 or test==0 and point_rempli1[3]==0):
+                            if test!=0:
+                                xp = 225
+                                c = str(score1.count(4)*4)
+                                tot1j1 += score1.count(4)*4
+                                totj1 += score1.count(4)*4
+                            else:
+                                xp=217
+                            point_rempli1[3] = 1
+                            bon=1
+                                
+                        if x>254 and x<304 and bon==0 and (t5==1 or test==0 and point_rempli1[4]==0):
+                            if test!=0:
+                                xp = 275
+                                c = str(score1.count(5)*5)
+                                tot1j1 += score1.count(5)*5
+                                totj1 += score1.count(5)*5
+                            else:
+                                xp=267
+                            point_rempli1[4] = 1
+                            bon=1
+                                
+                        if x>304 and x<354 and bon==0 and (t6==1 or test==0 and point_rempli1[5]==0):
+                            if test!=0:
+                                xp = 325
+                                c = str(score1.count(6)*6)
+                                tot1j1 += score1.count(6)*6
+                                totj1 += score1.count(6)*6
+                            else:
+                                xp=317
+                            point_rempli1[5] = 1
+                            bon=1
+                                
+                        if x>491 and x<549 and bon==0 and (plus==1 or test==0 and point_rempli1[6]==0):
+                            if test!=0:
+                                xp = 515
+                                c = str(score1[0]+score1[1]+score1[2]+score1[3]+score1[4])
+                                tot2j1 += score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
+                                totj1 += score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
+                            else:
+                                xp=507
+                            point_rempli1[6] = 1
+                            bon=1
+                                
+                        if x>549 and x<618 and bon==0 and (moins==1 or test==0 and point_rempli1[7]==0):
+                            if test!=0:
+                                xp = 578
+                                c = str(score1[0]+score1[1]+score1[2]+score1[3]+score1[4])
+                                tot2j1 -= score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
+                                totj1 -= score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
+                            else:
+                                xp=572
+                            point_rempli1[7] = 1
+                            bon=1
+                                
+                        if x>698 and x<759 and bon==0 and (suite==1 or test==0 and point_rempli1[8]==0):
+                            if test!=0:
+                                xp = 722
+                                c = str(20)
+                                totj1 += 20
+                            else:
+                                xp=715
+                            point_rempli1[8] = 1
+                            bon=1
+                                
+                        if x>759 and x<812 and bon==0 and (full==1 or test==0 and point_rempli1[9]==0):
+                            if test!=0:
+                                xp = 775
+                                c = str(30)
+                                totj1 += 30
+                            else:
+                                xp=770
+                            point_rempli1[9] = 1
+                            bon=1
+                                
+                        if x>812 and x<874 and bon==0 and (carre==1 or test==0 and point_rempli1[10]==0):
+                            if test!=0:
+                                xp = 835
+                                c = str(40)
+                                totj1 += 40
+                            else:
+                                xp=830
+                            point_rempli1[10] = 1
+                            bon=1
+                                
+                        if x>874 and x<938 and bon==0 and (yams==1 or test==0 and point_rempli1[11]==0):
+                            if test!=0:
+                                xp = 900
+                                c = str(50)
+                                totj1 += 50
+                            else:
+                                xp = 892
+                            point_rempli1[11] = 1
+                            bon=1
+                    else:
+                            if x>54 and x<104 and bon==0 and (t1==1 or test==0 and point_rempli2[0]==0):
+                                if test!=0:
+                                    xp = 77
+                                    c = str(score1.count(1))
+                                    tot1j2 += score1.count(1)
+                                    totj2 += score1.count(1)
+                                else:
+                                    xp=67
+                                point_rempli2[0] = 1
+                                bon=1
+                                
+                                
+                                    
+                            if x>104 and x<154 and bon==0 and(t2==1 or test==0 and point_rempli2[1]==0):
+                                if test!=0:
+                                    xp = 127
+                                    c = str(score1.count(2)*2)
+                                    tot1j2 += score1.count(2)*2
+                                    totj2 += score1.count(2)*2
+                                else:
+                                    xp=117
+                                point_rempli2[1] = 1
+                                bon=1
+                                    
+                            if x>154 and x<204 and bon==0 and (t3==1 or test==0 and point_rempli2[2]==0):
+                                if test!=0:
+                                    xp = 177
+                                    c = str(score1.count(3)*3)
+                                    tot1j2 += score1.count(3)*3
+                                    totj2 += score1.count(3)*3
+                                else:
+                                    xp=167
+                                point_rempli2[2] = 1
+                                bon=1
+                                    
+                            if x>204 and x<254 and bon==0 and (t4==1 or test==0 and point_rempli2[3]==0):
+                                if test!=0:
+                                    xp = 225
+                                    c = str(score1.count(4)*4)
+                                    tot1j2 += score1.count(4)*4
+                                    totj2 += score1.count(4)*4
+                                else:
+                                    xp=217
+                                point_rempli2[3] = 1
+                                bon=1
+                                    
+                            if x>254 and x<304 and bon==0 and (t5==1 or test==0 and point_rempli2[4]==0):
+                                if test!=0:
+                                    xp = 275
+                                    c = str(score1.count(5)*5)
+                                    tot1j2 += score1.count(5)*5
+                                    totj2 += score1.count(5)*5
+                                else:
+                                    xp=267
+                                point_rempli2[4] = 1
+                                bon=1
+                                    
+                            if x>304 and x<354 and bon==0 and (t6==1 or test==0 and point_rempli2[5]==0):
+                                if test!=0:
+                                    xp = 325
+                                    c = str(score1.count(6)*6)
+                                    tot1j2 += score1.count(6)*6
+                                    totj2 += score1.count(6)*6
+                                else:
+                                    xp=317
+                                point_rempli2[5] = 1
+                                bon=1
+                                    
+                            if x>491 and x<549 and bon==0 and (plus==1 or test==0 and point_rempli2[6]==0):
+                                if test!=0:
+                                    xp = 515
+                                    c = str(score1[0]+score1[1]+score1[2]+score1[3]+score1[4])
+                                    tot2j2 += score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
+                                    totj2 += score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
+                                else:
+                                    xp=507
+                                point_rempli2[6] = 1
+                                bon=1
+                                    
+                            if x>549 and x<618 and bon==0 and (moins==1 or test==0 and point_rempli2[7]==0):
+                                if test!=0:
+                                    xp = 578
+                                    c = str(score1[0]+score1[1]+score1[2]+score1[3]+score1[4])
+                                    tot2j2 -= score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
+                                    totj2 -= score1[0]+score1[1]+score1[2]+score1[3]+score1[4]
+                                else:
+                                    xp=572
+                                point_rempli2[7] = 1
+                                bon=1
+                                    
+                            if x>698 and x<759 and bon==0 and (suite==1 or test==0 and point_rempli2[8]==0):
+                                if test!=0:
+                                    xp = 722
+                                    c = str(20)
+                                    totj2 += 20
+                                else:
+                                    xp=715
+                                point_rempli2[8] = 1
+                                bon=1
+                                    
+                            if x>759 and x<812 and bon==0 and (full==1 or test==0 and point_rempli2[9]==0):
+                                if test!=0:
+                                    xp = 775
+                                    c = str(30)
+                                    totj2 += 30
+                                else:
+                                    xp=770
+                                point_rempli2[9] = 1
+                                bon=1
+                                    
+                            if x>812 and x<874 and bon==0 and (carre==1 or test==0 and point_rempli2[10]==0):
+                                if test!=0:
+                                    xp = 835
+                                    c = str(40)
+                                    totj2 += 40
+                                else:
+                                    xp=830
+                                point_rempli2[10] = 1
+                                bon=1
+                                    
+                            if x>874 and x<938 and bon==0 and (yams==1 or test==0 and point_rempli2[11]==0):
+                                if test!=0:
+                                    xp = 900
+                                    c = str(50)
+                                    totj2 += 50
+                                else:
+                                    xp = 892
+                                point_rempli2[11] = 1
+                                bon=1
+                            
+
+                    if c!=0 and xp!=0 and test!=0:
+                        printText(c, 20, "black", (xp, yp), fenetre)
+                        pygame.display.flip()
+                    elif test==0 and xp!=0:
+                        printImage("./image/yams/croix.png", (25, 25), [xp, yc], fenetre)
+                        pygame.display.flip()
+
+                    
+                    if kijou%2==0:
+                        if tot1j1>=63 and bonus1==0:
+                            bonus1 = 1
+                            totj1 += 30
+                            printText(str(30), 20, "red", (450, yp), fenetre)
+                            pygame.display.flip()
+                        elif point_rempli1[0] == point_rempli1[1] == point_rempli1[2] == point_rempli1[3] == point_rempli1[4] == point_rempli1[5] == 1 and bonus1==0:
+                            bonus1 = 1
+                            printImage("./image/yams/croix.png", (25, 25), [445, yc], fenetre)
+                            pygame.display.flip()
+                    else:
+                            if tot1j2>=63 and bonus2==0:
+                                bonus2 = 1
+                                totj2 += 30
+                                printText(str(30), 20, "red", (450, yp), fenetre)
+                                pygame.display.flip()
+                            elif point_rempli2[0] == point_rempli2[1] == point_rempli2[2] == point_rempli2[3] == point_rempli2[4] == point_rempli2[5] == 1 and bonus2==0:
+                                bonus2 = 1
+                                printImage("./image/yams/croix.png", (25, 25), [445, yc], fenetre)
+                                pygame.display.flip()
+
+                    
+                    if kijou%2==0:
+                        if tot1j1!=0:
+                            printImage("./image/yams/cache.png", (25, 25), [370, yc], fenetre)
+                            printText(str(tot1j1), 20, "red", (387, yp), fenetre, Alignement="Center")
+                            pygame.display.flip()
+                        if tot2j1!=0:
+                            printImage("./image/yams/cache.png", (25, 25), [650, yc], fenetre)
+                            printText(str(tot2j1), 20, "red", (659, yp), fenetre, Alignement="Center")
+                            pygame.display.flip()
+
+                        
+                        printImage("./image/yams/cache.png", (40, 25), [950, yc], fenetre)
+                        printText(str(totj1), 30, "green", (967, yp), fenetre, Alignement="Center")
+                        pygame.display.flip()
+                    else:
+                            if tot1j2!=0:
+                                printImage("./image/yams/cache.png", (25, 25), [370, yc], fenetre)
+                                printText(str(tot1j2), 20, "red", (387, yp), fenetre, Alignement="Center")
+                                pygame.display.flip()
+                            if tot2j2!=0:
+                                printImage("./image/yams/cache.png", (25, 25), [650, yc], fenetre)
+                                printText(str(tot2j2), 20, "red", (659, yp), fenetre, Alignement="Center")
+                                pygame.display.flip()
+
+                            
+                            printImage("./image/yams/cache.png", (40, 25), [950, yc], fenetre)
+                            printText(str(totj2), 30, "green", (967, yp), fenetre, Alignement="Center")
+                            pygame.display.flip()
+
+                
+
+                if point_rempli1 == [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] and point_rempli2 == [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]:
+                    end=1
+                    if totj1>totj2:   
+                        printImage("./image/yams/cache.png", (1000, 100), [0, 140], fenetre)
+                        printText("Victoire de "+nomj1, 76, "green", (500, 150), fenetre, Alignement="Center")
+                        pygame.display.flip()
+                    else:
+                        printImage("./image/yams/cache.png", (1000, 100), [0, 140], fenetre)
+                        printText("Victoire de "+nomj2, 76, "green", (500, 150), fenetre, Alignement="Center")
+                        pygame.display.flip()
+
+                
+                
+                if x > 550 and x < 900 and y > 460 and y < 540 and bon==1:
+                    fin=1
+                    kijou+=1
+                            
+                            
                     
 if __name__ == '__main__':
     yams()
