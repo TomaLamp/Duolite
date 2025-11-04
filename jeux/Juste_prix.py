@@ -99,7 +99,7 @@ def justePrix(connexion=[None,None,None]):
                 if nombre==4004:
                     result = quitScreen(fenetre, connexion, "#5E0066", "#0F0011")
                     if result=="NULL":
-                        return "NULL"
+                        return "404"
                 elif nombre==0:
                     break
                 else:
@@ -422,6 +422,8 @@ def justePrix(connexion=[None,None,None]):
                             ton_nombre = choix_nombre(conn)
                         elif connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
                             ton_nombre = recv_number(connexion)
+                            if ton_nombre=="404":
+                                return 0
                         
                         if ton_nombre=="NULL":
                             if conn!=None:

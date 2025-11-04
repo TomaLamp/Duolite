@@ -255,7 +255,7 @@ def recv_list_data(connexion, fenetre, color, subcolor, nbError="404"):
         for event in pygame.event.get():
             if (event.type == pygame.QUIT): 
                 conn.send(pickle.dumps([nbError]))
-                return 0
+                return ["NULL"]
 
 
 def send_data(connexion, data, fenetre, color, subcolor):

@@ -202,7 +202,7 @@ def yams(connexion=[None, None, None]):
                         return 0
                     else:
                         x=data[0]
-                        y=data[0]
+                        y=data[1]
                     
 
                 if x > 99 and x < 449 and y > 460 and y < 540:
@@ -424,7 +424,7 @@ def yams(connexion=[None, None, None]):
                         return 0
                     else:
                         x=data[0]
-                        y=data[0]
+                        y=data[1]
 
                 xp = 0
                 c = 0

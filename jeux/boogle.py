@@ -2,10 +2,11 @@ import random
 from pygame import *
 import pygame
 from module.pygameCore import *
+from module.LANscreen import *
 from threading import Timer
 import time
 
-def boogle():
+def boogle(connexion=[None, None, None]):
 
     # %% classes
     class De:
@@ -287,13 +288,15 @@ def boogle():
 
     
     class Jeu:
-        def __init__(self, langue, taille, nb_joueurs):
+        def __init__(self, langue, taille, nb_joueur,connexion):
             """
             Constructeur de la classe Jeu.
             Initialise les joueurs et la grille du jeu.
             """
             self.joueurs = [Player(nomj1)]
             self.grille = Plateau("./annexes/Lettres.txt", taille, langue)
+            self.connexion = connexion
+            self.kijou=0
 
             if nb_joueur==2:
                 self.joueurs.append(Player(nomj2))
@@ -321,35 +324,64 @@ def boogle():
             printText("Fin du tour, appuyez sur entrée", 60, pygame.Color("black"), (200, 10), fenetre)
             pygame.display.flip()
             self.fin_timer = True
+            self.kijou+=1
 
         def get_lettre(self, startTime):
             end = 0
+            conn = self.connexion[0]
+            lettre=" "
             while end==0:
-                for event in pygame.event.get():
-                    if (event.type == MOUSEBUTTONUP):
-                        x = event.pos[0]
-                        y = event.pos[1]
+                if conn==None or self.connexion[2]==True and self.kijou%2 == 0 or self.connexion[2]==False and self.kijou%2 == 1:
+                    for event in pygame.event.get():
+                        if (event.type == MOUSEBUTTONUP):
+                            x = event.pos[0]
+                            y = event.pos[1]
 
-                        posj = (x-312.5)/100 + 1
-                        posi = (y-112.5)/100 + 1
-                        j = int((x-312.5)//100 + 1)
-                        i = int((y-112.5)//100 + 1)
-                        
-                        if y>277 and y<327 and x>740 and self.fin_timer:
-                            return ">"
-                        if i>0 and i<=4 and j>0 and j<=4 and posi-i<0.735 and posj-j<0.735:
-                            return self.grille.Grille[i][j].Face_visible
+                            posj = (x-312.5)/100 + 1
+                            posi = (y-112.5)/100 + 1
+                            j = int((x-312.5)//100 + 1)
+                            i = int((y-112.5)//100 + 1)
+                            
+                            if y>277 and y<327 and x>740 and self.fin_timer:
+                                lettre = ">"
+                            if i>0 and i<=4 and j>0 and j<=4 and posi-i<0.735 and posj-j<0.735:
+                                lettre = self.grille.Grille[i][j].Face_visible
 
-                    if event.type == KEYDOWN:
-                        if event.key<=122 and event.key>=97:
-                            return chr(event.key).upper()
-                        elif event.key==8:
-                            return("<")
-                        elif event.key==13:
-                            return(">")
+                        if event.type == KEYDOWN:
+                            if event.key<=122 and event.key>=97:
+                                lettre = chr(event.key).upper()
+                            elif event.key==8:
+                                lettre = "<"
+                            elif event.key==13:
+                                lettre = ">"
+                            
+                        if (event.type == QUIT): 
+                            if conn!=None:
+                                conn.send(b"404")
+                            return 0
                         
-                    if (event.type == QUIT): 
-                        return 0
+                        if lettre!=" ":
+                            if conn!=None:
+                                send_data(self.connexion, bytes(lettre, "utf-8"), "#778100", "#323600")
+                            return lettre
+                        
+                else:
+                    try:
+                        data = conn.recv(1024)
+                        prop = str(data, "utf-8")
+                        if prop=="404":
+                            result = quitScreen(fenetre, self.connexion, "#778100", "#323600")
+                            if result=="NULL":
+                                return "NULL"
+                        else:
+                            return prop
+                    except BlockingIOError:
+                        pass
+                                    
+                    for event in pygame.event.get():
+                        if (event.type == pygame.QUIT): 
+                            conn.send(bytes("404", "utf-8"))
+                            return "NULL"
                 
                 if not self.fin_timer:
                     pygame.draw.rect(fenetre, "#A2B203", (850, 500, 200, 200))
@@ -390,6 +422,7 @@ def boogle():
             Chaque joueur joue trois tours où ils choisissent des mots dans la grille.
             """
             for _ in range(3):  # Trois tours par joueur
+                self.kijou=0
                 for joueur in self.joueurs:
                     self.grille.LancePlateau()
                     self.grille.AfficheGrille()
@@ -460,6 +493,12 @@ def boogle():
     pygame.display.flip()
 
     nomj1, nomj2 = get_nom()
+    conn = None
+    if connexion[0]!=None and connexion[2]==True:
+        nomj2=connexion[1]
+    elif connexion[0]!=None and connexion[2]==False:
+        nomj2=nomj1
+        nomj1=connexion[1]
             
 
     fin = 0
@@ -480,7 +519,6 @@ def boogle():
         end = 0
         while end==0:
             printImage("./image/boogle/1joueur.png", (750, 185.7), (150, 65), fenetre)
-            pygame.display.flip()
             printImage("./image/boogle/2joueur.png", (750, 185.7), (150, 350), fenetre)
             pygame.display.flip()
 
@@ -491,10 +529,22 @@ def boogle():
                         y = event.pos[1]
                         if x>150 and x<900 and y>65 and y<250.7:
                             end=1
-                            nb_joueur = 1
+                            nbjoueur = 1
                         elif x>150 and x<900 and y>350 and y<535.7:
-                            end=1
-                            nb_joueur = 2
+                            if connexion[0]!=None:
+                                quit = waitScreen(fenetre, connexion, "#778100", "#323600", "boogle")
+                                fenetre.fill("#A2B203")
+                                printImage("./image/boogle/1joueur.png", (750, 185.7), (150, 65), fenetre)
+                                printImage("./image/boogle/2joueur.png", (750, 185.7), (150, 350), fenetre)
+                                if quit=="NULL":
+                                    return 0
+                                elif quit==1:
+                                    end=1
+                                    nbjoueur = 2
+                                    conn = connexion[0]
+                            else:
+                                end=1
+                                nbjoueur = 2
 
 
                 if (event.type == QUIT): 
@@ -502,7 +552,7 @@ def boogle():
 
         rejouer=0
         while(rejouer==0):
-            jeu = Jeu("fr", 4, nb_joueur)
+            jeu = Jeu("fr", 4, nbjoueur, connexion)
             a=jeu.Jouer()
             
             if(a!=0):
@@ -518,10 +568,19 @@ def boogle():
                             x = event.pos[0]
                             y = event.pos[1]
                             if y>277 and y<327 and x>740 and x<990:
-                                fin=1
+                                if conn!=None:
+                                    quit = waitScreen(fenetre, connexion, "#778100", "#323600", "boogle")
+                                    if quit=="NULL":
+                                        return 0
+                                    elif quit==1:
+                                        fin=1
+                                else:
+                                    fin=1
                             if(x>21 and x<51 and y>10 and y<21) or (x>5 and x<20 and y>1 and y<31):
                                 fin=1
                                 rejouer=1
+                                if conn!=None:
+                                    conn.send(b"404")
 
                         if (event.type == QUIT): 
                             return 0

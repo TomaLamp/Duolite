@@ -146,7 +146,7 @@ def main():
                                 morpion(connexion)
                                 restart(page, jeux1, fenetre)
                             if page==2:
-                                boogle()
+                                boogle(connexion)
                                 restart(page, jeux2, fenetre)
                     if page==1:
                         if x>940 and x<990 and y>300 and y<350:
