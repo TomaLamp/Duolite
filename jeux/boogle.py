@@ -5,6 +5,7 @@ from module.pygameCore import *
 from module.LANscreen import *
 from threading import Timer
 import time
+import cloudpickle as cpickle
 
 def boogle(connexion=[None, None, None]):
 
@@ -362,7 +363,7 @@ def boogle(connexion=[None, None, None]):
                         
                         if lettre!=" ":
                             if conn!=None:
-                                send_data(self.connexion, bytes(lettre, "utf-8"), "#778100", "#323600")
+                                send_data(self.connexion, bytes(lettre, "utf-8"), fenetre, "#778100", "#323600")
                             return lettre
                         
                 else:
@@ -372,7 +373,7 @@ def boogle(connexion=[None, None, None]):
                         if prop=="404":
                             result = quitScreen(fenetre, self.connexion, "#778100", "#323600")
                             if result=="NULL":
-                                return "NULL"
+                                return 0
                         else:
                             return prop
                     except BlockingIOError:
@@ -381,7 +382,7 @@ def boogle(connexion=[None, None, None]):
                     for event in pygame.event.get():
                         if (event.type == pygame.QUIT): 
                             conn.send(bytes("404", "utf-8"))
-                            return "NULL"
+                            return 0
                 
                 if not self.fin_timer:
                     pygame.draw.rect(fenetre, "#A2B203", (850, 500, 200, 200))
@@ -424,7 +425,14 @@ def boogle(connexion=[None, None, None]):
             for _ in range(3):  # Trois tours par joueur
                 self.kijou=0
                 for joueur in self.joueurs:
-                    self.grille.LancePlateau()
+                    if conn==None or connexion[2]==True:
+                        self.grille.LancePlateau()
+                        if conn!=None:
+                            conn.send(cpickle.dumps(self.grille))
+                            print(self.grille.grille)
+                    else:
+                        self.grille = cpickle.loads(conn.recv(1024))
+
                     self.grille.AfficheGrille()
 
                     printImage("./image/boogle/vert.png", (250, 250), (10,200), fenetre)
