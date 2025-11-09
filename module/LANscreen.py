@@ -266,3 +266,16 @@ def send_data(connexion, data, fenetre, color, subcolor):
     else:
         connexion[0].send(data)
         return "OK"
+    
+
+def recv_all(sock, n):
+    data = b''
+    while len(data) < n:
+        try:
+            packet = sock.recv(n - len(data))
+            if not packet:
+                raise ConnectionError("Connexion coupée")
+            data += packet
+        except BlockingIOError:
+            continue  # attends réellement les données
+    return data

@@ -411,7 +411,7 @@ class Jeu:
                     chaine += chainebis[j]
                 chainebis=""
 
-            printImage("./image/boogle/vert.png", (1000, 80), (0,520), self.fenetre)
+            printImage("./image/boogle/vert.png", (800, 80), (0,520), self.fenetre)
             printText(f"{chaine}", 60, pygame.Color("black"), (500, 540), self.fenetre, Alignement="Center")
             pygame.display.flip()
             lettre = self.get_lettre(startTime)
@@ -428,9 +428,19 @@ class Jeu:
                 if self.connexion[0]==None or self.connexion[2]==True:
                     self.grille.LancePlateau()
                     if self.connexion[0]!=None:
-                        self.connexion[0].send(pickle.dumps(self.grille))
+                        data = pickle.dumps(self.grille)
+                        self.connexion[0].send(len(data).to_bytes(4))
+                        self.connexion[0].sendall(data)
                 else:
-                    self.grille = pickle.loads(self.connexion[0].recv(1024))
+                    while True:
+                        size_bytes = recv_all(self.connexion[0], 4)
+                        size = int.from_bytes(size_bytes, "big")
+                        data = recv_all(self.connexion[0], size)
+                        if not data:
+                            continue
+                        
+                        self.grille = pickle.loads(data)
+                        break
 
                 self.grille.AfficheGrille(self.fenetre)
 
