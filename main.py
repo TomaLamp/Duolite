@@ -107,7 +107,7 @@ def main():
                     if y > 149 and y < 293:
                         if x<298 and x>99:
                             if page==1:
-                                bataille_naval()
+                                bataille_naval(connexion)
                                 restart(page, jeux1, fenetre) 
                             if page==2:
                                 jeux421(connexion)

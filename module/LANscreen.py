@@ -244,7 +244,7 @@ def recv_list_data(connexion, fenetre, color, subcolor, nbError="404"):
         try:
             data = pickle.loads(conn.recv(1024))
             if len(data)!=0 and data[0]=="404":
-                result = quitScreen(fenetre, connexion, "#E3C400", "#BE9F02")
+                result = quitScreen(fenetre, connexion, color, subcolor)
                 if result=="NULL":
                     return ["NULL"]
             else:
