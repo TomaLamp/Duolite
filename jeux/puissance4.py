@@ -3,49 +3,64 @@ from module.pygameCore import *
 import pygame
 from module.LANscreen import *
 
-def puissance4(connexion=[None, None, None]):
-    def get_ligne():
-        pygame.init()
-        end = 0
-        while end==0:
-            for event in pygame.event.get():
-                if (event.type == MOUSEBUTTONUP):
-                        x = event.pos[0]
-                        y = event.pos[1]
-                        if y>124 and y<571:
-                            if x>236 and x<310:
-                                return 1
-                            elif x>310 and x<385:
-                                return 2
-                            elif x>385 and x<461:
-                                return 3
-                            elif x>461 and x<535:
-                                return 4
-                            elif x>535 and x<611:
-                                return 5
-                            elif x>611 and x<686:
-                                return 6
-                            elif x>686 and x<761:
-                                return 7
-                            
-                        
-                if event.type == QUIT: 
-                    return "NULL"
-                    
-                        
 
-    def place_point(kijou, ligne, case):
-        if kijou%2 == 1:
-            pion = "./image/puissance4/rouge.png"
-        else:
-            pion = "./image/puissance4/jaune.png"
+def get_ligne(fenetre : pygame.Surface) -> int:
+    """Retourne le numéro de colonne choisi par le joueur
+    - fenetre : la fenetre sur laquelle afficher
+    """
+    pygame.init()
+    end = 0
+    while end==0:
+        for event in pygame.event.get():
+            if (event.type == MOUSEBUTTONUP):
+                    x = event.pos[0]
+                    y = event.pos[1]
+                    if y>124 and y<571:
+                        if x>236 and x<310:
+                            return 1
+                        elif x>310 and x<385:
+                            return 2
+                        elif x>385 and x<461:
+                            return 3
+                        elif x>461 and x<535:
+                            return 4
+                        elif x>535 and x<611:
+                            return 5
+                        elif x>611 and x<686:
+                            return 6
+                        elif x>686 and x<761:
+                            return 7
+                        
+                        
+            if event.type == QUIT: 
+                return "NULL"
+                    
+
+
+def place_point(kijou : int, ligne : int, case : int, fenetre : pygame.Surface) -> None:
+    """Place un pion sur le plateau
+    - kijou : le numéro du joueur
+    - ligne : la colonne où placer le pion
+    - case : la ligne où placer le pion
+    - fenetre : la fenetre sur laquelle afficher
+    """
+    if kijou%2 == 1:
+        pion = "./image/puissance4/rouge.png"
+    else:
+        pion = "./image/puissance4/jaune.png"
 
     
-        x = 250 + (ligne-1)*75
-        y = 510 - (case-1)*75
+    x = 250 + (ligne-1)*75
+    y = 510 - (case-1)*75
 
-        printImage(pion, (50, 50), (x, y), fenetre, 90)
-        pygame.display.flip()
+    printImage(pion, (50, 50), (x, y), fenetre, 90)
+    pygame.display.flip()
+
+
+def puissance4(connexion=[None, None, None]) -> int:
+    """Fonction principale du jeu Puissance 4
+    - connexion : paramétres de connexion LAN
+    """
 
 
     fenetre = initScreen((1000,600), "Puissance 4", "#A2B203", "./image/puissance4/icon.png")
@@ -121,7 +136,7 @@ def puissance4(connexion=[None, None, None]):
             while not choix:
 
                 if conn==None or connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
-                    prop = get_ligne()
+                    prop = get_ligne(fenetre)
                 elif connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
                     prop = recv_int_data(connexion, fenetre, "#7E8A00", "#272B00")
 
@@ -146,7 +161,7 @@ def puissance4(connexion=[None, None, None]):
             
             if connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
                 conn.send(prop.to_bytes(1))  
-            place_point(kijou, prop, i)
+            place_point(kijou, prop, i, fenetre)
 
             nbr = 0
             haut = 0

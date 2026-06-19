@@ -2,10 +2,10 @@ import socket
 import scapy.all as sc
 import psutil
 import pygame
-from pygame import *
 import select
 
-def get_ip():
+def get_ip() -> str:
+    """Retourne l'adresse IP et le submask de la machine"""
 
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
@@ -32,7 +32,10 @@ def get_ip():
     
     return local_ip+"/"+str(nb)
 
-def netScan(ip):
+
+def netScan(ip : str) -> list:
+    """Scan le reseaux de la machine et retourne la liste de toutes les IP du reseaux"""
+
     frame = sc.Ether(dst="ff:ff:ff:ff:ff:ff") / sc.ARP(pdst=ip)
 
     answered_list = sc.srp(frame, timeout = 3, verbose = False)[0]
@@ -43,7 +46,8 @@ def netScan(ip):
     return result
 
 
-def createRoom(code):
+def createRoom(code : str) -> socket.socket:
+    """Créé une room pour inviter un autre joueur"""
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.bind(("0.0.0.0", 5555))
@@ -83,7 +87,9 @@ def createRoom(code):
                         exit()
 
 
-def joinRoom(code):
+def joinRoom(code : str) -> socket.socket:
+    """Permet de rejoindre la room avec le code correspondant pour se connecter à un autre joueur"""
+
     ips = netScan(get_ip())
 
     for ip in ips:
@@ -107,7 +113,9 @@ def joinRoom(code):
                     s.close()
 
 
-def isConnClose(conn):
+def isConnClose(conn : socket.socket) -> bool:
+    """Teste si la connexion entre deux joueur est toujours en vie"""
+
     isclose = False
     readable, _, _ = select.select([conn], [], [], 1)
     if conn in readable:

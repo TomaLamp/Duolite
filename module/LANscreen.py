@@ -1,11 +1,12 @@
-import pygame
 from module.pygameCore import *
 from module.connectLAN import *
 from random import randint
 import time
 import pickle
 
-def LANscreen(fenetre, connexion=[None, None, None]):
+def LANscreen(fenetre : pygame.Surface, connexion : list =[None, None, None]):
+    """créé une fenetre de connexion multijoueur LAN"""
+
     pygame.draw.rect(fenetre, "#272728", (205,105,600,400), border_radius=50)
     pygame.draw.rect(fenetre, "#001751", (200,100,600,400), border_radius=50)
     printText("Connexion LAN", 50, "black", (500, 110), fenetre, Alignement="Center")
@@ -84,10 +85,10 @@ def LANscreen(fenetre, connexion=[None, None, None]):
                         elif x>400 and x<600 and y>375 and y<415 and len(code)==4:
                             end=1
 
-                    if event.type == KEYDOWN:
-                        if pygame.key.get_pressed()[K_LSHIFT] and event.key<=57 and event.key>=48:
+                    if event.type == pygame.KEYDOWN:
+                        if pygame.key.get_pressed()[pygame.K_LSHIFT] and event.key<=57 and event.key>=48:
                             letter = str(event.key-48)
-                        elif event.key==K_BACKSPACE:
+                        elif event.key==pygame.K_BACKSPACE:
                             letter = "<"
                         elif event.key>1073741912 and event.key<1073741922:
                             letter = str(event.key-1073741912)
@@ -137,7 +138,9 @@ def LANscreen(fenetre, connexion=[None, None, None]):
             connexion[0]=None
 
 
-def decoScreen(fenetre, connexion):
+def decoScreen(fenetre : pygame.Surface, connexion : list) -> int:
+    """Créé une fenetre quand un joueur se deconnecte"""
+
     pygame.draw.rect(fenetre, "#272728", (305,205,400,200), border_radius=50)
     pygame.draw.rect(fenetre, "#001751", (300,200,400,200), border_radius=50)
     printImage("./image/close.png", (30, 30), (650, 215), fenetre)
@@ -152,8 +155,17 @@ def decoScreen(fenetre, connexion):
             exit()
         if x>650 and x<680 and y>215 and y<245:
             return 0
-        
-def quitScreen(screen, connexion, color, subcolor):
+
+
+def quitScreen(screen : pygame.Surface, connexion : list, color : str , subcolor : str) -> str:
+    """
+    Créé une fenetre quand un joueur a quitter un jeux
+    - screen : la fenetre sur laquelle afficher l'ecran
+    - connexion : la liste specifiant la connexion du joueur
+    - color : la color de fond de la fenetre
+    - subcolor : la color secondaire de fond de la fenetre
+    """
+
     pygame.draw.rect(screen, subcolor, (305,205,400,200), border_radius=50)
     pygame.draw.rect(screen, color, (300,200,400,200), border_radius=50)
     printImage("./image/close.png", (30, 30), (650, 215), screen)
@@ -166,7 +178,16 @@ def quitScreen(screen, connexion, color, subcolor):
         if x=="NULL":
             return "NULL"
         
-def waitScreen(screen, connexion, color, subcolor, text):
+def waitScreen(screen : pygame.Surface, connexion : list, color : str, subcolor : str, text : str) -> int:
+    """
+    Créé une fenetre quand un joueur rejoint un jeux
+    - screen : la fenetre sur laquelle afficher l'ecran
+    - connexion : la liste specifiant la connexion du joueur
+    - color : la color de fond de la fenetre
+    - subcolor : la color secondaire de fond de la fenetre
+    - text : le text specifiant le jeux
+    """
+
     pygame.draw.rect(screen, subcolor, (305,205,400,200), border_radius=50)
     pygame.draw.rect(screen, color, (300,200,400,200), border_radius=50)
     printImage("./image/close.png", (30, 30), (650, 215), screen)
@@ -197,7 +218,15 @@ def waitScreen(screen, connexion, color, subcolor, text):
             return 1
         
 
-def recv_int_data(connexion, fenetre, color, subcolor, nbError=404):
+def recv_int_data(connexion : list, fenetre : pygame.Surface, color : str, subcolor : str, nbError : int = 404) -> int:
+    """
+    Attend de recevoir des données integer de la part de l'autre joueur
+    - connexion : la liste specifiant la connexion du joueur
+    - fenetre : la fenetre sur laquelle afficher l'ecran
+    - color : la color de fond de la fenetre
+    - subcolor : la color secondaire de fond de la fenetre
+    - nbError : le nombre qui indique une erreur de connexion 
+    """
     conn = connexion[0]
     while True:
         try:
@@ -218,7 +247,16 @@ def recv_int_data(connexion, fenetre, color, subcolor, nbError=404):
                 return "NULL"
             
 
-def recv_str_data(connexion, fenetre, color, subcolor, nbError="404"):
+def recv_str_data(connexion : list, fenetre : pygame.Surface, color : str, subcolor : str, nbError : str = "404") -> str:
+    """
+    Attend de recevoir des données string de la part de l'autre joueur
+    - connexion : la liste specifiant la connexion du joueur
+    - fenetre : la fenetre sur laquelle afficher l'ecran
+    - color : la color de fond de la fenetre
+    - subcolor : la color secondaire de fond de la fenetre
+    - nbError : la chaine de caractere qui indique une erreur de connexion
+    """
+
     conn = connexion[0]
     while True:
         try:
@@ -237,8 +275,17 @@ def recv_str_data(connexion, fenetre, color, subcolor, nbError="404"):
             if (event.type == pygame.QUIT): 
                 conn.send(bytes(nbError, "utf-8"))
                 return "NULL"
-            
-def recv_list_data(connexion, fenetre, color, subcolor, nbError="404"):
+
+   
+def recv_list_data(connexion : list, fenetre : pygame.Surface, color : str, subcolor : str, nbError : str = "404") -> list:
+    """
+    Attend de recevoir des données liste de la part de l'autre joueur
+    - connexion : la liste specifiant la connexion du joueur
+    - fenetre : la fenetre sur laquelle afficher l'ecran
+    - color : la color de fond de la fenetre
+    - subcolor : la color secondaire de fond de la fenetre
+    - nbError : la liste qui indique une erreur de connexion
+    """
     conn = connexion[0]
     while True:
         try:
@@ -258,7 +305,15 @@ def recv_list_data(connexion, fenetre, color, subcolor, nbError="404"):
                 return ["NULL"]
 
 
-def send_data(connexion, data, fenetre, color, subcolor):
+def send_data(connexion : list, data : bytes, fenetre : pygame.Surface, color : str, subcolor : str) -> str:
+    """
+    Envoie des données à l'autre joueur
+    - connexion : la liste specifiant la connexion du joueur
+    - date : les données à envoyer
+    - fenetre : la fenetre sur laquelle afficher l'ecran
+    - color : la color de fond de la fenetre
+    - subcolor : la color secondaire de fond de la fenetre
+    """
     if isConnClose(connexion[0]):
         result = quitScreen(fenetre, connexion, color, subcolor)
         if result=="NULL":
@@ -268,7 +323,9 @@ def send_data(connexion, data, fenetre, color, subcolor):
         return "OK"
     
 
-def recv_all(sock, n):
+def recv_all(sock : socket.socket, n : int) -> bytes:
+    """Permet de recevoir des data de grandes taille n"""
+
     data = b''
     while len(data) < n:
         try:

@@ -4,72 +4,91 @@ from module.pygameCore import *
 import pygame
 from module.LANscreen import *
 
+# --- Nouvelle taille ---
+NEW_WIDTH_CHI = 1000
+NEW_HEIGHT_CHI = 600
+
+
+# --- Ancienne taille (base du jeu) ---
+BASE_WIDTH_CHI = 700
+BASE_HEIGHT_CHI = 400
+
+
+# Facteurs d'échelle
+scale_x = NEW_WIDTH_CHI / BASE_WIDTH_CHI
+scale_y = NEW_HEIGHT_CHI / BASE_HEIGHT_CHI
+
+
+def scores(mon_coup : int, ton_coup : int, mon_score : int, ton_score : int) -> int:
+    """
+    Calcule le score après le coup de chaque joueur /
+    coup = 1 : pierre /
+    coup = 2 : feuille /
+    coup = 3 : sciseaux
+    """
+
+    if mon_coup == 1 and ton_coup == 2:
+        ton_score += 1
+    elif mon_coup == 2 and ton_coup == 1:
+        mon_score += 1
+    elif mon_coup == 1 and ton_coup == 3:
+        mon_score += 1
+    elif mon_coup == 3 and ton_coup == 1:
+        ton_score += 1
+    elif mon_coup == 3 and ton_coup == 2:
+        mon_score += 1
+    elif mon_coup == 2 and ton_coup == 3:
+        ton_score += 1
+    return ton_score, mon_score
+
+
+def position() -> int:
+    """Retourne le coup joué par le joueur"""
+   
+    end = 0
+    while end==0:
+        for event in pygame.event.get():   
+            if (event.type == QUIT): 
+                return "NULL"
+
+            if (event.type == MOUSEBUTTONDOWN):
+                x = event.pos[0]
+                y = event.pos[1]
+
+                if x>100*scale_x and x<199*scale_x and y>250*scale_y and y<349*scale_y:
+                    return 3
+                elif x>300*scale_x and x<399*scale_x and y>250*scale_y and y<349*scale_y:
+                    return 2
+                elif x>500*scale_x and x<599*scale_x and y>250*scale_y and y<349*scale_y:
+                    return 1
+
+
+def affiche_image(coup : int, kijou : int, fenetre : pygame.surface):
+    """
+    Affiche une image en fonction de qui joue
+    - coup : l'image à afficher entre pierre, feuille et sciseaux
+    - kijou : le joueur en train de jouer
+    - fenetre : la fenetre sur laquelle afficher l'image
+    """
+
+    if kijou==1:
+        x=190*scale_x
+    else:
+        x=410*scale_x
+    if coup==0:
+        printImage("./image/chifoumi/flou.jpg", (100*scale_x, 100*scale_y), (x, 85*scale_y), fenetre)
+    elif coup==1:
+        printImage("./image/chifoumi/pierre.png", (100*scale_x, 100*scale_y), (x, 85*scale_y), fenetre)
+    elif coup==2:
+        printImage("./image/chifoumi/feuille.png", (100*scale_x, 100*scale_y), (x, 85*scale_y), fenetre)
+    elif coup==3:
+        printImage("./image/chifoumi/ciseaux.png", (100*scale_x, 100*scale_y), (x, 85*scale_y), fenetre)
+    pygame.display.flip()
+
+
 def chifoumi(connexion=[None,None,None]):
 
-    # --- Nouvelle taille ---
-    NEW_WIDTH = 1000
-    NEW_HEIGHT = 600
-
-
-    # --- Ancienne taille (base du jeu) ---
-    BASE_WIDTH = 700
-    BASE_HEIGHT = 400
-
-
-    # Facteurs d'échelle
-    scale_x = NEW_WIDTH / BASE_WIDTH
-    scale_y = NEW_HEIGHT / BASE_HEIGHT
-
-
-    def scores(mon_coup,ton_coup,mon_score,ton_score):
-        if mon_coup == 1 and ton_coup == 2:
-            ton_score += 1
-        elif mon_coup == 2 and ton_coup == 1:
-            mon_score += 1
-        elif mon_coup == 1 and ton_coup == 3:
-            mon_score += 1
-        elif mon_coup == 3 and ton_coup == 1:
-            ton_score += 1
-        elif mon_coup == 3 and ton_coup == 2:
-            mon_score += 1
-        elif mon_coup == 2 and ton_coup == 3:
-            ton_score += 1
-        return ton_score, mon_score
-
-    def position():
-        end = 0
-        while end==0:
-            for event in pygame.event.get():   
-                if (event.type == QUIT): 
-                    return "NULL"
-
-                if (event.type == MOUSEBUTTONDOWN):
-                    x = event.pos[0]
-                    y = event.pos[1]
-
-                    if x>100*scale_x and x<199*scale_x and y>250*scale_y and y<349*scale_y:
-                        return 3
-                    elif x>300*scale_x and x<399*scale_x and y>250*scale_y and y<349*scale_y:
-                        return 2
-                    elif x>500*scale_x and x<599*scale_x and y>250*scale_y and y<349*scale_y:
-                        return 1
-
-    def affiche_image(coup, kijou):
-        if kijou==1:
-            x=190*scale_x
-        else:
-            x=410*scale_x
-        if coup==0:
-            printImage("./image/chifoumi/flou.jpg", (100*scale_x, 100*scale_y), (x, 85*scale_y), fenetre)
-        elif coup==1:
-            printImage("./image/chifoumi/pierre.png", (100*scale_x, 100*scale_y), (x, 85*scale_y), fenetre)
-        elif coup==2:
-            printImage("./image/chifoumi/feuille.png", (100*scale_x, 100*scale_y), (x, 85*scale_y), fenetre)
-        elif coup==3:
-            printImage("./image/chifoumi/ciseaux.png", (100*scale_x, 100*scale_y), (x, 85*scale_y), fenetre)
-        pygame.display.flip()
-        
-    fenetre =initScreen((NEW_WIDTH,NEW_HEIGHT), "Pierre feuille ciseaux", "#F5411A", "./image/chifoumi/icon.jpg")
+    fenetre = initScreen((NEW_WIDTH_CHI,NEW_HEIGHT_CHI), "Pierre feuille ciseaux", "#F5411A", "./image/chifoumi/icon.jpg")
 
     printImage("./image/chifoumi/jouer.png", (600*scale_x, 420*scale_y), (50*scale_x,-55*scale_y), fenetre)
     pygame.display.flip()
@@ -168,10 +187,10 @@ def chifoumi(connexion=[None,None,None]):
 
                     if a==2:
                         if conn == None:
-                            affiche_image(0, 1)
-                            ton_coup = position()
+                            affiche_image(0, 1, fenetre)
+                            mon_coup = position()
                         else:
-                            affiche_image(ton_coup, 1)
+                            affiche_image(ton_coup, 1, fenetre)
                             conn.send(ton_coup.to_bytes(1))
                             mon_coup = recv_int_data(connexion, fenetre, "#D82A03", "#6F1E00")
                         
@@ -181,8 +200,8 @@ def chifoumi(connexion=[None,None,None]):
                         mon_coup = randint(1,3)
 
 
-                    affiche_image(ton_coup, 1)
-                    affiche_image(mon_coup, 2)
+                    affiche_image(ton_coup, 1, fenetre)
+                    affiche_image(mon_coup, 2, fenetre)
 
                     pygame.time.wait(800)
                     

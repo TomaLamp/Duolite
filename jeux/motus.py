@@ -1,183 +1,197 @@
-from pygame import *
-import pygame
 from random import choice
 from module.pygameCore import *
 from module.LANscreen import *
 
+def get_lettre(conn: socket.socket = None) -> str:
+    """
+    Retourne la lettre choisie par l'utilisateur
+    - conn : la connexion socket
+    """
 
-def motus(connexion=[None, None, None]):
+    lettre = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "<", ">"]
+    end = 0
+    while end==0:
+        for event in pygame.event.get():
+            if (event.type == pygame.MOUSEBUTTONUP):
+                x = event.pos[0]
+                y = event.pos[1]
+                if y<30:
+                    return lettre[round(x//35.71)]
 
-    def get_lettre(conn=None):
-        lettre = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "<", ">"]
-        end = 0
-        while end==0:
-            for event in pygame.event.get():
-                if (event.type == MOUSEBUTTONUP):
-                    x = event.pos[0]
-                    y = event.pos[1]
-                    if y<30:
-                        return lettre[round(x//35.71)]
-
-                if event.type == KEYDOWN:
-                    if event.key<=122 and event.key>=97:
-                        return chr(event.key).upper()
-                    elif event.key==8:
-                        return("<")
-                    elif event.key==13:
-                        return(">")
-                    
-                if (event.type == QUIT): 
-                    if conn!=None:
-                        conn.send(b"404")
-                    return "NULL"
+            if event.type == pygame.KEYDOWN:
+                if event.key<=122 and event.key>=97:
+                    return chr(event.key).upper()
+                elif event.key==8:
+                    return("<")
+                elif event.key==13:
+                    return(">")
                 
-    
-    def play_round(mot_partiel, fenetre, connexion=[None, None, None]):
-        fond = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]
-        mot_final = []
-        tour=0
-        points=0
+            if (event.type == pygame.QUIT): 
+                if conn!=None:
+                    conn.send(b"404")
+                return "NULL"
+            
+
+def play_round(mot_partiel : list, mot_choisi : list, dico : list, kijou : int, fenetre : pygame.Surface, connexion : list = [None, None, None]) -> int:
+    """
+    Joue une manche et retourne les points et le nombre de tours de la manche
+    - mot_partiel : le mot partiel composé de la 1er lettre
+    - mot_choisi : le mot à deviner
+    - dico : le dictionnaire des mots français
+    - kijou : le joueur qui joue
+    - fenetre : la fenetre sur laquelle afficher l'ecran
+    - connexion : la liste specifiant la connexion du joueur
+    """
+
+    lettre = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "<", ">"]
+    fond = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]
+    mot_final = []
+    tour=0
+    points=0
+    for i in range(len(mot_choisi)):
+        mot_final.append(mot_choisi[i])
+
+    while tour<6:
+
+        
+        for i in range(28):
+            if fond[i] == 0:
+                printImage("./image/motus/carresB.jpg", (35.71, 35.71), [i*35.71, 0], fenetre)
+            elif fond[i] == 1 :
+                printImage("./image/motus/carresR.jpg", (35.71, 35.71), [i*35.71, 0], fenetre)
+            elif fond[i] == 2:
+                printImage("./image/motus/carresJ.png", (35.71, 35.71), [i*35.71, 0], fenetre)
+            else:
+                printImage("./image/motus/carresP.jpg", (35.71, 35.71), [i*35.71, 0], fenetre)
+        
+
+            printText(lettre[i], 25, "black", (i*35.8+10, 10), fenetre)
+            pygame.display.flip()
+
+        conn=connexion[0]
+        mot_point = list(mot_partiel)
+        mot_verif = mot_choisi
+        mot_test = mot_partiel[0]
+        mot_verif_rouge = list(mot_point)
+        verif = []
+        nbr_lettre = 0
+        fin=0
+        for i in range(len(mot_choisi)-1):
+            verif.append(0)
+        
+
+        taille = [0, 0, 0, 0, 320, 290, 250, 210]
         for i in range(len(mot_choisi)):
-            mot_final.append(mot_choisi[i])
 
-        while tour<6:
+            printText(mot_partiel[i], 40, "black", (i*84+taille[len(mot_choisi)]+30+2*i, 100+tour*85), fenetre)
+            pygame.display.flip()
 
+        while fin==0:
             
-            for i in range(28):
-                if fond[i] == 0:
-                    printImage("./image/motus/carresB.jpg", (35.71, 35.71), [i*35.71, 0], fenetre)
-                elif fond[i] == 1 :
-                    printImage("./image/motus/carresR.jpg", (35.71, 35.71), [i*35.71, 0], fenetre)
-                elif fond[i] == 2:
-                    printImage("./image/motus/carresJ.png", (35.71, 35.71), [i*35.71, 0], fenetre)
-                else:
-                    printImage("./image/motus/carresP.jpg", (35.71, 35.71), [i*35.71, 0], fenetre)
+            if conn==None:
+                lettre_choisis = get_lettre()
+            elif connexion[2]==True and kijou%2 == 1 or connexion[2]==False and kijou%2 == 0:
+                lettre_choisis = get_lettre(conn)
+                conn.send(bytes(lettre_choisis, "utf-8"))
+            elif connexion[2]==True and kijou%2 == 0 or connexion[2]==False and kijou%2 == 1:
+                lettre_choisis = recv_str_data(connexion, fenetre, "#2C5C83", "#122C42")
             
+            if lettre_choisis=="NULL":
+                return "NULL", 0
+            if lettre_choisis == "<":
+                if nbr_lettre>1:
+                    nbr_lettre -= 1
+                    mot_partiel[nbr_lettre] = mot_verif_rouge[nbr_lettre]
+                    mot_test = mot_partiel[0:nbr_lettre] 
 
-                printText(lettre[i], 25, "black", (i*35.8+10, 10), fenetre)
-                pygame.display.flip()
+                for i in range(len(mot_choisi)):
+                    printImage("./image/motus/bleu.png", (60, 60), [i*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
 
-            conn==connexion[0]
-            mot_point = list(mot_partiel)
-            mot_verif = mot_choisi
-            mot_test = mot_partiel[0]
-            mot_verif_rouge = list(mot_point)
-            verif = []
-            nbr_lettre = 0
-            fin=0
-            for i in range(len(mot_choisi)-1):
-                verif.append(0)
+                    printText(mot_partiel[i], 40, "black", (i*84+taille[len(mot_choisi)]+30+1.5*i, 100+tour*85), fenetre)
+                    pygame.display.flip()
             
-
-            taille = [0, 0, 0, 0, 320, 290, 250, 210]
-            for i in range(len(mot_choisi)):
-
-                printText(mot_partiel[i], 40, "black", (i*84+taille[len(mot_choisi)]+30+2*i, 100+tour*85), fenetre)
-                pygame.display.flip()
-
-            while fin==0:
-                
-                if conn==None:
-                    lettre_choisis = get_lettre()
-                elif connexion[2]==True and kijou%2 == 1 or connexion[2]==False and kijou%2 == 0:
-                    lettre_choisis = get_lettre(conn)
-                    conn.send(bytes(lettre_choisis, "utf-8"))
-                elif connexion[2]==True and kijou%2 == 0 or connexion[2]==False and kijou%2 == 1:
-                    lettre_choisis = recv_str_data(connexion, fenetre, "#2C5C83", "#122C42")
-                
-                if lettre_choisis=="NULL":
-                    return "NULL", 0
-                if lettre_choisis == "<":
-                    if nbr_lettre>1:
-                        nbr_lettre -= 1
-                        mot_partiel[nbr_lettre] = mot_verif_rouge[nbr_lettre]
-                        mot_test = mot_partiel[0:nbr_lettre] 
-
-                    for i in range(len(mot_choisi)):
-                        printImage("./image/motus/bleu.png", (60, 60), [i*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
-
-                        printText(mot_partiel[i], 40, "black", (i*84+taille[len(mot_choisi)]+30+1.5*i, 100+tour*85), fenetre)
-                        pygame.display.flip()
-                
-                
-                elif lettre_choisis == ">":
-                    mot_dico = ''
-                    for i in range(len(mot_test)):
-                        mot_dico = mot_dico + mot_test[i]
-                    if len(mot_test)==len(mot_choisi) and (mot_dico.upper()+'\n') in dico:
-                        j = 0
-                        fin = 1
-                        for i in range(len(mot_choisi)-1):
-                            if mot_test[i+1] == mot_choisi[i+1]:
-                                verif[i] = 2
+            
+            elif lettre_choisis == ">":
+                mot_dico = ''
+                for i in range(len(mot_test)):
+                    mot_dico = mot_dico + mot_test[i]
+                if len(mot_test)==len(mot_choisi) and (mot_dico.upper()+'\n') in dico:
+                    j = 0
+                    fin = 1
+                    for i in range(len(mot_choisi)-1):
+                        if mot_test[i+1] == mot_choisi[i+1]:
+                            verif[i] = 2
+                            n = mot_verif.index(mot_test[i+1])+1
+                            mot_verif2 = mot_verif
+                            mot_verif = ''
+                            for k in range(len(mot_verif2)):
+                                if k+1!=n:
+                                    mot_verif += mot_verif2[k]
+                            mot_partiel = list(mot_point)
+                            mot_partiel[i+1] = mot_test[i+1]
+                            mot_point = list(mot_partiel)
+                            mot_verif_rouge[i+1] = mot_test[i+1]
+                    for i in range(len(mot_choisi)-1):
+                        if verif[i]!=2:
+                            if mot_test[i+1] in mot_verif[1:]:
+                                verif[i] = 1
                                 n = mot_verif.index(mot_test[i+1])+1
                                 mot_verif2 = mot_verif
                                 mot_verif = ''
                                 for k in range(len(mot_verif2)):
                                     if k+1!=n:
                                         mot_verif += mot_verif2[k]
-                                mot_partiel = list(mot_point)
-                                mot_partiel[i+1] = mot_test[i+1]
-                                mot_point = list(mot_partiel)
-                                mot_verif_rouge[i+1] = mot_test[i+1]
-                        for i in range(len(mot_choisi)-1):
-                            if verif[i]!=2:
-                                if mot_test[i+1] in mot_verif[1:]:
-                                    verif[i] = 1
-                                    n = mot_verif.index(mot_test[i+1])+1
-                                    mot_verif2 = mot_verif
-                                    mot_verif = ''
-                                    for k in range(len(mot_verif2)):
-                                        if k+1!=n:
-                                            mot_verif += mot_verif2[k]
-                        for i in range(len(verif)):
-                            if verif[i]==0 and fond[lettre.index(mot_test[i+1])]==0:
-                                fond[lettre.index(mot_test[i+1])] = 3
-                            elif verif[i]==1 and fond[lettre.index(mot_test[i+1])]!=1:
-                                fond[lettre.index(mot_test[i+1])] = 2
-                            elif verif[i]==2:
-                                fond[lettre.index(mot_test[i+1])] = 1
-                        if mot_test == mot_partiel:
-                            mot_partiel = mot_point
+                    for i in range(len(verif)):
+                        if verif[i]==0 and fond[lettre.index(mot_test[i+1])]==0:
+                            fond[lettre.index(mot_test[i+1])] = 3
+                        elif verif[i]==1 and fond[lettre.index(mot_test[i+1])]!=1:
+                            fond[lettre.index(mot_test[i+1])] = 2
+                        elif verif[i]==2:
+                            fond[lettre.index(mot_test[i+1])] = 1
+                    if mot_test == mot_partiel:
+                        mot_partiel = mot_point
 
-                        for i in range(len(verif)):
-                            if verif[i]==2:
-                                printImage("./image/motus/rouge.jpg", (60, 60), [(i+1)*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
+                    for i in range(len(verif)):
+                        if verif[i]==2:
+                            printImage("./image/motus/rouge.jpg", (60, 60), [(i+1)*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
 
-                                printText(mot_test[i+1], 40, "black", ((i+1)*84+taille[len(mot_choisi)]+30+i, 100+tour*85), fenetre)
-                                pygame.display.flip()
-
-                            elif verif[i] == 1:
-                                printImage("./image/motus/cerclejaune.png", (60, 60), [(i+1)*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
-
-                                printText(mot_test[i+1], 40, "black", ((i+1)*84+taille[len(mot_choisi)]+30+i, 100+tour*85), fenetre)
-                                pygame.display.flip()
-                        tour+=1
-
-                        if mot_test == mot_final:
-                            points+=7-tour
-                            tour=10
-                            
-                            printText('Bravo', 40, "green", (50,500), fenetre)
+                            printText(mot_test[i+1], 40, "black", ((i+1)*84+taille[len(mot_choisi)]+30+i, 100+tour*85), fenetre)
                             pygame.display.flip()
-                    
-                elif nbr_lettre==0 and lettre_choisis!=mot_choisi[0] or nbr_lettre>0:
-                    if nbr_lettre==0:
-                        nbr_lettre+=1
-                    if len(mot_test)<len(mot_choisi):
-                        mot_partiel[nbr_lettre] = lettre_choisis
-                        nbr_lettre += 1
-                        mot_test = mot_partiel[0:nbr_lettre] 
 
-                        for i in range(len(mot_choisi)):
-                            printImage("./image/motus/bleu.png", (60, 60), [i*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
+                        elif verif[i] == 1:
+                            printImage("./image/motus/cerclejaune.png", (60, 60), [(i+1)*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
 
-                            printText(str(mot_partiel[i]), 40, "black", (i*84+taille[len(mot_choisi)]+30+i, 100+tour*85), fenetre)
+                            printText(mot_test[i+1], 40, "black", ((i+1)*84+taille[len(mot_choisi)]+30+i, 100+tour*85), fenetre)
                             pygame.display.flip()
-                else:
-                    nbr_lettre+=1  
+                    tour+=1
 
-        return points, tour    
+                    if mot_test == mot_final:
+                        points+=7-tour
+                        tour=10
+                        
+                        printText('Bravo', 40, "green", (50,500), fenetre)
+                        pygame.display.flip()
+                
+            elif nbr_lettre==0 and lettre_choisis!=mot_choisi[0] or nbr_lettre>0:
+                if nbr_lettre==0:
+                    nbr_lettre+=1
+                if len(mot_test)<len(mot_choisi):
+                    mot_partiel[nbr_lettre] = lettre_choisis
+                    nbr_lettre += 1
+                    mot_test = mot_partiel[0:nbr_lettre] 
+
+                    for i in range(len(mot_choisi)):
+                        printImage("./image/motus/bleu.png", (60, 60), [i*84+taille[len(mot_choisi)]+12, 80+tour*85], fenetre)
+
+                        printText(str(mot_partiel[i]), 40, "black", (i*84+taille[len(mot_choisi)]+30+i, 100+tour*85), fenetre)
+                        pygame.display.flip()
+            else:
+                nbr_lettre+=1  
+
+    return points, tour
+
+
+def motus(connexion=[None, None, None]):    
 
 
     # %% main
@@ -198,13 +212,13 @@ def motus(connexion=[None, None, None]):
     fin = 0
     while fin == 0:
         for event in pygame.event.get():
-            if (event.type == MOUSEBUTTONUP):
+            if (event.type == pygame.MOUSEBUTTONUP):
                 x = event.pos[0]
                 y = event.pos[1]
                 if x > 150 and x < 850 and y > 110 and y < 461:
                     fin = 1 
                         
-            if (event.type == KEYDOWN) or (event.type == QUIT): 
+            if (event.type == pygame.KEYDOWN) or (event.type == pygame.QUIT): 
                 return 0
 
     fenetre.fill("#4682B4")
@@ -228,7 +242,7 @@ def motus(connexion=[None, None, None]):
 
             for event in pygame.event.get():
 
-                if (event.type == MOUSEBUTTONUP):
+                if (event.type == pygame.MOUSEBUTTONUP):
                         x = event.pos[0]
                         y = event.pos[1]
                         if x>150 and x<900 and y>65 and y<250.7:
@@ -252,7 +266,7 @@ def motus(connexion=[None, None, None]):
                                 nb_joueur = 2
 
 
-                if (event.type == QUIT): 
+                if (event.type == pygame.QUIT): 
                     return 0
 
 
@@ -332,7 +346,7 @@ def motus(connexion=[None, None, None]):
                 fin=0
                 while fin==0:
                     for event in pygame.event.get():
-                        if (event.type == MOUSEBUTTONUP):
+                        if (event.type == pygame.MOUSEBUTTONUP):
                             x = event.pos[0]
                             y = event.pos[1]
                             if x>830 and x<980 and y>530 and y<564:
@@ -341,7 +355,7 @@ def motus(connexion=[None, None, None]):
                                 fin=1
                                 end=1
 
-                        if (event.type == QUIT): 
+                        if (event.type == pygame.QUIT): 
                             return 0
 
 
@@ -375,14 +389,14 @@ def motus(connexion=[None, None, None]):
                     while end==0:
                         for event in pygame.event.get():
 
-                            if (event.type == MOUSEBUTTONUP):
+                            if (event.type == pygame.MOUSEBUTTONUP):
                                     x = event.pos[0]
                                     y = event.pos[1]
                                     if x>200 and x<800 and y>350 and y<493.04:
                                         end=1
 
 
-                            if (event.type == QUIT): 
+                            if (event.type == pygame.QUIT): 
                                 return 0
                             
                 elif connexion[2]==True and kijou%2 == 1 or connexion[2]==False and kijou%2 == 0:
@@ -427,7 +441,7 @@ def motus(connexion=[None, None, None]):
                     while end==0:
                         for event in pygame.event.get():
 
-                            if (event.type == MOUSEBUTTONUP):
+                            if (event.type == pygame.MOUSEBUTTONUP):
                                 x = event.pos[0]
                                 y = event.pos[1]
                                 if x>60 and x<310 and y>105 and y<144:
@@ -477,7 +491,7 @@ def motus(connexion=[None, None, None]):
                                     mot_choisi = choix_mot[14]
                                             
 
-                            if (event.type == QUIT): 
+                            if (event.type == pygame.QUIT): 
                                 if conn!=None:
                                     conn.send(b"404")
                                 return 0
@@ -528,7 +542,7 @@ def motus(connexion=[None, None, None]):
                     pygame.display.flip()
 
                     
-                    points, tour = play_round(mot_partiel, fenetre, connexion)
+                    points, tour = play_round(mot_partiel, mot_choisi, dico, kijou, fenetre, connexion)
                     if points=="NULL":
                         if conn!=None:
                             conn.send(b"404")
@@ -557,7 +571,7 @@ def motus(connexion=[None, None, None]):
                     fin=0
                     while fin==0:
                         for event in pygame.event.get():
-                            if (event.type == MOUSEBUTTONUP):
+                            if (event.type == pygame.MOUSEBUTTONUP):
                                 x = event.pos[0]
                                 y = event.pos[1]
                                 if x>830 and x<980 and y>530 and y<564:
@@ -570,7 +584,7 @@ def motus(connexion=[None, None, None]):
                                     if conn!=None:
                                         conn.send(b"404")
 
-                            if (event.type == QUIT): 
+                            if (event.type == pygame.QUIT): 
                                 if conn!=None:
                                     conn.send(b"404")
                                 return 0

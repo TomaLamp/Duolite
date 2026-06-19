@@ -1,92 +1,105 @@
-from pygame import *
 import pygame
-from time import sleep
 import random
 import pickle
 from module.pygameCore import *
 from module.LANscreen import *
 
 
+def tirage(d1 : int, d2 : int, d3 : int) -> list:
+    """Créé une liste de 3 dés avec des valeurs aleatoires"""
+
+    l = [0, 0, 0]
+    if d1==1:
+        l[0] = random.randint(1, 6)
+    if d2==1:
+        l[1] = random.randint(1, 6)
+    if d3==1:
+        l[2] = random.randint(1, 6)
+
+    return l
+
+def affich(l : list, score : list, fenetre : pygame.Surface):
+    """
+    Affiche les 3 dés tiré par le joueur
+    - l : la liste des valeurs de dés à afficher
+    - score : la liste des dés à afficher
+    - fenetre : la fenetre sur laquelle afficher l'image
+    """
+
+    if score[0]==0:
+        for i in range(10):
+            a = random.randint(1,6)
+            printImage("./image/421/de"+str(a)+".jpg", (100, 100), [200, 200], fenetre)
+            pygame.display.flip()
+            pygame.time.wait(100)
+
+        printImage("./image/421/de"+str(l[0])+".jpg", (100, 100), [200, 200], fenetre)
+        pygame.display.flip()
+    
+    if score[1]==0:
+        for i in range(10):
+            a = random.randint(1,6)
+            printImage("./image/421/de"+str(a)+".jpg", (100, 100), [450, 200], fenetre)
+            pygame.display.flip()
+            pygame.time.wait(100)
+
+        printImage("./image/421/de"+str(l[1])+".jpg", (100, 100), [450, 200], fenetre)
+        pygame.display.flip()
+
+    if score[2]==0:
+        for i in range(10):
+            a = random.randint(1,6)
+            printImage("./image/421/de"+str(a)+".jpg", (100, 100), [700, 200], fenetre)
+            pygame.display.flip()
+            pygame.time.wait(100)
+
+
+        printImage("./image/421/de"+str(l[2])+".jpg", (100, 100), [700, 200], fenetre)
+    
+    pygame.display.flip()
+
+
+def keep(d : int, pos : int, val : int, fenetre : pygame.Surface):
+    """
+    Permet de choisir les dés à garder et ceux à relancer
+    - d : si le dé était gardé
+    - pos : le position du dé (1, 2 ou 3)
+    - val : la valeur du dé
+    - fenetre : la fenetre sur laquelle afficher
+    """
+
+    if d==1:
+        l='R'
+    else:
+        l=''
+
+    p=[200, 450, 700] 
+    printImage("./image/421/de"+l+str(val)+".jpg", (100, 100), [p[pos-1], 200], fenetre)
+    pygame.display.flip()
+
+
+def comptage(l : list) -> int:
+    """retourne le nombre de points des dés presents dans la liste l"""
+
+    pts = 0
+    if l == [4,2,1]:
+        pts=10
+    elif l == [1,1,1]:
+        pts=7
+    elif l[0] == l[1] == l[2]:
+        pts=l[0]
+    elif l[0] == l[1] == 1:
+        pts=l[2]
+    elif l[0] == l[1]-1 == l[2]-2:
+        pts=2
+    else:
+        pts=1
+    return pts
+
 
 def jeux421(connexion=[None, None, None]):
 
-    def tirage(d1, d2, d3):
-
-        l = [0, 0, 0]
-        if d1==1:
-            l[0] = random.randint(1, 6)
-        if d2==1:
-            l[1] = random.randint(1, 6)
-        if d3==1:
-            l[2] = random.randint(1, 6)
-
-        return l
-
-    def affich(l, score):
-
-        if score[0]==0:
-            for i in range(10):
-                a = random.randint(1,6)
-                printImage("./image/421/de"+str(a)+".jpg", (100, 100), [200, 200], fenetre)
-                pygame.display.flip()
-                sleep(0.1)
-
-            printImage("./image/421/de"+str(l[0])+".jpg", (100, 100), [200, 200], fenetre)
-            pygame.display.flip()
-        
-        if score[1]==0:
-            for i in range(10):
-                a = random.randint(1,6)
-                printImage("./image/421/de"+str(a)+".jpg", (100, 100), [450, 200], fenetre)
-                pygame.display.flip()
-                sleep(0.1)
-
-            printImage("./image/421/de"+str(l[1])+".jpg", (100, 100), [450, 200], fenetre)
-            pygame.display.flip()
-
-        if score[2]==0:
-            for i in range(10):
-                a = random.randint(1,6)
-                printImage("./image/421/de"+str(a)+".jpg", (100, 100), [700, 200], fenetre)
-                pygame.display.flip()
-                sleep(0.1)
-
-
-            printImage("./image/421/de"+str(l[2])+".jpg", (100, 100), [700, 200], fenetre)
-        
-        pygame.display.flip()
-
-
-    def keep(d, pos, val):
-        if d==1:
-            l='R'
-        else:
-            l=''
-
-        p=[200, 450, 700] 
-        printImage("./image/421/de"+l+str(val)+".jpg", (100, 100), [p[pos-1], 200], fenetre)
-        pygame.display.flip()
-
-
-    def comptage(l):
-        pts = 0
-        if l == [4,2,1]:
-            pts=10
-        elif l == [1,1,1]:
-            pts=7
-        elif l[0] == l[1] == l[2]:
-            pts=l[0]
-        elif l[0] == l[1] == 1:
-            pts=l[2]
-        elif l[0] == l[1]-1 == l[2]-2:
-            pts=2
-        else:
-            pts=1
-        return pts
-
-
     fenetre = initScreen((1000,600), "421", "#FFFF00", './image/421/icon.jpg')
-
 
     printImage("./image/421/play.png", (700, 472.73), [160,36], fenetre)
     pygame.display.flip()
@@ -104,7 +117,7 @@ def jeux421(connexion=[None, None, None]):
     fin = 0
     while fin == 0:
         for event in pygame.event.get():
-            if (event.type == MOUSEBUTTONUP):
+            if (event.type == pygame.MOUSEBUTTONUP):
                 x = event.pos[0]
                 y = event.pos[1]
                 if x > 161 and x < 859 and y > 298 and y < 485:
@@ -121,7 +134,7 @@ def jeux421(connexion=[None, None, None]):
                     else:
                         fin=1
                     
-            if (event.type == QUIT): 
+            if (event.type == pygame.QUIT): 
                 return 0
 
     printImage("./image/421/jaune.png", (1000, 600), [0, 0], fenetre)
@@ -185,14 +198,14 @@ def jeux421(connexion=[None, None, None]):
             x=0
             y=0
             for event in pygame.event.get():
-                if (event.type == MOUSEBUTTONUP):
+                if (event.type == pygame.MOUSEBUTTONUP):
                         if conn==None or connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
                             x = event.pos[0]
                             y = event.pos[1]
                             if conn!=None:
                                 conn.send(pickle.dumps([x,y]))
                             
-                if (event.type == QUIT): 
+                if (event.type == pygame.QUIT): 
                     if conn!=None:
                         conn.send(pickle.dumps(["404"]))
                     return 0
@@ -232,38 +245,38 @@ def jeux421(connexion=[None, None, None]):
                         except BlockingIOError:
                             pass 
 
-                affich(lancer, score[kijou%2])
+                affich(lancer, score[kijou%2], fenetre)
                 coup+=1
             if x > 200 and x < 300 and y > 200 and y < 300 and coup!=0:
                 if d1 == 1:
-                    keep(d1, 1, lancer[0])
+                    keep(d1, 1, lancer[0], fenetre)
                     score[kijou%2][0] = lancer[0]
                     lancer[0] = 0
                     d1 = 0
                 else:
-                    keep(d1, 1, score[kijou%2][0])
+                    keep(d1, 1, score[kijou%2][0], fenetre)
                     lancer[0] = score[kijou%2][0]
                     score[kijou%2][0] = 0
                     d1 = 1
             if x > 450 and x < 550 and y > 200 and y < 300 and coup!=0:
                 if d2 == 1:
-                    keep(d2, 2, lancer[1])
+                    keep(d2, 2, lancer[1], fenetre)
                     score[kijou%2][1] = lancer[1]
                     lancer[1] = 0
                     d2 = 0
                 else:
-                    keep(d2, 2, score[kijou%2][1])
+                    keep(d2, 2, score[kijou%2][1], fenetre)
                     lancer[1] = score[kijou%2][1]
                     score[kijou%2][1] = 0
                     d2 = 1
             if x > 700 and x < 800 and y > 200 and y < 300 and coup!=0:
                 if d3 == 1:
-                    keep(d3, 3, lancer[2])
+                    keep(d3, 3, lancer[2], fenetre)
                     score[kijou%2][2] = lancer[2]
                     lancer[2] = 0
                     d3 = 0
                 else:
-                    keep(d3, 3, score[kijou%2][2])
+                    keep(d3, 3, score[kijou%2][2], fenetre)
                     lancer[2] = score[kijou%2][2]
                     score[kijou%2][2] = 0
                     d3 = 1
@@ -427,10 +440,10 @@ def jeux421(connexion=[None, None, None]):
 
             pygame.display.flip()
 
-        if conn!=None and connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
+        if conn==None or connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
             while fin==0:
                 for event in pygame.event.get(): 
-                    if (event.type == MOUSEBUTTONUP):
+                    if (event.type == pygame.MOUSEBUTTONUP):
                     
                         x = event.pos[0]
                         y = event.pos[1]
@@ -439,13 +452,13 @@ def jeux421(connexion=[None, None, None]):
                             if conn!=None:
                                 conn.send(pickle.dumps(["next"]))
 
-                    if (event.type == KEYDOWN):
-                        if event.key==K_RETURN:
+                    if (event.type == pygame.KEYDOWN):
+                        if event.key==pygame.K_RETURN:
                             fin=1
                             if conn!=None:
                                     conn.send(pickle.dumps(["next"]))
                     
-                    if (event.type == QUIT): 
+                    if (event.type == pygame.QUIT): 
                         if conn!=None:
                             conn.send(pickle.dumps(["404"]))
                         return 0

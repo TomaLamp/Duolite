@@ -3,54 +3,65 @@ import pygame
 from module.pygameCore import *
 from module.LANscreen import *
 
-def morpion(connexion=[None,None,None]):
+# %% fonctions
 
-    # %% fonctions
+def get_case() -> int:
+    """
+    Permet de retourner la case choisie
+    """
 
-    def get_case():
-        end = 0
-        while end==0:
-            for event in pygame.event.get():
-                if (event.type == MOUSEBUTTONUP):
-                        x = event.pos[0]
-                        y = event.pos[1]
-                        if x>322 and x<439 and y>220 and y<332:
-                            return 0
-                        elif x>439 and x<555 and y>220 and y<332:
-                            return 1
-                        elif x>555 and x<669 and y>220 and y<332:
-                            return 2
-                        elif x>322 and x<439 and y>332 and y<450:
-                            return 3
-                        elif x>439 and x<555 and y>332 and y<450:
-                            return 4
-                        elif x>555 and x<669 and y>332 and y<450:
-                            return 5
-                        elif x>322 and x<439 and y>450 and y<566:
-                            return 6
-                        elif x>439 and x<555 and y>450 and y<566:
-                            return 7
-                        elif x>555 and x<669 and y>450 and y<566:
-                            return 8
-                            
+    end = 0
+    while end==0:
+        for event in pygame.event.get():
+            if (event.type == MOUSEBUTTONUP):
+                    x = event.pos[0]
+                    y = event.pos[1]
+                    if x>322 and x<439 and y>220 and y<332:
+                        return 0
+                    elif x>439 and x<555 and y>220 and y<332:
+                        return 1
+                    elif x>555 and x<669 and y>220 and y<332:
+                        return 2
+                    elif x>322 and x<439 and y>332 and y<450:
+                        return 3
+                    elif x>439 and x<555 and y>332 and y<450:
+                        return 4
+                    elif x>555 and x<669 and y>332 and y<450:
+                        return 5
+                    elif x>322 and x<439 and y>450 and y<566:
+                        return 6
+                    elif x>439 and x<555 and y>450 and y<566:
+                        return 7
+                    elif x>555 and x<669 and y>450 and y<566:
+                        return 8
                         
-                if (event.type == QUIT): 
-                    return "NULL"
+                    
+            if (event.type == QUIT): 
+                return "NULL"
 
-    def place_point(kijou, ligne, case):
-        if kijou%2 == 1:
-            pion = "./image/morpion/rond.png"
-        else:
-            pion = "./image/morpion/croix.png"
+def place_point(kijou : int, ligne : int, case : int, fenetre : pygame.Surface):
+    """
+    Place un point sur la grille
+    - kijou : la personne qui joue
+    - ligne : la ligne sur laquelle mettre le point
+    - case : la case sur la ligne oû il faut placer le point
+    - fenetre : la fenetre sur laquelle afficher la combinaison
+    """
+
+    if kijou%2 == 1:
+        pion = "./image/morpion/rond.png"
+    else:
+        pion = "./image/morpion/croix.png"
+
+    x = 200 + (case)*120
+    y = 110 + (ligne)*110
+
+    printImage(pion, (120, 120), [x, y], fenetre, rotation=90)
+
+
+# %% main
+def morpion(connexion=[None,None,None]):
     
-        x = 200 + (case)*120
-        y = 110 + (ligne)*110
-
-        printImage(pion, (120, 120), [x, y], fenetre, rotation=90)
-
-
-    # %% main
-
     fenetre = initScreen((1000,600), "Morpion", "#FAF723", "./image/morpion/icon.jpg")
     printImage("./image/morpion/play.png", (600, 522.97), [220, 20], fenetre)
     pygame.display.flip()

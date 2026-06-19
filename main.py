@@ -101,7 +101,7 @@ def main():
                 restart(page, jeux, fenetre)
 
         for event in pygame.event.get():
-            if (event.type == MOUSEBUTTONUP):
+            if (event.type == pygame.MOUSEBUTTONUP):
                     x = event.pos[0]
                     y = event.pos[1]
                     if y > 149 and y < 293:
@@ -165,7 +165,7 @@ def main():
                         LANscreen(fenetre, connexion)
                         restart(page, jeux, fenetre)
                     
-            if (event.type == QUIT): 
+            if (event.type == pygame.QUIT): 
                 if connexion[0]!=None:
                     connexion[0].close()
                 return 0

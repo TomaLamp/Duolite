@@ -1,7 +1,4 @@
-from pygame import *
-import pygame
-import pickle
-from random import *
+import random
 from module.pygameCore import *
 from module.LANscreen import *
 
@@ -26,7 +23,7 @@ def memory(connexion=[None, None, None]):
     fin = 0
     while fin == 0:
         for event in pygame.event.get():
-            if (event.type == MOUSEBUTTONUP):
+            if (event.type == pygame.MOUSEBUTTONUP):
                 x = event.pos[0]
                 y = event.pos[1]
                 if x > 150 and x < 850 and y > 110 and y < 461:
@@ -43,7 +40,7 @@ def memory(connexion=[None, None, None]):
                     else:
                         fin=1
                             
-            if (event.type == KEYDOWN) or (event.type == QUIT): 
+            if (event.type == pygame.KEYDOWN) or (event.type == pygame.QUIT): 
                 return 0
 
 
@@ -59,7 +56,7 @@ def memory(connexion=[None, None, None]):
         if conn==None or connexion[2]==True:
             for j in range(6):
                 for i in range(6):
-                    r = randint(0, len(carte)-1)
+                    r = random.randint(0, len(carte)-1)
                     placement[j][i] = carte[r]
                     del(carte[r])
 
@@ -118,7 +115,7 @@ def memory(connexion=[None, None, None]):
                 end=0
                 while end==0:
                     for event in pygame.event.get():
-                        if (event.type == MOUSEBUTTONUP):
+                        if (event.type == pygame.MOUSEBUTTONUP):
                             x = event.pos[0]
                             y = event.pos[1]
                             if y>85 and y<162:
@@ -147,7 +144,7 @@ def memory(connexion=[None, None, None]):
                             if x>702 and x<780:
                                 i=5
                         
-                        if (event.type == QUIT): 
+                        if (event.type == pygame.QUIT): 
                             if conn!=None:
                                 conn.send(b"404")
                             return 0
@@ -213,14 +210,14 @@ def memory(connexion=[None, None, None]):
                         end=0
                         while end==0:
                             for event in pygame.event.get():
-                                if (event.type == MOUSEBUTTONUP):
+                                if (event.type == pygame.MOUSEBUTTONUP):
                                         x = event.pos[0]
                                         y = event.pos[1]
                                         if x<990 and x>790 and y>530 and y<583:
                                             end=1
                                             fin=1
 
-                                if (event.type == QUIT): 
+                                if (event.type == pygame.QUIT): 
                                     if conn!=None:
                                         conn.send(b"404") 
                                     return 0
@@ -230,7 +227,7 @@ def memory(connexion=[None, None, None]):
                         end=0
                         while end==0:
                             for event in pygame.event.get():
-                                if (event.type == MOUSEBUTTONUP):
+                                if (event.type == pygame.MOUSEBUTTONUP):
                                         x = event.pos[0]
                                         y = event.pos[1]
                                         if x<990 and x>790 and y>530 and y<583:
@@ -238,13 +235,13 @@ def memory(connexion=[None, None, None]):
                                             if conn!=None:
                                                 conn.send(b"continue")
 
-                                if (event.type == KEYDOWN):
-                                    if event.key == K_RETURN:
+                                if (event.type == pygame.KEYDOWN):
+                                    if event.key == pygame.K_RETURN:
                                         end = 1
                                         if conn!=None:
                                             conn.send(b"continue")
 
-                                if (event.type == QUIT): 
+                                if (event.type == pygame.QUIT): 
                                     if conn!=None:
                                         conn.send(b"404") 
                                     return 0

@@ -1,122 +1,126 @@
-from pygame import *
 import pygame
 from module.pygameCore import *
 from module.LANscreen import *
 from random import randint
 
-def justePrix(connexion=[None,None,None]):
-    
-    def choix_nombre(conn=None):
-        nombre = ""
-        fin = 0
-        while fin == 0:
-            for event in pygame.event.get():
-                if (event.type == MOUSEBUTTONUP):
-                        x = event.pos[0]
-                        y = event.pos[1]
-                        if x > 400 and x < 450 and y > 340 and y < 390:
-                            if len(nombre)<3:
-                                nombre += "7"   
-                        if x > 470 and x < 520 and y > 400 and y < 450:
-                            if len(nombre)<3:
-                                nombre += "5" 
-                        if x > 540 and x < 590 and y > 460 and y < 510:
-                            if len(nombre)<3:
-                                nombre += "3" 
-                        if x > 470 and x < 520 and y > 340 and y < 390:
-                            if len(nombre)<3:
-                                nombre += "8" 
-                        if x > 400 and x < 450 and y > 400 and y < 450:
-                            if len(nombre)<3:
-                                nombre += "4" 
-                        if x > 400 and x < 450 and y > 460 and y < 510:
-                            if len(nombre)<3:
-                                nombre += "1" 
-                        if x > 470 and x < 520 and y > 460 and y < 510:
-                            if len(nombre)<3:
-                                nombre += "2" 
-                        if x > 540 and x < 590 and y > 340 and y < 390:
-                            if len(nombre)<3:
-                                nombre += "9" 
-                        if x > 540 and x < 590 and y > 400 and y < 450:
-                            if len(nombre)<3:
-                                nombre += "6" 
-                        if x > 400 and x < 450 and y > 520 and y < 570:
-                            nombre = nombre[0:len(nombre)-1]
-                        if x > 470 and x < 520 and y > 520 and y < 570:
-                            if len(nombre)<3:
-                                nombre += "0"
-                        if x > 540 and x < 590 and y > 520 and y < 570:
-                            if len(nombre) != 0:
-                                if conn != None:
-                                    conn.send((0).to_bytes(2))
-                                return int(nombre)
-                        
 
-                
-                if event.type == KEYDOWN:
-                    if len(nombre)<3:
-                        if event.key>1073741912 and event.key<1073741922:
-                            nombre += str(event.key-1073741912)
-                        elif event.key == 1073741922:
-                            nombre += "0"
-                    if event.key == 8:
+def choix_nombre(fenetre : pygame.Surface, connexion : list = [None,None,None]) -> int:
+    """Permet de choisir un nombre dans la fenetre spécifié"""
+
+    nombre = ""
+    fin = 0
+    while fin == 0:
+        for event in pygame.event.get():
+            if (event.type == pygame.MOUSEBUTTONUP):
+                    x = event.pos[0]
+                    y = event.pos[1]
+                    if x > 400 and x < 450 and y > 340 and y < 390:
+                        if len(nombre)<3:
+                            nombre += "7"   
+                    if x > 470 and x < 520 and y > 400 and y < 450:
+                        if len(nombre)<3:
+                            nombre += "5" 
+                    if x > 540 and x < 590 and y > 460 and y < 510:
+                        if len(nombre)<3:
+                            nombre += "3" 
+                    if x > 470 and x < 520 and y > 340 and y < 390:
+                        if len(nombre)<3:
+                            nombre += "8" 
+                    if x > 400 and x < 450 and y > 400 and y < 450:
+                        if len(nombre)<3:
+                            nombre += "4" 
+                    if x > 400 and x < 450 and y > 460 and y < 510:
+                        if len(nombre)<3:
+                            nombre += "1" 
+                    if x > 470 and x < 520 and y > 460 and y < 510:
+                        if len(nombre)<3:
+                            nombre += "2" 
+                    if x > 540 and x < 590 and y > 340 and y < 390:
+                        if len(nombre)<3:
+                            nombre += "9" 
+                    if x > 540 and x < 590 and y > 400 and y < 450:
+                        if len(nombre)<3:
+                            nombre += "6" 
+                    if x > 400 and x < 450 and y > 520 and y < 570:
                         nombre = nombre[0:len(nombre)-1]
-                    elif event.key == 13:
+                    if x > 470 and x < 520 and y > 520 and y < 570:
+                        if len(nombre)<3:
+                            nombre += "0"
+                    if x > 540 and x < 590 and y > 520 and y < 570:
                         if len(nombre) != 0:
-                            if conn != None:
-                                conn.send((0).to_bytes(2))
+                            if connexion[0] != None:
+                                connexion[0].send((0).to_bytes(2))
                             return int(nombre)
+                    
 
-                if (event.type == KEYDOWN or event.type == MOUSEBUTTONUP):
-                    if conn != None and len(nombre)>0:
-                        conn.send(int(nombre).to_bytes(2))
-                        try:
-                            data = int.from_bytes(conn.recv(1024), "big")
-                            if data==4004:
-                                result = quitScreen(fenetre, connexion, "#5E0066", "#0F0011")
-                                if result=="NULL":
-                                    return "NULL"
-                        except BlockingIOError:
-                            pass
-                    rectwidth = printImage("./image/juste prix/fond.jpg", (90, 50), (445, 270), fenetre).width
-                    printText(nombre, 72, "black", (rectwidth/2 + 445, 270), fenetre, Alignement="Center")
-                    pygame.display.flip()  
+            
+            if event.type == pygame.KEYDOWN:
+                if len(nombre)<3:
+                    if event.key>1073741912 and event.key<1073741922:
+                        nombre += str(event.key-1073741912)
+                    elif event.key == 1073741922:
+                        nombre += "0"
+                if event.key == 8:
+                    nombre = nombre[0:len(nombre)-1]
+                elif event.key == 13:
+                    if len(nombre) != 0:
+                        if connexion[0] != None:
+                            connexion[0].send((0).to_bytes(2))
+                        return int(nombre)
 
-                if (event.type == QUIT): 
+            if (event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONUP):
+                if connexion[0] != None and len(nombre)>0:
+                    connexion[0].send(int(nombre).to_bytes(2))
+                    try:
+                        data = int.from_bytes(connexion[0].recv(1024), "big")
+                        if data==4004:
+                            result = quitScreen(fenetre, connexion, "#5E0066", "#0F0011")
+                            if result=="NULL":
+                                return "NULL"
+                    except BlockingIOError:
+                        pass
+                rectwidth = printImage("./image/juste prix/fond.jpg", (90, 50), (445, 270), fenetre).width
+                printText(nombre, 72, "black", (rectwidth/2 + 445, 270), fenetre, Alignement="Center")
+                pygame.display.flip()  
+
+            if (event.type == pygame.QUIT): 
+                return "NULL"
+
+
+
+def recv_number(connexion : list, fenetre : pygame.Surface) -> int:
+    """Permet de recevoir le nombre de l'autre joueur"""
+    
+    conn=connexion[0] 
+    ton_nombre=0
+    printImage("./image/juste prix/fond.jpg", (90, 50), (445, 270), fenetre)
+    while True:
+        try:
+            data = conn.recv(1024)
+            nombre = int.from_bytes(data, "big")
+            if nombre==4004:
+                result = quitScreen(fenetre, connexion, "#5E0066", "#0F0011")
+                if result=="NULL":
+                    return "404"
+            elif nombre==0:
+                break
+            else:
+                rectwidth = printImage("./image/juste prix/fond.jpg", (90, 50), (445, 270), fenetre).width
+                printText(str(nombre), 72, "black", (rectwidth/2 + 445, 270), fenetre, Alignement="Center")
+                pygame.display.flip()
+                ton_nombre=nombre
+        except BlockingIOError:
+            pass
+                            
+        for event in pygame.event.get():
+            if (event.type == pygame.QUIT): 
                     return "NULL"
+            
+    return ton_nombre
 
 
-
-    def recv_number(connexion):
-        conn=connexion[0] 
-        ton_nombre=0
-        printImage("./image/juste prix/fond.jpg", (90, 50), (445, 270), fenetre)
-        while True:
-            try:
-                data = conn.recv(1024)
-                nombre = int.from_bytes(data, "big")
-                if nombre==4004:
-                    result = quitScreen(fenetre, connexion, "#5E0066", "#0F0011")
-                    if result=="NULL":
-                        return "404"
-                elif nombre==0:
-                    break
-                else:
-                    rectwidth = printImage("./image/juste prix/fond.jpg", (90, 50), (445, 270), fenetre).width
-                    printText(str(nombre), 72, "black", (rectwidth/2 + 445, 270), fenetre, Alignement="Center")
-                    pygame.display.flip()
-                    ton_nombre=nombre
-            except BlockingIOError:
-                pass
-                                
-            for event in pygame.event.get():
-                if (event.type == pygame.QUIT): 
-                        return "NULL"
+def justePrix(connexion=[None,None,None]):
                 
-        return ton_nombre
-                
-
     fenetre = initScreen((1000,600), "Juste prix", "#B707C6", './image/juste prix/icon.png')
 
     printImage("./image/juste prix/play.png", (700, 549.5), (150,-10), fenetre)
@@ -125,13 +129,13 @@ def justePrix(connexion=[None,None,None]):
     fin = 0
     while fin == 0:
         for event in pygame.event.get():
-            if (event.type == MOUSEBUTTONUP):
+            if (event.type == pygame.MOUSEBUTTONUP):
                     x = event.pos[0]
                     y = event.pos[1]
                     if y > 324 and y < 539 and x > 150 and x < 850:
                         fin=1
             
-            if (event.type == QUIT): 
+            if (event.type == pygame.QUIT): 
                     return 0
 
 
@@ -157,7 +161,7 @@ def justePrix(connexion=[None,None,None]):
         fin = 0
         while fin == 0:
             for event in pygame.event.get():
-                if (event.type == MOUSEBUTTONUP):
+                if (event.type == pygame.MOUSEBUTTONUP):
                         x = event.pos[0]
                         y = event.pos[1]
                         if x > 159 and x < 858 and y > 69 and y < 236:
@@ -180,7 +184,7 @@ def justePrix(connexion=[None,None,None]):
                                 nbrj = 2
                                 fin=1 
                 
-                if (event.type == QUIT): 
+                if (event.type == pygame.QUIT): 
                     return 0
                 
                 
@@ -253,7 +257,7 @@ def justePrix(connexion=[None,None,None]):
                         printText("<" + str(borne_sup), 72, "black", (550, 270), fenetre)
                         pygame.display.flip()
 
-                        ton_nombre = choix_nombre()
+                        ton_nombre = choix_nombre(fenetre)
                         if ton_nombre == "NULL":
                             return 0
 
@@ -287,7 +291,7 @@ def justePrix(connexion=[None,None,None]):
                             fin = 0
                             while fin == 0:
                                 for event in pygame.event.get():
-                                    if (event.type == MOUSEBUTTONUP):
+                                    if (event.type == pygame.MOUSEBUTTONUP):
                                         x = event.pos[0]
                                         y = event.pos[1]
                                         if x > 680 and x < 977 and y > 500 and y < 579:
@@ -299,7 +303,7 @@ def justePrix(connexion=[None,None,None]):
                                             restart=1
                                             end=1
                     
-                                    if (event.type == QUIT): 
+                                    if (event.type == pygame.QUIT): 
                                         return 0
 
                         pygame.display.flip()
@@ -317,7 +321,7 @@ def justePrix(connexion=[None,None,None]):
                             fin = 0
                             while fin == 0:
                                 for event in pygame.event.get():
-                                    if (event.type == MOUSEBUTTONUP):
+                                    if (event.type == pygame.MOUSEBUTTONUP):
                                         x = event.pos[0]
                                         y = event.pos[1]
                                         if x > 680 and x < 977 and y > 500 and y < 579:
@@ -332,7 +336,7 @@ def justePrix(connexion=[None,None,None]):
                                             end=1
 
 
-                                    if (event.type == QUIT): 
+                                    if (event.type == pygame.QUIT): 
                                         return 0
 
 
@@ -419,9 +423,9 @@ def justePrix(connexion=[None,None,None]):
                         pygame.display.flip()
 
                         if conn==None or connexion[2]==True and kijou%2==0 or connexion[2]==False and kijou%2==1:
-                            ton_nombre = choix_nombre(conn)
+                            ton_nombre = choix_nombre(fenetre, connexion)
                         elif connexion[2]==True and kijou%2==1 or connexion[2]==False and kijou%2==0:
-                            ton_nombre = recv_number(connexion)
+                            ton_nombre = recv_number(connexion, fenetre)
                             if ton_nombre=="404":
                                 return 0
                         
@@ -469,7 +473,7 @@ def justePrix(connexion=[None,None,None]):
                             fin = 0
                             while fin == 0:
                                 for event in pygame.event.get():
-                                    if (event.type == MOUSEBUTTONUP):
+                                    if (event.type == pygame.MOUSEBUTTONUP):
                                         x = event.pos[0]
                                         y = event.pos[1]
                                         if x > 680 and x < 977 and y > 500 and y < 579:
@@ -484,7 +488,7 @@ def justePrix(connexion=[None,None,None]):
                                                 conn.send((404).to_bytes(2)) 
 
                     
-                                    if (event.type == QUIT):
+                                    if (event.type == pygame.QUIT):
                                         if conn!=None:
                                             conn.send((404).to_bytes(2)) 
                                         return 0
@@ -518,7 +522,7 @@ def justePrix(connexion=[None,None,None]):
                             fin = 0
                             while fin == 0:
                                 for event in pygame.event.get():
-                                    if (event.type == MOUSEBUTTONUP):
+                                    if (event.type == pygame.MOUSEBUTTONUP):
                                         x = event.pos[0]
                                         y = event.pos[1]
                                         if x > 680 and x < 977 and y > 500 and y < 579:
@@ -533,7 +537,7 @@ def justePrix(connexion=[None,None,None]):
                                             end=1
 
 
-                                    if (event.type == QUIT):
+                                    if (event.type == pygame.QUIT):
                                         if conn!=None:
                                             conn.send((4004).to_bytes(2)) 
                                         return 0

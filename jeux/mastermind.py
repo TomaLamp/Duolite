@@ -1,24 +1,29 @@
-from pygame import *
 import pygame
 import pickle
-from random import *
+import random
 from module.pygameCore import *
 from module.LANscreen import *
 
+def affich_combi(l : list, tour : int, fenetre : pygame.Surface):
+    """
+    Permet d'afficher la combinaison
+    - l : la liste qui contient la combinaison
+    - tour : le tour actuelle 
+    - fenetre : la fenetre sur laquelle afficher la combinaison
+    """
+
+    yb = [85, 127, 155, 183, 212, 241, 269, 298, 326, 354, 383, 412, 440, 469, 497, 526, 554]
+    xb = [447, 475, 503, 531]
+
+    for i in range(len(l)):
+        if l[i]=="blanc":
+            printImage("./image/mastermind/p_blanc.png", (20, 20), [xb[i]+i,yb[17-tour]+3], fenetre)
+        else:
+            printImage(f"./image/mastermind/p_{l[i]}.png", (25, 25), [xb[i],yb[17-tour]], fenetre)
+        pygame.display.flip()
+
 
 def mastermind(connexion=[None, None, None]):
-
-    def affich_combi(l, tour):
-
-        yb = [85, 127, 155, 183, 212, 241, 269, 298, 326, 354, 383, 412, 440, 469, 497, 526, 554]
-        xb = [447, 475, 503, 531]
-
-        for i in range(len(l)):
-            if l[i]=="blanc":
-                printImage("./image/mastermind/p_blanc.png", (20, 20), [xb[i]+i,yb[17-tour]+3], fenetre)
-            else:
-                printImage(f"./image/mastermind/p_{l[i]}.png", (25, 25), [xb[i],yb[17-tour]], fenetre)
-            pygame.display.flip()
 
     fenetre = initScreen((1000,600), "mastermind", "#DD00E4", './image/mastermind/icon.jpg')
 
@@ -36,14 +41,14 @@ def mastermind(connexion=[None, None, None]):
     fin = 0
     while fin == 0:
         for event in pygame.event.get():
-            if (event.type == MOUSEBUTTONUP):
+            if (event.type == pygame.MOUSEBUTTONUP):
                 x = event.pos[0]
                 y = event.pos[1]
 
                 if x > 150 and x < 850 and y > 60 and y < 487:
                     fin = 1 
                             
-            if (event.type == KEYDOWN) or (event.type == QUIT): 
+            if (event.type == pygame.KEYDOWN) or (event.type == pygame.QUIT): 
                 return 0
 
 
@@ -59,7 +64,7 @@ def mastermind(connexion=[None, None, None]):
 
             for event in pygame.event.get():
 
-                if (event.type == MOUSEBUTTONUP):
+                if (event.type == pygame.MOUSEBUTTONUP):
                         x = event.pos[0]
                         y = event.pos[1]
                         if x>125 and x<875 and y>65 and y<250.7:
@@ -80,7 +85,7 @@ def mastermind(connexion=[None, None, None]):
                                 nbjoueur = 2
 
 
-                if (event.type == QUIT): 
+                if (event.type == pygame.QUIT): 
                     return 0
 
 
@@ -136,7 +141,7 @@ def mastermind(connexion=[None, None, None]):
 
             if conn==None or connexion[2]==True:
                 for i in range(4):
-                    combinaison.append(choice(couleur))
+                    combinaison.append(random.choice(couleur))
                 
                 if conn!= None:
                     conn.send(pickle.dumps(combinaison))
@@ -161,7 +166,7 @@ def mastermind(connexion=[None, None, None]):
                     fin = 0
                     while fin == 0:
                         for event in pygame.event.get():
-                            if (event.type == MOUSEBUTTONUP):
+                            if (event.type == pygame.MOUSEBUTTONUP):
                                 x = event.pos[0]
                                 y = event.pos[1]
                                 #print(x,y)
@@ -180,7 +185,7 @@ def mastermind(connexion=[None, None, None]):
                                             choix.append("bleu")
                                         elif x<180:
                                             choix.append("jaune")
-                                    affich_combi(choix, tour)
+                                    affich_combi(choix, tour, fenetre)
                                     if conn!=None:
                                         conn.send(pickle.dumps(choix))
                                 if x > 180 and x < 230 and y > 470 and y < 570 and len(choix)!=0:
@@ -189,7 +194,7 @@ def mastermind(connexion=[None, None, None]):
                                     printImage("./image/mastermind/fond.png", (170, 22.58), [xc,yc[16-tour]], fenetre)
                                     pygame.display.flip()
 
-                                    affich_combi(choix, tour)
+                                    affich_combi(choix, tour, fenetre)
                                     if conn!=None:
                                         conn.send(pickle.dumps(choix))
 
@@ -198,7 +203,7 @@ def mastermind(connexion=[None, None, None]):
                                     if conn!=None:
                                         conn.send(pickle.dumps(["next"]))
 
-                            if (event.type == QUIT): 
+                            if (event.type == pygame.QUIT): 
                                 if conn!=None:
                                     conn.send(pickle.dumps(["404"]))
                                 return 0
@@ -216,7 +221,7 @@ def mastermind(connexion=[None, None, None]):
                             else:
                                 choix=list(data)
                                 printImage("./image/mastermind/fond.png", (170, 22.58), [xc,yc[16-tour]], fenetre)
-                                affich_combi(choix, tour)
+                                affich_combi(choix, tour, fenetre)
                         except BlockingIOError:
                             pass 
 
@@ -260,7 +265,7 @@ def mastermind(connexion=[None, None, None]):
                                 
 
             
-            affich_combi(combinaison, 17)
+            affich_combi(combinaison, 17, fenetre)
 
             if nbjoueur==1:
                 point1+= 17-tour
@@ -302,7 +307,7 @@ def mastermind(connexion=[None, None, None]):
             end=0
             while end==0:
                 for event in pygame.event.get():
-                    if (event.type == MOUSEBUTTONUP):
+                    if (event.type == pygame.MOUSEBUTTONUP):
                         x = event.pos[0]
                         y = event.pos[1]
                         if x>771 and x<970 and y>495 and y<540:
@@ -314,7 +319,7 @@ def mastermind(connexion=[None, None, None]):
                                 conn.send(pickle.dumps(["404"]))
 
 
-                    if (event.type == QUIT): 
+                    if (event.type == pygame.QUIT): 
                         if conn!=None:
                             conn.send(pickle.dumps(["404"]))
                         return 0

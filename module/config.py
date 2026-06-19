@@ -1,9 +1,10 @@
 import pygame
-from pygame import *
 from module.pygameCore import *
 import time
 
-def configScreen(fenetre):
+def configScreen(fenetre : pygame.Surface) -> int:
+    """Créé une fenetre de configuration de nom"""
+    
     pygame.draw.rect(fenetre, "#272728", (205,105,600,400), border_radius=50)
     pygame.draw.rect(fenetre, "#001751", (200,100,600,400), border_radius=50)
 
@@ -54,14 +55,14 @@ def configScreen(fenetre):
                 elif x!=0 and y!=0:
                     choose=0
 
-            if event.type == KEYDOWN:
-                if pygame.key.get_pressed()[K_LSHIFT] and event.key<=122 and event.key>=97:
+            if event.type == pygame.KEYDOWN:
+                if pygame.key.get_pressed()[pygame.K_LSHIFT] and event.key<=122 and event.key>=97:
                     letter = chr(event.key).upper()
                 elif event.key<=122 and event.key>=97:
                     letter = chr(event.key)
-                elif event.key==K_BACKSPACE:
+                elif event.key==pygame.K_BACKSPACE:
                     letter = "<"
-                elif event.key==K_SPACE:
+                elif event.key==pygame.K_SPACE:
                     letter=" "
                 elif event.key>1073741912 and event.key<1073741922:
                     letter = str(event.key-1073741912)
@@ -89,7 +90,7 @@ def configScreen(fenetre):
                         nomj2 += letter
 
             if (event.type == pygame.QUIT): 
-                    sys.exit()
+                exit()
         
         
         if choose==1:

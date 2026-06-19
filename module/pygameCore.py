@@ -1,8 +1,8 @@
 import pygame
-import sys
 
+def initScreen(size : tuple[int, int], title : str, color : str, iconPath : str) -> pygame.Surface:
+    """Créé une fenetre avec comme parametre la taille, le titre, la couleur de fond et une icon"""
 
-def initScreen(size, title, color, iconPath):
     pygame.init()
     pygame.font.init()
     fenetre = pygame.display.set_mode(size)
@@ -13,7 +13,17 @@ def initScreen(size, title, color, iconPath):
 
     return fenetre
 
-def printImage(path, size, position, fenetre, rotation=0, Alignement="Left"):
+def printImage(path : str, size : tuple[int, int], position : tuple[int, int], fenetre : pygame.Surface, rotation : int = 0, Alignement : str = "Left") -> pygame.Rect:
+    """
+    Affiche une image sur une fenetre
+    - path : chemin relatif de l'image
+    - size : la taille de l'image (sizex, sizey)
+    - position : la position de l'image (x,y)
+    - fenetre : la fenetre sur laquelle afficher l'image
+    - rotation : la rotation de l'image
+    - Alignement : A partir d'oû la position x va mettre l'image, Left / Center / Right
+    """
+
     bille = pygame.image.load(path).convert_alpha()
     bille = pygame.transform.scale(bille, size)
     bille = pygame.transform.rotate(bille, rotation)
@@ -31,7 +41,20 @@ def printImage(path, size, position, fenetre, rotation=0, Alignement="Left"):
 
     return rect
 
-def printText(text, fontSize, color, position, fenetre, Alignement="Left", police=None, underline=False, Alignementy="Bottom"):
+def printText(text : str, fontSize : int, color : str, position : tuple[int, int], fenetre : pygame.Surface, Alignement : str = "Left", police : str = None, underline : bool = False, Alignementy : str = "Bottom") -> pygame.Rect:
+    """
+    Affiche un texte sur une fenetre
+    - text : Le texte à afficher
+    - fontsize : la taille de police du texte
+    - color : la couleur du texte
+    - position : la position de l'image (x,y)
+    - fenetre : la fenetre sur laquelle afficher l'image
+    - Alignement : A partir d'oû la position x va mettre l'image, Left / Center / Right
+    - police : la police d'écriture du texte
+    - underline : si le texte est souligné
+    - Alignementy : : A partir d'oû la position y va mettre l'image, Top / Center / Bottom
+    """
+
     police = pygame.font.Font(police, fontSize)
     police.underline = underline
     texte = police.render(text,True,color)
@@ -56,7 +79,9 @@ def printText(text, fontSize, color, position, fenetre, Alignement="Left", polic
     return rect
 
 
-def get_pos():
+def get_pos() -> int:
+    """Retourne la position du clique de la souris"""
+
     x=0
     y=0
     for event in pygame.event.get():
@@ -70,7 +95,9 @@ def get_pos():
     return x,y
 
 
-def get_nom():
+def get_nom() -> str:
+    """Retourne les noms qui sont dans le fichiers log.txt"""
+    
     fichier = open("./annexes/log.txt", "r")
     log = fichier.read()   
     fichier.close()

@@ -10,7 +10,10 @@ import cloudpickle as cpickle
 
 # %% classes
 class De:
-    def __init__(self, lettres=None):
+    def __init__(self, lettres : str = None) -> None:
+        """Crée un dé avec ses 6 faces contenant des lettres
+        - lettres : chaîne contenant les 6 lettres du dé (optionnel)
+        """
         if lettres:
             self.faces = lettres[:6]  # Assurez-vous que 'lettres' a au moins 6 caractères
             self.face_visible = self.faces[random.randint(0, 5)]
@@ -19,23 +22,27 @@ class De:
             self.face_visible = '-'
 
     @property
-    def Face_visible(self):
+    def Face_visible(self) -> str:
+        """Retourne la face visible du dé"""
         return self.face_visible
 
     @Face_visible.setter
-    def Face_visible(self, value):
+    def Face_visible(self, value : str) -> None:
+        """Définit la face visible du dé"""
         self.face_visible = value
 
     @property
-    def Faces(self):
+    def Faces(self) -> list:
+        """Retourne la liste des 6 faces du dé"""
         return self.faces
 
-    def Lancer(self):
+    def Lancer(self) -> None:
+        """Lance le dé et affecte une face aléatoire à la face visible"""
         self.face_visible = self.faces[random.randint(0, 5)]
 
 
 class Dictionary:
-    def __init__(self, langue):
+    def __init__(self, langue : str) -> None:
         """
         Constructeur de la classe Dictionary, initialise les mots en fonction de la langue.
         """
@@ -49,9 +56,10 @@ class Dictionary:
             self.mots = [""]
 
     @staticmethod
-    def TriFusion(tab):
-        """
-        Implémentation de l'algorithme de tri fusion pour trier un tableau de mots.
+    def TriFusion(tab : list) -> list:
+        """Trie un tableau de mots en utilisant l'algorithme de tri fusion
+        - tab : tableau à trier
+        - Retourne : le tableau trié
         """
         if len(tab) <= 1:
             return tab
@@ -65,9 +73,11 @@ class Dictionary:
         return Dictionary.Fusion(Dictionary.TriFusion(a), Dictionary.TriFusion(b))
 
     @staticmethod
-    def Fusion(a, b):
-        """
-        Fusionne deux listes triées en une seule liste triée.
+    def Fusion(a : list, b : list) -> list:
+        """Fusionne deux listes triées en une seule liste triée
+        - a : première liste triée
+        - b : deuxième liste triée
+        - Retourne : la liste fusionnée et triée
         """
         if b is None:
             return a
@@ -97,9 +107,12 @@ class Dictionary:
 
         return c
 
-    def RechDichoRecursif(self, mot, fin=None, debut=0):
-        """
-        Recherche dichotomique récursive pour vérifier si un mot est dans la liste triée des mots.
+    def RechDichoRecursif(self, mot : str, fin : int = None, debut : int = 0) -> bool:
+        """Recherche dichotomique récursive pour vérifier si un mot est dans le dictionnaire
+        - mot : mot à rechercher
+        - fin : index de fin (optionnel)
+        - debut : index de début (optionnel)
+        - Retourne : True si le mot est trouvé, False sinon
         """
         if fin is None:
             fin = len(self.mots) - 1
@@ -118,7 +131,12 @@ class Dictionary:
             return self.RechDichoRecursif(mot, mid_index - 1, debut)
 
 class Plateau:
-    def __init__(self, fichier="./annexes/Lettres.txt", taille=4, langue="fr"):
+    def __init__(self, fichier : str = "./annexes/Lettres.txt", taille : int = 4, langue : str = "fr") -> None:
+        """Crée le plateau de jeu avec une grille de dés
+        - fichier : chemin du fichier contenant les lettres
+        - taille : taille de la grille (4 par défaut)
+        - langue : langue utilisée pour le dictionnaire
+        """
         self.dico = Dictionary(langue)
 
         # Lire le fichier et remplir le tableau fich
@@ -169,12 +187,13 @@ class Plateau:
                     comp += 1
     
     @property
-    def Grille(self):
+    def Grille(self) -> list:
+        """Retourne la grille de dés du plateau"""
         return self.grille
     
-    def AfficheGrille(self, fenetre):
-        """
-        Affiche la grille en ne considérant que les éléments à l'intérieur des bordures.
+    def AfficheGrille(self, fenetre : pygame.Surface) -> None:
+        """Affiche la grille des dés sur la fenêtre
+        - fenetre : la fenetre pygame où afficher
         """
         fenetre.fill("#A2B203")
         for i in range(1, len(self.grille) - 1):  # Exclure les bordures
@@ -186,9 +205,12 @@ class Plateau:
 
                 
 
-    def MotLie(self, mot, x, y, pos=0):
-        """
-        Vérifie si le mot est lié à partir de la position (x, y).
+    def MotLie(self, mot : str, x : int, y : int, pos : int = 0) -> bool:
+        """Vérifie si les lettres du mot sont liées adjacentes sur le plateau
+        - mot : mot à vérifier
+        - x, y : position de départ
+        - pos : position courante dans le mot
+        - Retourne : True si le mot est valide, False sinon
         """
         if pos >= len(mot):
             return True  # Si toutes les lettres ont été trouvées
@@ -213,9 +235,10 @@ class Plateau:
         return False
     
 
-    def MotDansGrille(self, mot):
-        """
-        Vérifie si un mot est présent dans la grille.
+    def MotDansGrille(self, mot : str) -> bool:
+        """Vérifie si un mot complet existe dans la grille
+        - mot : mot à vérifier
+        - Retourne : True si le mot est dans la grille, False sinon
         """
         res = False
         for i in range(1, len(self.grille) - 1):  # Parcourir les cases internes de la grille
@@ -228,23 +251,23 @@ class Plateau:
                         break  # Sortir dès que le mot est trouvé
         return res
 
-    def Test_Plateau(self, mot):
-        """
-        Vérifie si un mot est dans la grille et dans le dictionnaire.
+    def Test_Plateau(self, mot : str) -> bool:
+        """Teste si un mot est valide (existe dans le dictionnaire et la grille)
+        - mot : mot à tester
+        - Retourne : True si le mot est valide, False sinon
         """
         return self.MotDansGrille(mot) and self.dico.RechDichoRecursif(mot)
 
-    def LancePlateau(self):
-        """
-        Lance tous les dés dans la grille.
-        """
+    def LancePlateau(self) -> None:
+        """Lance tous les dés du plateau pour générer de nouvelles faces visibles"""
         for i in range(1, len(self.grille) - 1):  # Parcourir les cases internes de la grille
             for j in range(1, len(self.grille[i]) - 1):
                 self.grille[i][j].Lancer()
 
-    def ScoreMot(self, mot):
-        """
-        Calcule le score d'un mot en fonction de la valeur des lettres définies dans le fichier de configuration.
+    def ScoreMot(self, mot : str) -> int:
+        """Calcule le score d'un mot en fonction de sa longueur
+        - mot : mot dont calculer le score
+        - Retourne : le score du mot
         """
         score = 0
         atteind = False
@@ -260,18 +283,18 @@ class Plateau:
 
 
 class Player:
-    def __init__(self, name):
-        """
-        Constructeur de la classe Player.
-        Initialise le nom du joueur, le score et la liste des mots trouvés.
+    def __init__(self, name : str) -> None:
+        """Crée un joueur avec un nom et initialise son score et ses mots
+        - name : nom du joueur
         """
         self.name = name
         self.score = 0
         self.list = []
 
-    def Contain(self, mot):
-        """
-        Vérifie si le mot donné est déjà présent dans la liste des mots du joueur.
+    def Contain(self, mot : str) -> bool:
+        """Vérifie si un mot a déjà été trouvé par le joueur
+        - mot : mot à vérifier
+        - Retourne : True si le mot est déjà trouvé, False sinon
         """
         test = 0
         for c in self.list:
@@ -279,19 +302,23 @@ class Player:
                 test += 1
         return test > 0
 
-    def Add_Mot(self, mot):
-        """
-        Ajoute un mot à la liste des mots du joueur si celui-ci n'y figure pas déjà.
+    def Add_Mot(self, mot : str) -> None:
+        """Ajoute un mot à la liste des mots trouvés par le joueur
+        - mot : mot à ajouter
         """
         if not self.Contain(mot):
             self.list.append(mot)
 
 
 class Jeu:
-    def __init__(self, langue, taille, nb_joueur,connexion, fenetre, nomj1, nomj2):
-        """
-        Constructeur de la classe Jeu.
-        Initialise les joueurs et la grille du jeu.
+    def __init__(self, langue : str, taille : int, nb_joueur : int, connexion : list, fenetre : pygame.Surface, nomj1 : str, nomj2 : str) -> None:
+        """Initialise une partie de Boogle
+        - langue : langue du jeu
+        - taille : taille de la grille
+        - nb_joueur : nombre de joueurs
+        - connexion : paramètres de connexion LAN
+        - fenetre : fenetre pygame du jeu
+        - nomj1, nomj2 : noms des joueurs
         """
         self.joueurs = [Player(nomj1)]
         self.grille = Plateau("./annexes/Lettres.txt", taille, langue)
@@ -302,10 +329,8 @@ class Jeu:
         if nb_joueur==2:
             self.joueurs.append(Player(nomj2))
 
-    def Gagnant(self):
-        """
-        Détermine le joueur avec le score le plus élevé.
-        """
+    def Gagnant(self) -> 'Player':
+        """Détermine et retourne le joueur avec le score le plus élevé"""
         max_score = 0
         gagnant = self.joueurs[0]
 
@@ -316,10 +341,8 @@ class Jeu:
 
         return gagnant
 
-    def OnTimedEvent(self):
-        """
-        Gère l'événement de fin de temps pour un tour.
-        """
+    def OnTimedEvent(self) -> None:
+        """Gère l'événement de fin de temps (timeout) pour un tour de jeu"""
         printImage("./image/boogle/vert.png", (800, 80), (100,10), self.fenetre)
         printImage("./image/boogle/suivant.png", (250, 60.913), [740, 270], self.fenetre)
         printText("Fin du tour, appuyez sur entrée", 60, pygame.Color("black"), (200, 10), self.fenetre)
@@ -327,7 +350,11 @@ class Jeu:
         self.fin_timer = True
         self.kijou+=1
 
-    def get_lettre(self, startTime):
+    def get_lettre(self, startTime : float) -> str:
+        """Récupère la lettre saisie par le joueur (clavier ou souris)
+        - startTime : timestamp du début du tour
+        - Retourne : la lettre saisie ou un caractère spécial (< pour backspace, > pour valider)
+        """
         end = 0
         conn = self.connexion[0]
         lettre=" "
@@ -390,7 +417,11 @@ class Jeu:
                 printText(str(round(30-(time.time()-startTime))), 60, "black", (900, 550), self.fenetre)
                 pygame.display.flip()        
     
-    def get_mot(self, startTime):
+    def get_mot(self, startTime : float) -> str:
+        """Récupère le mot complet saisi par le joueur lettre par lettre
+        - startTime : timestamp du début du tour
+        - Retourne : le mot saisi ou une chaîne vide si timeout
+        """
         
         printImage("./image/boogle/vert.png", (1000, 80), (0,520), self.fenetre)
         pygame.display.flip()
@@ -417,10 +448,9 @@ class Jeu:
             lettre = self.get_lettre(startTime)
         return chaine
 
-    def Jouer(self):
-        """
-        Lance la partie.
-        Chaque joueur joue trois tours où ils choisissent des mots dans la grille.
+    def Jouer(self) -> int:
+        """Lance la partie de Boogle avec 3 tours par joueur
+        - Retourne : 0 en cas d'interruption, 1 si la partie s'est déroulée correctement
         """
         for _ in range(3):  # Trois tours par joueur
             self.kijou=0
@@ -503,7 +533,10 @@ class Jeu:
             pygame.display.flip()
 
 
-def boogle(connexion=[None, None, None]):
+def boogle(connexion=[None, None, None]) -> int:
+    """Fonction principale du jeu Boogle
+    - connexion : paramètres de connexion LAN
+    """
 
     fenetre = initScreen((1000,600), "boogle", "#A2B203","./image/boogle/icon.png")
 

@@ -5,89 +5,105 @@ from time import *
 from module.pygameCore import *
 from module.LANscreen import *
 
-def yams(connexion=[None, None, None]):
 
-    def affich(l, score):
-
-            for i in range(10):
-                if score[0]==0:
-                    a = randint(1,6)
-                    printImage(f"./image/421/de{a}.jpg", (100, 100), [83, 250], fenetre)
-                if score[1]==0:
-                    a = randint(1,6)
-                    printImage(f"./image/421/de{a}.jpg", (100, 100), [266, 250], fenetre)
-                if score[2]==0:
-                    a = randint(1,6)
-                    printImage(f"./image/421/de{a}.jpg", (100, 100), [449, 250], fenetre)
-                if score[3]==0:
-                    a = randint(1,6)
-                    printImage(f"./image/421/de{a}.jpg", (100, 100), [632, 250], fenetre)
-                if score[4]==0:
-                    a = randint(1,6)
-                    printImage(f"./image/421/de{a}.jpg", (100, 100), [817, 250], fenetre)
-                pygame.display.flip()
-                sleep(0.1)
-
-
-            if score[0]==0:
-                printImage(f"./image/421/de{l[0]}.jpg", (100, 100), [83, 250], fenetre)
-                pygame.display.flip()
-                sleep(0.1)
-            
-            if score[1]==0:
-                printImage(f"./image/421/de{l[1]}.jpg", (100, 100), [266, 250], fenetre)
-                pygame.display.flip()
-                sleep(0.1)
-
-            if score[2]==0:
-                printImage(f"./image/421/de{l[2]}.jpg", (100, 100), [449, 250], fenetre)
-                pygame.display.flip()
-                sleep(0.1)
-
-            if score[3]==0:
-                printImage(f"./image/421/de{l[3]}.jpg", (100, 100), [632, 250], fenetre)
-                pygame.display.flip()
-                sleep(0.1)
-
-            if score[4]==0:
-                printImage(f"./image/421/de{l[4]}.jpg", (100, 100), [817, 250], fenetre)
-                pygame.display.flip()
-                sleep(0.1)
-            
-            pygame.display.flip()
+def affich(l : list, score : list, fenetre : pygame.Surface) -> None:
+    """Affiche les dés en animant le lancer
+    - l : la liste des valeurs finales des dés
+    - score : l'état des dés (gardés ou non)
+    - fenetre : la fenetre sur laquelle afficher
+    """
+    for i in range(10):
+        if score[0]==0:
+            a = randint(1,6)
+            printImage(f"./image/421/de{a}.jpg", (100, 100), [83, 250], fenetre)
+        if score[1]==0:
+            a = randint(1,6)
+            printImage(f"./image/421/de{a}.jpg", (100, 100), [266, 250], fenetre)
+        if score[2]==0:
+            a = randint(1,6)
+            printImage(f"./image/421/de{a}.jpg", (100, 100), [449, 250], fenetre)
+        if score[3]==0:
+            a = randint(1,6)
+            printImage(f"./image/421/de{a}.jpg", (100, 100), [632, 250], fenetre)
+        if score[4]==0:
+            a = randint(1,6)
+            printImage(f"./image/421/de{a}.jpg", (100, 100), [817, 250], fenetre)
+        pygame.display.flip()
+        sleep(0.1)
 
 
-    def keep(d, pos, val):
-            if d==1:
-                l='R'
-            else:
-                l=''
+    if score[0]==0:
+        printImage(f"./image/421/de{l[0]}.jpg", (100, 100), [83, 250], fenetre)
+        pygame.display.flip()
+        sleep(0.1)
+    
+    if score[1]==0:
+        printImage(f"./image/421/de{l[1]}.jpg", (100, 100), [266, 250], fenetre)
+        pygame.display.flip()
+        sleep(0.1)
 
-            p=[83, 266, 449, 632, 817] 
-            
-            printImage(f"./image/421/de{l}{val}.jpg", (100, 100), [p[pos-1], 250], fenetre)
-            pygame.display.flip()
+    if score[2]==0:
+        printImage(f"./image/421/de{l[2]}.jpg", (100, 100), [449, 250], fenetre)
+        pygame.display.flip()
+        sleep(0.1)
 
-    def tirage(d1, d2, d3, d4, d5):
+    if score[3]==0:
+        printImage(f"./image/421/de{l[3]}.jpg", (100, 100), [632, 250], fenetre)
+        pygame.display.flip()
+        sleep(0.1)
 
-            l = [0, 0, 0, 0, 0]
-            if d1==1:
-                l[0] = randint(1, 6)
-            if d2==1:
-                l[1] = randint(1, 6)
-            if d3==1:
-                l[2] = randint(1, 6)
-            if d4==1:
-                l[3] = randint(1, 6)
-            if d5==1:
-                l[4] = randint(1, 6)
+    if score[4]==0:
+        printImage(f"./image/421/de{l[4]}.jpg", (100, 100), [817, 250], fenetre)
+        pygame.display.flip()
+        sleep(0.1)
+    
+    pygame.display.flip()
 
-            return l
 
+def keep(d : int, pos : int, val : int, fenetre : pygame.Surface) -> None:
+    """Garde un dé en affichant la version rouge
+    - d : l'état du dé (1 ou 0)
+    - pos : la position du dé (1-5)
+    - val : la valeur affichée
+    - fenetre : la fenetre sur laquelle afficher
+    """
+    if d==1:
+        l='R'
+    else:
+        l=''
+
+    p=[83, 266, 449, 632, 817] 
+    
+    printImage(f"./image/421/de{l}{val}.jpg", (100, 100), [p[pos-1], 250], fenetre)
+    pygame.display.flip()
+
+
+def tirage(d1 : int, d2 : int, d3 : int, d4 : int, d5 : int) -> list:
+    """Lance les dés selon les paramètres
+    - d1, d2, d3, d4, d5 : 1 si le dé doit être lancé, 0 sinon
+    - Retourne : la liste des valeurs des dés
+    """
+    l = [0, 0, 0, 0, 0]
+    if d1==1:
+        l[0] = randint(1, 6)
+    if d2==1:
+        l[1] = randint(1, 6)
+    if d3==1:
+        l[2] = randint(1, 6)
+    if d4==1:
+        l[3] = randint(1, 6)
+    if d5==1:
+        l[4] = randint(1, 6)
+
+    return l
+
+
+def yams(connexion=[None, None, None]) -> int:
+    """Fonction principale du jeu Yams
+    - connexion : paramètres de connexion LAN
+    """
 
     fenetre = initScreen((1000,600), "Yams", "orange", './image/yams/icon.jpg')
-
-
 
     printImage("./image/yams/play.png", (700, 356.84), (150,110), fenetre)
     pygame.display.flip()
@@ -218,60 +234,60 @@ def yams(connexion=[None, None, None]):
                             except BlockingIOError:
                                 pass 
 
-                    affich(lancer, score1)
+                    affich(lancer, score1, fenetre)
                     coup+=1
                 if x > 83 and x < 183 and y > 250 and y < 350 and coup!=0:
                     if d1 == 1:
-                        keep(d1, 1, lancer[0])
+                        keep(d1, 1, lancer[0], fenetre)
                         score1[0] = lancer[0]
                         lancer[0] = 0
                         d1 = 0
                     else:
-                        keep(d1, 1, score1[0])
+                        keep(d1, 1, score1[0], fenetre)
                         lancer[0] = score1[0]
                         score1[0] = 0
                         d1 = 1
                 if x > 266 and x < 366 and y > 250 and y < 350 and coup!=0:
                     if d2 == 1:
-                        keep(d2, 2, lancer[1])
+                        keep(d2, 2, lancer[1], fenetre)
                         score1[1] = lancer[1]
                         lancer[1] = 0
                         d2 = 0
                     else:
-                        keep(d2, 2, score1[1])
+                        keep(d2, 2, score1[1], fenetre)
                         lancer[1] = score1[1]
                         score1[1] = 0
                         d2 = 1
                 if x > 449 and x < 549 and y > 250 and y < 350 and coup!=0:
                     if d3 == 1:
-                        keep(d3, 3, lancer[2])
+                        keep(d3, 3, lancer[2], fenetre)
                         score1[2] = lancer[2]
                         lancer[2] = 0
                         d3 = 0
                     else:
-                        keep(d3, 3, score1[2])
+                        keep(d3, 3, score1[2], fenetre)
                         lancer[2] = score1[2]
                         score1[2] = 0
                         d3 = 1
                 if x > 632 and x < 732 and y > 250 and y < 350 and coup!=0:
                     if d4 == 1:
-                        keep(d4, 4, lancer[3])
+                        keep(d4, 4, lancer[3], fenetre)
                         score1[3] = lancer[3]
                         lancer[3] = 0
                         d4 = 0
                     else:
-                        keep(d4, 4, score1[3])
+                        keep(d4, 4, score1[3], fenetre)
                         lancer[3] = score1[3]
                         score1[3] = 0
                         d4 = 1
                 if x > 817 and x < 917 and y > 250 and y < 350 and coup!=0:
                     if d5 == 1:
-                        keep(d5, 5, lancer[4])
+                        keep(d5, 5, lancer[4], fenetre)
                         score1[4] = lancer[4]
                         lancer[4] = 0
                         d5 = 0
                     else:
-                        keep(d5, 5, score1[4])
+                        keep(d5, 5, score1[4], fenetre)
                         lancer[4] = score1[4]
                         score1[4] = 0
                         d5 = 1

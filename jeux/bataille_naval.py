@@ -1,5 +1,3 @@
-from pygame import *
-import pygame
 from module.pygameCore import *
 from module.LANscreen import *
 
@@ -109,7 +107,9 @@ total=[A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,C1,C2,C3,C4
 
 # %% fonctions
 
-def get_coordonee(case):
+def get_coordonee(case : str) -> int:
+    """Retourne les coordonnées de la case en paramètre"""
+
     if case[1:3] == "10":
         x = 418
     
@@ -140,9 +140,6 @@ def get_coordonee(case):
     elif case[1] == "9":
         x = 380
 
-    
-
-    
     if case[0:1] == "A":
         y = 177
 
@@ -175,7 +172,10 @@ def get_coordonee(case):
     
     return x,y
 
-def get_nbr_case(lettre):
+
+def get_nbr_case(lettre : str) -> int:
+    """Retourne la position de la case passé en paramètre"""
+
     if lettre[0:1] == "A":
         case = 0
     
@@ -208,11 +208,14 @@ def get_nbr_case(lettre):
     
     return case
 
-def get_case(kijou):
+
+def get_case(kijou : int) -> str:
+    """Choisis une case de la grille en fonction de qui est la personne qui joue"""
+
     end=0
     while end==0:
         for event in pygame.event.get():
-            if (event.type == MOUSEBUTTONUP):
+            if (event.type == pygame.MOUSEBUTTONUP):
                 x = event.pos[0]
                 y = event.pos[1]
                 casey = (y - 175)//41
@@ -228,10 +231,18 @@ def get_case(kijou):
                     case = str(lettres[casey]) + str(casex+1)
                     return case
 
-            if(event.type == QUIT): 
+            if(event.type == pygame.QUIT): 
                 return "NULL"
 
-def place_point(kijou, case, fenetre, image):
+
+def place_point(kijou : int, case : str, fenetre : pygame.Surface, image : str):
+    """
+    Place une image sur la case choisis
+    - kijou : la personne qui est en train de jouer, 1 / 2
+    - case : la case oû il faut afficher l'image
+    - fenetre : la fenetre sur laquelle afficher le bateau
+    - image : le chemin de l'image à afficher
+    """
     x,y = get_coordonee(case)
 
     if kijou == 2:
@@ -241,13 +252,28 @@ def place_point(kijou, case, fenetre, image):
     pygame.display.flip()
 
 
-def printt(textes, fenetre, color):
+def printt(textes : str, fenetre : pygame.Surface, color : str):
+    """Affiche le texte sur l'ecran du jeux de la couleur shouaitée"""
+
     printImage("./image/bataille_naval/fond texte.JPG", (1005, 100), (0,0), fenetre)
     printText(textes, 64, color, (502, 20), fenetre, Alignement="Center", police="./police/Modusa.ttf", underline=False)
     pygame.display.flip()
 
-def place_ship(kijou, bateau, fenetre):
-    image = "./image/bataille_naval/bateau" + str(len(bateau)) + ".png"
+
+def place_ship(kijou : int, bateau : list, fenetre : pygame.Surface, end : bool = False):
+    """
+    Place l\'image du bateau voulu sur la fenetre de jeux
+    - kijou : la personne qui est en train de jouer, 1 / 2
+    - bateau : la liste contenant les cases du bateaux
+    - fenetre : la fenetre sur laquelle afficher le bateau
+    - end : si le bateau à afficher est à la fin du jeux 
+    """
+
+    if end:
+        extension="R.png"
+    else:
+        extension=".png"
+    image = "./image/bataille_naval/bateau" + str(len(bateau)) + extension
     case = bateau[0]
 
     x,y = get_coordonee(case)
@@ -264,25 +290,14 @@ def place_ship(kijou, bateau, fenetre):
     
     pygame.display.flip()
 
-def place_Rship(kijou, bateau, fenetre):
-    image = "./image/bataille_naval/bateau" + str(len(bateau)) + "R.png"
-    case = bateau[0]
 
-    x,y = get_coordonee(case)
+def place_line(kijou : int, bateau : int, fenetre : pygame.Surface):
+    """
+    Place une ligne sur la selection des bateaux
+    - kijou : la personne qui est en train de jouer, 1 / 2
+    - bateau : la liste contenant les cases du bateaux
+    """
 
-    if kijou == 2:
-        x = x + 500
-
-    if len(bateau) == 1:
-        printImage(image, (40, 40), (x, y), fenetre)
-    elif bateau[0][0] == bateau[1][0]:
-        printImage(image, (40*len(bateau), 40), (x, y), fenetre)
-    else:
-        printImage(image, (40*len(bateau), 40), (x, y), fenetre, 90)
-    
-    pygame.display.flip()
-
-def place_line(kijou, bateau, fenetre):
     image = "./image/bataille_naval/red line.png"
     case = bateau[0]
 
@@ -300,7 +315,10 @@ def place_line(kijou, bateau, fenetre):
     
     pygame.display.flip()
 
-def copie_bateau(bateau):
+
+def copie_bateau(bateau : list) -> list:
+    """retourne la copie du bateau passé en paramètre"""
+
     copie = []
     lettre = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
     if bateau[0][0] == bateau[1][0]:
@@ -322,17 +340,18 @@ def copie_bateau(bateau):
         return copie
 
 
-def acote(lettre, choix):
+def acote(lettre : str, choix : str) -> bool:
+    """Teste si le choix est à coté de la case passé en paramètre dans lettre"""
+    
     case = 0
     end = 0
 
     case = get_nbr_case(lettre)*10 
 
-    chiffre = lettre[1:2]
-    chiffre = int(chiffre)
+    chiffre = int(lettre[1:2])
     
     d10 = ["A10","B10","C10","D10","E10","F10","G10","H10","I10","J10"]
-    entier = [1,2,3,4,5,6,7,8,9,10]
+    
     if lettre in d10 :
         while(end==0): 
             if choix not in total[(chiffre + case) + 8]:
@@ -348,7 +367,16 @@ def acote(lettre, choix):
                 end += 1
                 return True
 
-def suite(case1, case2, choix, nbrcase):
+
+def suite(case1 : str, case2 : str, choix : str, nbrcase : int) -> bool:
+    """
+    Teste si le choix est aligné avec 2 autres cases
+    - case1 : la 1er case aligné
+    - case2 : la 2e case aligné
+    - choix : la case à tester
+    - nbrcase : le nombre de case qui composen l'alignement
+    """
+
     end = 0
     verifinverse = 0
     verif = 0
@@ -442,9 +470,16 @@ def suite(case1, case2, choix, nbrcase):
             return True
 
 
-def previsual(case2, case3, nbrcase, bateau):
+def previsual(case2 : str, case3 : str, nbrcase : int, bateau : list) -> bool:
+    """
+    Teste si la taille du bateau va rentrer dans la grille
+    - case2 : la 1er case du bateau
+    - case3 : la 2e case du bateau
+    - nbrcase : la taille du bateau
+    - bateau : la liste definissant le bateau
+    """
+
     end = 0
-    sortie = 0
     while (end==0):
         droite = 0
         gauche = 0
@@ -555,11 +590,13 @@ def previsual(case2, case3, nbrcase, bateau):
 
             
 
-def notdouble(c, bateau, bateauA):
+def notdouble(case : str, bateau : list) -> bool:
+    """Teste si la case est deja utilisé dans la liste de tous les bateaux"""
+    
     end = 0
     grille=["A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","B1","B2","B3","B4","B5","B6","B7","B8","B9","B10","C1","C2","C3","C4","C5","C6","C7","C8","C9","C10","D1","D2","D3","D4","D5","D6","D7","D8","D9","D10","E1","E2","E3","E4","E5","E6","E7","E8","E9","E10","F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","G1","G2","G3","G4","G5","G6","G7","G8","G9","G10","H1","H2","H3","H4","H5","H6","H7","H8","H9","H10","I1","I2","I3","I4","I5","I6","I7","I8","I9","I10","J1","J2","J3","J4","J5","J6","J7","J8","J9","J10"]
     while (end==0):
-        if c in bateau or c not in grille:
+        if case in bateau or case not in grille:
             
             return False
         else:
@@ -594,7 +631,7 @@ def bataille_naval(connexion=[None, None, None]):
     fin = 0
     while fin == 0:
         for event in pygame.event.get():
-            if (event.type == MOUSEBUTTONUP):
+            if (event.type == pygame.MOUSEBUTTONUP):
                 x = event.pos[0]
                 y = event.pos[1]
                 if x > 161 and x < 859 and y > 298 and y < 485:
@@ -611,7 +648,7 @@ def bataille_naval(connexion=[None, None, None]):
                     else:
                         fin=1
                 
-            if (event.type == KEYDOWN) or (event.type == QUIT): 
+            if (event.type == pygame.KEYDOWN) or (event.type == pygame.QUIT): 
                 return 0
 
     start = 0
@@ -626,7 +663,7 @@ def bataille_naval(connexion=[None, None, None]):
 
         isbateau3 = 0
         for i in range(2):
-            if conn==None or connexion[2]==True and i==1 or connexion[2]==False and i==2:
+            if conn==None or connexion[2]==True and i==0 or connexion[2]==False and i==1:
                 printImage("./image/bataille_naval/grille4.png", (1000, 600), (0,0), fenetre)
                 if i==0:
                     printText(nomj1, 44, "yellow", (10, 100), fenetre)
@@ -648,6 +685,10 @@ def bataille_naval(connexion=[None, None, None]):
                             return 0
                         
                         while True:
+                            if isbateau3==1:
+                                printt("2e BATEAU DE "+str(j), fenetre, "black")
+                            else:
+                                printt("BATEAU DE "+str(j), fenetre, "black")
                             
                             if notdouble(case, bateau[i], bateauAll[i][j-1][isbateau3]) == False:
                                 printt("case deja prise", fenetre, "red")
@@ -702,12 +743,14 @@ def bataille_naval(connexion=[None, None, None]):
         
 
         if conn!=None:
+            printt("En attente de l'adversaire", fenetre, "red")
             if connexion[2]==True:
                 i=1
             else:
                 i=0
             send_data(connexion, pickle.dumps(bateau[(i+1)%2]), fenetre, "#013EB0BA", "#013087B9")
             liste = recv_list_data(connexion, fenetre, "#013EB0BA", "#013087B9")
+            send_data(connexion, pickle.dumps(bateau[(i+1)%2]), fenetre, "#013EB0BA", "#013087B9")
 
             compteur=0
             for j in tailleBateau:
@@ -723,11 +766,9 @@ def bataille_naval(connexion=[None, None, None]):
                 
                 if j!=1:
                     copybateauAll[i][j-1][isbateau3] = copie_bateau(bateauAll[i][j-1][isbateau3])
-                    place_line(i+1, copybateauAll[i][j-1][isbateau3], fenetre)
                 else:
                     copybateauAll[i][j-1][isbateau3] = list(bateauAll[i][j-1][isbateau3])
                     
-
 
         printImage("./image/bataille_naval/grille4.png", (1000, 600), (0,0), fenetre)
         printText(nomj1, 44, "yellow", (10, 100), fenetre)
@@ -746,6 +787,8 @@ def bataille_naval(connexion=[None, None, None]):
                 printt("A "+nomj1+" de tirer", fenetre, "gold")
             if conn==None or connexion[2]==True and kijou%2 == 0 or connexion[2]==False and kijou%2 == 1:
                 tir = get_case(kijou)
+                if conn!=None:
+                    send_data(connexion, bytes(tir, "utf-8"), fenetre, "#013EB0BA", "#013087B9")
             else:
                 tir = recv_str_data(connexion, fenetre, "#013EB0BA", "#013087B9")
             if tir == "NULL":
@@ -779,17 +822,17 @@ def bataille_naval(connexion=[None, None, None]):
                             printt("Victoire de "+nomj1, fenetre, "green")
                         end += 1
                         if len(bateauAll[notkijou-1][0][0]) !=0:
-                            place_Rship(notkijou, copybateauAll[notkijou-1][0][0], fenetre)
+                            place_ship(notkijou, copybateauAll[notkijou-1][0][0], fenetre, True)
                         if len(bateauAll[notkijou-1][1][0]) !=0:
-                            place_Rship(notkijou, copybateauAll[notkijou-1][1][0], fenetre)
+                            place_ship(notkijou, copybateauAll[notkijou-1][1][0], fenetre, True)
                         if len(bateauAll[notkijou-1][2][0]) !=0:
-                            place_Rship(notkijou, copybateauAll[notkijou-1][2][0], fenetre)
+                            place_ship(notkijou, copybateauAll[notkijou-1][2][0], fenetre, True)
                         if len(bateauAll[notkijou-1][2][1]) !=0:
-                            place_Rship(notkijou, copybateauAll[notkijou-1][2][1], fenetre)
+                            place_ship(notkijou, copybateauAll[notkijou-1][2][1], fenetre, True)
                         if len(bateauAll[notkijou-1][3][0]) !=0:
-                            place_Rship(notkijou, copybateauAll[notkijou-1][3][0], fenetre)
+                            place_ship(notkijou, copybateauAll[notkijou-1][3][0], fenetre, True)
                         if len(bateauAll[notkijou-1][4][0]) !=0:
-                            place_Rship(notkijou, copybateauAll[notkijou-1][4][0], fenetre)
+                            place_ship(notkijou, copybateauAll[notkijou-1][4][0], fenetre, True)
 
 
                         bille = pygame.image.load("./image/bataille_naval/rejouer.png").convert_alpha()
@@ -814,12 +857,12 @@ def bataille_naval(connexion=[None, None, None]):
         end = 0
         while end==0:
             for event in pygame.event.get():
-                if(event.type == QUIT): 
+                if(event.type == pygame.QUIT): 
                     if conn!=None:
                         conn.send(pickle.dumps(["404"]))
                     return 0
                 
-                if (event.type == MOUSEBUTTONUP):
+                if (event.type == pygame.MOUSEBUTTONUP):
                     x = event.pos[0]
                     y = event.pos[1]
                     if y > 10 and y < 50 and x > 10 and x < 50:

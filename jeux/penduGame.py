@@ -5,75 +5,91 @@ from module.LANscreen import *
 from random import choice
 
 
-def pendu(connexion=[None,None,None]):
+# --- Nouvelle taille ---
+NEW_WIDTH_PEN = 1000
+NEW_HEIGHT_PEN = 600
+
+
+# --- Ancienne taille (base du jeu) ---
+BASE_WIDTH_PEN = 780
+BASE_HEIGHT_PEN = 400
+
+
+# Facteurs d'échelle
+scale_x = NEW_WIDTH_PEN / BASE_WIDTH_PEN
+scale_y = NEW_HEIGHT_PEN / BASE_HEIGHT_PEN
+
+
+def place_image(nb_echecs : int, fenetre : pygame.Surface) -> None:
+    """Affiche l'image du pendu en fonction du nombre d'échecs
+    - nb_echecs : le nombre d'échecs actuels
+    - fenetre : la fenetre sur laquelle afficher l'image
+    """
+    nomFichier = "./image/pendu/pendu_"+str(nb_echecs)+".png"
+    printImage(nomFichier, (300*scale_x, 239.682*scale_y), (240*scale_x, 150*scale_y), fenetre)
     
-    # --- Nouvelle taille ---
-    NEW_WIDTH = 1000
-    NEW_HEIGHT = 600
+    pygame.display.flip()
 
 
-    # --- Ancienne taille (base du jeu) ---
-    BASE_WIDTH = 780
-    BASE_HEIGHT = 400
+def printt(mot : str, fenetre : pygame.Surface) -> None:
+    """Affiche le mot avec les lettres espacées sur la bande
+    - mot : le mot à afficher
+    - fenetre : la fenetre sur laquelle afficher le mot
+    """
+    i=0
+    mot_large = ""
+    while i<len(mot):  
+        mot_large = mot_large + mot[i] + " "
+        i+=1
+    mot = mot_large
+
+    printImage("./image/pendu/bande.jpg", (1000, 60), (0*scale_x, 70*scale_y), fenetre)
+    printText(mot, int(64*scale_y), "black", (500, 70*scale_y), fenetre, Alignement="Center")
+    
+    pygame.display.flip()
 
 
-    # Facteurs d'échelle
-    scale_x = NEW_WIDTH / BASE_WIDTH
-    scale_y = NEW_HEIGHT / BASE_HEIGHT
+def get_lettre(fenetre : pygame.Surface) -> str:
+    """Retourne la lettre choisie par le joueur
+    - fenetre : la fenetre sur laquelle afficher les lettres
+    """
+    lettre = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+    end = 0
+    while end==0:
+        for event in pygame.event.get():
+            if (event.type == MOUSEBUTTONUP):
+                x = event.pos[0]
+                y = event.pos[1]
+                if y < 30*scale_y:
+                    index = int(x // (30*scale_x))
+                    printImage("./image/pendu/dejavue.png", (30*scale_x, 30*scale_y), ((lettre.index(lettre[index]))*30*scale_x, 0), fenetre)
+                    printText(lettre[index], int(20*scale_y), "black", ((lettre.index(lettre[index]))*30*scale_x+10*scale_x, 10*scale_y), fenetre)
+                    pygame.display.flip()
+
+                    return lettre[index]
+
+            if event.type == KEYDOWN:
+                if event.key<=122 and event.key>=97:
+                    printImage("./image/pendu/dejavue.png", (30*scale_x, 30*scale_y), ((lettre.index(chr(event.key).upper()))*30*scale_x, 0), fenetre)
+                    printText(chr(event.key).upper(), int(20*scale_y), "black", ((lettre.index(chr(event.key).upper()))*30*scale_x+10*scale_x, 10*scale_y), fenetre)
+                    pygame.display.flip()
+
+                    return chr(event.key).upper()
+            
+            if (event.type == QUIT): 
+                return "NULL"
 
 
-    def place_image(nb_echecs):
-        nomFichier = "./image/pendu/pendu_"+str(nb_echecs)+".png"
-        printImage(nomFichier, (300*scale_x, 239.682*scale_y), (240*scale_x, 150*scale_y), fenetre)
-        
-        pygame.display.flip()
-
-    def printt(mot):
-        i=0
-        mot_large = ""
-        while i<len(mot):  
-            mot_large = mot_large + mot[i] + " "
-            i+=1
-        mot = mot_large
-
-        printImage("./image/pendu/bande.jpg", (1000, 60), (0*scale_x, 70*scale_y), fenetre)
-        printText(mot, int(64*scale_y), "black", (500, 70*scale_y), fenetre, Alignement="Center")
-        
-        pygame.display.flip()
-
-
-    def get_lettre():
-        lettre = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-        end = 0
-        while end==0:
-            for event in pygame.event.get():
-                if (event.type == MOUSEBUTTONUP):
-                    x = event.pos[0]
-                    y = event.pos[1]
-                    if y < 30*scale_y:
-                        index = int(x // (30*scale_x))
-                        printImage("./image/pendu/dejavue.png", (30*scale_x, 30*scale_y), ((lettre.index(lettre[index]))*30*scale_x, 0), fenetre)
-                        printText(lettre[index], int(20*scale_y), "black", ((lettre.index(lettre[index]))*30*scale_x+10*scale_x, 10*scale_y), fenetre)
-                        pygame.display.flip()
-
-                        return lettre[index]
-
-                if event.type == KEYDOWN:
-                    if event.key<=122 and event.key>=97:
-                        printImage("./image/pendu/dejavue.png", (30*scale_x, 30*scale_y), ((lettre.index(chr(event.key).upper()))*30*scale_x, 0), fenetre)
-                        printText(chr(event.key).upper(), int(20*scale_y), "black", ((lettre.index(chr(event.key).upper()))*30*scale_x+10*scale_x, 10*scale_y), fenetre)
-                        pygame.display.flip()
-
-                        return chr(event.key).upper()
-                
-                if (event.type == QUIT): 
-                    return "NULL"
-
+def pendu(connexion=[None,None,None]) -> int:
+    """Fonction principale du jeu du pendu
+    - connexion : paramétres de connexion LAN
+    """
+    
     fichier = open("./annexes/liste.py", "r")
     liste_mots = fichier.readlines()   
     fichier.close()
 
-    fenetre = initScreen((NEW_WIDTH,NEW_HEIGHT), "Pendu", 'red', './image/pendu/icon.jpg')
+    fenetre = initScreen((NEW_WIDTH_PEN,NEW_HEIGHT_PEN), "Pendu", 'red', './image/pendu/icon.jpg')
 
     nomj1, nomj2 = get_nom()
 
@@ -289,14 +305,14 @@ def pendu(connexion=[None,None,None]):
             lettre_bonne = []
             lettre_fausse = []
 
-            printt(mot_partiel)
-            place_image(nb_echecs)
+            printt(mot_partiel, fenetre)
+            place_image(nb_echecs, fenetre)
             while nb_echecs < 10:
                 nouveau_mot_partiel = ""
                 fin = 0
                 if conn==None or connexion[2]==True and kijou%2 == 1 or connexion[2]==False and kijou%2 == 0: 
                     while fin==0:
-                        lettre_choisi = get_lettre()
+                        lettre_choisi = get_lettre(fenetre)
                         if lettre_choisi == "NULL":
                             return 0
                         if lettre_choisi not in lettre_deja_choisie:
@@ -321,11 +337,11 @@ def pendu(connexion=[None,None,None]):
                         nouveau_mot_partiel = nouveau_mot_partiel + mot_partiel[i]
                 if mot_partiel == nouveau_mot_partiel:
                     nb_echecs+=1
-                    place_image(nb_echecs)
+                    place_image(nb_echecs, fenetre)
                     lettre_fausse.append(lettre_choisi)
                 mot_partiel = nouveau_mot_partiel
                 lettre_deja_choisie.append(lettre_choisi)
-                printt(mot_partiel)
+                printt(mot_partiel, fenetre)
 
                 for i in range(len(lettre_fausse)):
                     if i>4:
@@ -356,8 +372,8 @@ def pendu(connexion=[None,None,None]):
                                    
 
             if nb_echecs == 10:
-                printt(mot_choisi)
-                place_image(nb_echecs)
+                printt(mot_choisi, fenetre)
+                place_image(nb_echecs, fenetre)
             else:
                 printImage("./image/pendu/bravo.png", (300*scale_x, 239.682*scale_y), (240*scale_x, 150*scale_y), fenetre)
                 pygame.display.flip()
