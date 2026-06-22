@@ -1,3 +1,9 @@
+import sys
+from pathlib import Path
+
+# Ajouter le répertoire parent au sys.path pour permettre les imports quand le script est lancé individuellement
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from pygame import *
 from module.pygameCore import *
 import pygame

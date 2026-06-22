@@ -1,3 +1,9 @@
+import sys
+from pathlib import Path
+
+# Ajouter le répertoire parent au sys.path pour permettre les imports quand le script est lancé individuellement
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from module.pygameCore import *
 from module.LANscreen import *
 
@@ -690,7 +696,7 @@ def bataille_naval(connexion=[None, None, None]):
                             else:
                                 printt("BATEAU DE "+str(j), fenetre, "black")
                             
-                            if notdouble(case, bateau[i], bateauAll[i][j-1][isbateau3]) == False:
+                            if notdouble(case, bateau[i]) == False:
                                 printt("case deja prise", fenetre, "red")
                                 case=get_case(i+1)
                                 if case=="NULL":
